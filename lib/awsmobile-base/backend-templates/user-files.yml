@@ -1,0 +1,7 @@
+--- !com.amazonaws.mobilehub.v0.Project
+features: 
+  user-files: !com.amazonaws.mobilehub.v0.UserFiles
+    attributes: 
+      enabled: true
+      wildcard-cors-policy: true
+

@@ -1,0 +1,25 @@
+--- !com.amazonaws.mobilehub.v0.Project
+features: 
+  database: !com.amazonaws.mobilehub.v0.Database
+    components: 
+      database-nosql: !com.amazonaws.mobilehub.v0.NoSQLDatabase
+        tables: 
+          - !com.amazonaws.mobilehub.v0.NoSQLTable
+            attributes: 
+              email: S
+              personName: S
+              phone: S
+            hashKeyName: teamId
+            hashKeyType: S
+            rangeKeyName: personId
+            rangeKeyType: S
+            indexes: 
+              - !com.amazonaws.mobilehub.v0.NoSQLIndex
+                hashKeyName: teamId
+                hashKeyType: S
+                indexName: personName-index
+                rangeKeyName: personName
+                rangeKeyType: S
+            tableName: ___DYNAMIC_PREFIX___-AWSMobileTable
+            tablePrivacy: public
+

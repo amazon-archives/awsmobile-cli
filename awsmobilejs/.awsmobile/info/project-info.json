@@ -1,0 +1,21 @@
+{
+	"ProjectName": "",
+	"ProjectPath": "",
+	"SourceDir": "src",
+	"DistributionDir": "dist",
+	"BuildCommand": "npm run-script build",
+	"StartCommand": "npm run-script start",
+	"InitializationTime": "",
+	"LastConfigurationTime": "",
+	"FrontendLastBuildTime": "",
+	"LastPublishTime": "",
+    "BackendFormat": "yml",
+	"BackendLastBuildTime": "",
+	"BackendLastUpdateTime": "",
+	"BackendLastUpdateSuccessful": false,
+	"BackendProjectID": "",
+	"BackendProjectName":  "",
+    "BackendProjectConsoleUrl": "",
+	"BackendProjectCreationTime": "",
+	"BackendProjectLastUpdatedTime": ""
+}

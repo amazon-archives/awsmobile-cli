@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+/* 
+ * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
+const program = require('commander')
+const chalk = require('chalk')
+const opn = require('opn')
+
+const backendUpdate = require('../lib/backend-update.js')
+const publisher = require('../lib/project-publisher.js')
+
+program
+    .description('publish the application to aws, backend to awsmobile, and frontend to s3')
+    .usage('[options]')
+    .option('-t, --test', 'test the application in aws device farm on publish')
+    .option('-c, --cloud-front', 'refresh CloudFront distribution on publish')
+    .option('-f, --frontend-only', 'publish frontend only without pushing backend awsmobile project')
+    .parse(process.argv)
+
+let testFlag = 0
+if(program.test){
+    testFlag = 1
+}
+
+let cloudFrontFlag = 0
+if(program.cloudFront){
+    cloudFrontFlag = 1
+}
+
+if(program.frontendOnly){
+    pubilshFrontend()
+}else{
+    backendUpdate.run(function(){
+        pubilshFrontend()
+    }, 0, -1)
+}
+
+function pubilshFrontend(){
+    publisher.publish(testFlag, cloudFrontFlag)
+}

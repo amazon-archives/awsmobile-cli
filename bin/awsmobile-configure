@@ -1,0 +1,94 @@
+#!/usr/bin/env node
+/* 
+ * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
+const program = require('commander')
+const inquirer = require('inquirer')
+const chalk = require('chalk')
+const projectInfoManager = require('../lib/project-info-manager.js')
+const awsConfigManager = require('../lib/aws-operations/aws-config-manager.js')
+const backendInfoManager = require('../lib/backend-operations/backend-info-manager.js')
+
+const options = ['aws', 'project']
+
+program
+    .description('edit configuration settings for the aws account and the project')
+    .usage('[aws|project] [options]')
+    .option('-l, --list', 'list the current configuration settings')
+    .parse(process.argv)
+
+if (program.args.length < 1){
+    configure('aws')
+}else{
+    let selection = program.args[0]
+    if(!options.includes(selection)){
+        promptForInput(configure)
+    }else{
+        configure(selection)
+    }
+}
+
+function promptForInput(callback)
+{ 
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'selection',
+            message: "configure",
+            choices: options,
+            default: 'aws'
+        }
+    ]).then(function (answers) {
+        if(callback){
+            callback(answers.selection)
+        }
+    })
+}
+
+function configure(selection)
+{
+    switch (selection) {
+        case 'aws':
+            configAWS()
+        break
+        case 'project':
+            configProject()
+        break
+    }
+}
+
+function configAWS(){
+    if(program.list){
+        console.log('here\'s the current configurations for aws')
+        awsConfigManager.listAWSConfig()
+    }else{
+        console.log(chalk.blue('configure aws'))
+        awsConfigManager.configureAWS()
+    }
+}
+
+
+function configProject(){
+    let projectInfo = projectInfoManager.getProjectInfo()
+    if(projectInfo){
+        if(program.list){
+            console.log('here\'s the current configurations for the project')
+            projectInfoManager.listProjectInfo()
+        }else{
+            console.log(chalk.blue('configure project'))
+            projectInfoManager.configureProjectInfo(function(projectInfo_old, projectInfo){
+                backendInfoManager.onProjectConfigChange(projectInfo_old, projectInfo)
+            })
+        }
+    }
+}

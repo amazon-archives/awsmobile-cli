@@ -1,0 +1,59 @@
+#!/usr/bin/env node
+/* 
+ * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
+const program = require('commander')
+const path = require('path')
+const chalk = require('chalk')
+const ora = require('ora')
+const { exec } = require('child_process')
+
+const projectInfoManager = require('../lib/project-info-manager.js')
+const projectAppBuilder = require('../lib/project-frontend-builder.js')
+const backendProjectUpdate = require('../lib/backend-update.js')
+const nameManager = require('../lib/utils/awsmobilejs-name-manager.js')
+
+program
+    .description('execute awsmobile push then npm start')
+    .parse(process.argv)
+
+
+let projectInfo = projectInfoManager.getProjectInfo()
+
+if(projectInfo){
+    if(projectInfo.StartCommand && projectInfo.StartCommand.length > 0){
+        if(projectInfo.BackendProjectID && projectInfo.BackendProjectID.length > 0){
+            backendProjectUpdate.run(checkNpmInstall, 0, -1)
+        }
+    }else{
+        console.log(chalk.red('missing frontend start command')) 
+        console.log(chalk.gray('    # to change the settings'))
+        console.log('    $ awsmobile configure project')
+    }
+}
+
+function checkNpmInstall(){ 
+    projectAppBuilder.checkNpmInstall(executeRun)
+}
+
+function  executeRun(){
+    console.log()
+    let spinner = new ora('running ...')
+    spinner.start()
+    exec(projectInfo.StartCommand, (error, stdout, stderr) => {
+        spinner.stop()
+        if (error) {
+            console.error('frontend start command exec error:' + error)
+        }
+    })
+}

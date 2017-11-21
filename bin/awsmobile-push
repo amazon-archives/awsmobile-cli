@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+/* 
+ * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
+const program = require('commander')
+const handler = require('../lib/backend-update.js')
+
+program
+  .description('update the backend awsmobile project with the latest local development')
+  .usage('[options]')
+  .option('-n, --nowait', 'return right after the mobile api call, no wait for cloud-api')
+  .parse(process.argv)
+
+let waitFlag = 0
+if(program.nowait){
+    waitFlag = -1
+}
+
+handler.run(null, waitFlag, -1)

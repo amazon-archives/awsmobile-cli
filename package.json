@@ -1,0 +1,61 @@
+{
+  "name": "awsmobile-cli",
+  "version": "0.1.0",
+  "description": "awsmobile cli enables easy incorporation of aws features into your project",
+  "main": "bin/awsmobile",
+  "bin": {
+    "awsmobile": "bin/awsmobile",
+    "awsmobile-init": "bin/awsmobile-init",
+    "awsmobile-pull": "bin/awsmobile-pull",
+    "awsmobile-push": "bin/awsmobile-push",
+    "awsmobile-delete": "bin/awsmobile-delete",
+    "awsmobile-publish": "bin/awsmobile-publish",
+    "awsmobile-console": "bin/awsmobile-console",
+    "awsmobile-configure": "bin/awsmobile-configure",
+    "awsmobile-features": "bin/awsmobile-features",
+    "awsmobile-run": "bin/awsmobile-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aws/awsmobile-cli.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aws/awsmobile-cli/issues"
+  },
+  "homepage": "https://github.com/aws/awsmobile-cli",
+  "dependencies": {
+    "archiver": "^2.1.0",
+    "aws-amplify": "^0.1.0",
+    "aws-sdk": "^2.131.0",
+    "chalk": "^2.0.1",
+    "commander": "^2.11.0",
+    "download-git-repo": "^1.0.1",
+    "extract-zip": "^1.6.6",
+    "fs-extra": "^4.0.2",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "inquirer": "^3.2.1",
+    "js-yaml": "^3.9.1",
+    "lodash": "^4.17.4",
+    "mime-types": "^2.1.16",
+    "moment": "^2.18.1",
+    "n-readlines": "^0.2.7",
+    "opn": "^5.1.0",
+    "ora": "^1.3.0",
+    "os": "^0.1.1",
+    "path": "^0.12.7",
+    "proxy-agent": "^2.1.0",
+    "util": "^0.10.3",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "jest": "^21.2.1",
+    "mockirer": "^2.0.1"
+  },
+  "jest": {
+    "automock": false,
+    "testEnvironment": "node"
+  }
+}

@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+/* 
+ * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
+const program = require('commander')
+const inquirer = require('inquirer')
+const _ = require('lodash')
+const chalk = require('chalk')
+
+const projectInfoManager = require('../lib/project-info-manager.js')
+const backendSpecManager = require('../lib/backend-operations/backend-spec-manager.js')
+const mobileFeatures = require('../lib/aws-operations/mobile-features.js')
+const pathManager = require('../lib/utils/awsmobilejs-path-manager.js')
+
+program
+    .description('turn on/off the backend awsmobile project features locally')
+    .usage('[options]')
+    .option('-s, --select', 'select backend features')
+    .option('-l, --list', 'list selected features')
+    .option('-a, --all', 'list all features')
+    .parse(process.argv)
+
+let projectInfo = projectInfoManager.getProjectInfo()
+
+if(projectInfo){
+    if(program.list){
+        backendSpecManager.listEnabledFeatures(projectInfo)
+    }else if(program.all){
+        backendSpecManager.listAllFeatures(projectInfo)
+    }else{
+        selectFeatures()
+    }
+}
+
+function selectFeatures(){
+    let currentFeatures = backendSpecManager.getEnabledFeatures(projectInfo)
+    if(currentFeatures){
+        inquirer.prompt([
+            {
+                type: 'checkbox',
+                name: 'selection',
+                message: "select features: ",
+                choices: mobileFeatures,
+                default: currentFeatures
+            }
+        ]).then(function (answers) {
+            backendSpecManager.updataFeatureList(projectInfo, currentFeatures, answers.selection)
+        })
+    }else{
+        console.log(chalk.red('local backend specs appear to be corrupted'))
+        console.log('please restored the local backend specs to valid state before continuing')
+    }
+}
