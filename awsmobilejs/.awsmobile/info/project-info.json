@@ -7,6 +7,7 @@
 	"StartCommand": "npm run-script start",
 	"InitializationTime": "",
 	"LastConfigurationTime": "",
+	"LastNPMInstallTime": "",
 	"FrontendLastBuildTime": "",
 	"LastPublishTime": "",
     "BackendFormat": "yml",
