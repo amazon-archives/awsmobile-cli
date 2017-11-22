@@ -79,8 +79,8 @@ Supported Features:
 5. analytics (Pinpoint)
 6. hosting (S3 and CloudFront Distribution)
 
-
+For a comprehensive description of the awsmobile-cli, please visit [AWSMobile CLI Reference](http://docs.aws.amazon.com/aws-mobile/latest/developerguide/aws-mobile-cli-reference.html)
 
 ## Usage
 
-Go to the [AWS Mobile Docs](http://docs.aws.amazon.com/aws-mobile/latest/developerguide/javascript-getting-started.html) to learn more about the usage of the awsmobile-cli and some sample codes to get your app up and running.  
+Go to the [AWS Mobile Docs](http://docs.aws.amazon.com/aws-mobile/latest/developerguide/web-getting-started.html) to learn more about the usage of the awsmobile-cli and some sample codes to get your app up and running.  
