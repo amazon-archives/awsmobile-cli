@@ -32,7 +32,6 @@ program.on('--help', function () {
   }
 })
 
-
 program
   .version(require('../package').version)
   .description('awsmobile cli enables easy incorporation of aws features into your project')
@@ -45,7 +44,7 @@ program
   .command('run', 'execute push and then start the frontend locally')
   .command('console', 'open the web console of the backend awsmobile project')
   .command('configure', 'edit configuration settings of the aws account or the project')  
-  .command('features', 'turn on/off the awsmobile project features locally')
+  .command('features', 'enable/disable the awsmobile project features locally')
   .command('<feature>', 'contains subcommands of the specified awsmobile feature')
   .parse(process.argv)
 
