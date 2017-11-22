@@ -114,7 +114,7 @@ function configure(){
 function displayGeneralHelp(){
     console.log('  Usage: awsmobile {featureName} <command> [options]'.replace('{featureName}', _featureName))
     console.log()
-    console.log('  contains subcommands for the awsmobile feature ' + _featureName)
+    console.log('  contains subcommands of the awsmobile feature ' + _featureName)
     console.log()
     console.log('  Options:'  )
     console.log()

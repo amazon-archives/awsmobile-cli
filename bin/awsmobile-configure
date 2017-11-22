@@ -22,7 +22,7 @@ const backendInfoManager = require('../lib/backend-operations/backend-info-manag
 const options = ['aws', 'project']
 
 program
-    .description('edit configuration settings for the aws account and the project')
+    .description('edit configuration settings of the aws account or the project')
     .usage('[aws|project] [options]')
     .option('-l, --list', 'list the current configuration settings')
     .parse(process.argv)

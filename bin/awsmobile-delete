@@ -16,7 +16,7 @@ const program = require('commander')
 const handler = require('../lib/backend-delete.js')
 
 program
-  .description('delete the backend awsmobile project')
+  .description('delete the awsmobile project in the cloud')
   .parse(process.argv)
 
 if(program.args.length > 0){

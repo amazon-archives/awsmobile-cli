@@ -24,7 +24,7 @@ const backendProjectUpdate = require('../lib/backend-update.js')
 const nameManager = require('../lib/utils/awsmobilejs-name-manager.js')
 
 program
-    .description('execute awsmobile push then npm start')
+    .description('execute push and then start the frontend locally')
     .parse(process.argv)
 
 

@@ -20,7 +20,7 @@ const backendUpdate = require('../lib/backend-update.js')
 const publisher = require('../lib/project-publisher.js')
 
 program
-    .description('publish the application to aws, backend to awsmobile, and frontend to s3')
+    .description('execute push and then publish the frontend to S3 hosting bucket')
     .usage('[options]')
     .option('-t, --test', 'test the application in aws device farm on publish')
     .option('-c, --cloud-front', 'refresh CloudFront distribution on publish')

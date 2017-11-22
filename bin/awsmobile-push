@@ -16,7 +16,7 @@ const program = require('commander')
 const handler = require('../lib/backend-update.js')
 
 program
-  .description('update the backend awsmobile project with the latest local development')
+  .description('push the local development of the awsmobile project to the cloud')
   .usage('[options]')
   .option('-n, --nowait', 'return right after the mobile api call, no wait for cloud-api')
   .parse(process.argv)
