@@ -18,7 +18,7 @@ const projectInfoManager = require('../lib/project-info-manager.js')
 const chalk = require('chalk')
 
 program
-  .description('retrieve the latest details of the backend awsmobile project')
+  .description('pull the latest details of the awsmobile project from the cloud')
   .parse(process.argv)
 
 let projectInfo = projectInfoManager.getProjectInfo()
