@@ -23,7 +23,7 @@ const mobileFeatures = require('../lib/aws-operations/mobile-features.js')
 const pathManager = require('../lib/utils/awsmobilejs-path-manager.js')
 
 program
-    .description('turn on/off the backend awsmobile project features locally')
+    .description('enable/disable the awsmobile project features locally')
     .usage('[options]')
     .option('-s, --select', 'select backend features')
     .option('-l, --list', 'list selected features')
