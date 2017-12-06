@@ -15,6 +15,9 @@
     "awsmobile-features": "bin/awsmobile-features",
     "awsmobile-run": "bin/awsmobile-run"
   },
+  "scripts": {
+    "test": "jest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws/awsmobile-cli.git"

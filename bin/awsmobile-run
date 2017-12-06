@@ -16,7 +16,7 @@ const program = require('commander')
 const path = require('path')
 const chalk = require('chalk')
 const ora = require('ora')
-const { spawn } = require('child_process')
+const { exec } = require('child_process')
 
 const projectInfoManager = require('../lib/project-info-manager.js')
 const projectAppBuilder = require('../lib/project-frontend-builder.js')
@@ -33,7 +33,7 @@ let projectInfo = projectInfoManager.getProjectInfo()
 if(projectInfo){
     if(projectInfo.StartCommand && projectInfo.StartCommand.length > 0){
         if(projectInfo.BackendProjectID && projectInfo.BackendProjectID.length > 0){
-            backendProjectUpdate.run(run, 0, -1)
+            backendProjectUpdate.run(checkNpmInstall, 0, -1)
         }
     }else{
         console.log(chalk.red('missing frontend start command')) 
@@ -42,22 +42,18 @@ if(projectInfo){
     }
 }
 
-function run(){ 
-    projectAppBuilder.checkNpmInstall(executeStart)
+function checkNpmInstall(){ 
+    projectAppBuilder.checkNpmInstall(executeRun)
 }
 
-function executeStart(){
+function  executeRun(){
     console.log()
-    console.log('executing frontend start command ...')
-
-    let args = projectInfo.StartCommand.split(/\s+/)
-    let command = args[0]
-    args = args.slice(1)
-
-    let startCommandExecution = spawn(command, args, {cwd: process.cwd(), env: process.env, stdio: 'inherit'})
-    
-    startCommandExecution.on('error', (err) => {
-        console.log(chalk.red('frontend start command execution error:'))
-        console.log(err)
+    let spinner = new ora('running ...')
+    spinner.start()
+    exec(projectInfo.StartCommand, (error, stdout, stderr) => {
+        spinner.stop()
+        if (error) {
+            console.error('frontend start command exec error:' + error)
+        }
     })
 }
