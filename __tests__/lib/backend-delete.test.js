@@ -1,22 +1,22 @@
-jest.mock('fs-extra')
+jest.mock('ora')
 jest.mock('../../lib/aws-operations/aws-client.js')
 jest.mock('../../lib/aws-operations/aws-config-manager.js')
 jest.mock('../../lib/aws-operations/aws-exception-handler.js')
 jest.mock('../../lib/backend-operations/backend-info-manager.js')
 
-const fs = require('fs-extra')
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
-const backendCreate = require('../../lib/backend-create.js')
+const backendDelete = require('../../lib/backend-delete.js')
 
+const projectInfoManager = require('../../lib/project-info-manager.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js')
 const awsClient = require('../../lib/aws-operations/aws-client.js')
 const awsExceptionHandler = require('../../lib/aws-operations/aws-exception-handler.js')
 const backendInfoManager = require('../../lib/backend-operations/backend-info-manager.js')
 
-describe('backend create', () => {
+describe('backend delete', () => {
     const projectName = 'projectName'
     const projectPath = '/projectName'
     const awsmobilejsDirPath = pathManager.getAWSMobileJSDirPath(projectPath)
@@ -30,11 +30,9 @@ describe('backend create', () => {
         "DistributionDir": "dist",
         "BuildCommand": "npm run-script build",
         "StartCommand": "npm run-script start",
+        'BackendProjectName': 'BackendProjectName', 
+        'BackendProjectID': 'BackendProjectID', 
     }
-    var MOCK_FILE_INFO = {}
-    MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
-    MOCK_FILE_INFO[backendYmlFilePath] = JSON.stringify('--- !com.amazonaws.mobilehub.v0.Project', null, '\t')
-
     const mock_awsConfig = {
         "accessKeyId":"mockAccessKeyID",
         "secretAccessKey":"mockSecretAccessKey",
@@ -43,11 +41,11 @@ describe('backend create', () => {
 
     const mock_mobileProjectName = 'mock_mobileProjectName'
 
-    const mock_createError = {
+    const mock_deleteError = {
         code: 'mockCode'
     }
 
-    const mock_createResponse = {
+    const mock_deleteResponse = {
         details: {
             name: mock_mobileProjectName
         }
@@ -55,59 +53,57 @@ describe('backend create', () => {
 
     beforeAll(() => {
         global.console = {log: jest.fn()}
-        fs.__setMockFiles(MOCK_FILE_INFO) 
+
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
             callback(mock_awsConfig)
         })
         awsExceptionHandler.handleMobileException = jest.fn()
         mockirer(inquirer, {
-            mobileProjectName: mock_mobileProjectName
+            deleteBackend: true
         }) 
-        backendInfoManager.syncCurrentBackendInfo = 
-        jest.fn((projectInfo, backendDetails, awsConfig, syncToDevFlag, callback) => {
-            if(callback){
-                callback()
-            }
+        projectInfoManager.getProjectInfo = jest.fn(()=>{
+            return mock_projectInfo
         })
+        backendInfoManager.clearBackendInfo = jest.fn()
+    })
+
+    beforeEach(() => {
+        backendInfoManager.clearBackendInfo.mockClear()
+        awsExceptionHandler.handleMobileException.mockClear()
     })
 
     test('when api call successful', () => {
-        const callback = jest.fn()
         const mock_mobileClient = {
-            createProject: jest.fn((param, callback)=>{
-                callback(null, mock_createResponse)
+            deleteProject: jest.fn((param, callback)=>{
+                callback(null, mock_deleteResponse)
             })
         }
         awsClient.Mobile = jest.fn(()=>{
             return mock_mobileClient
         })
 
-        backendCreate.createBackendProject(mock_projectInfo, callback)
+        backendDelete.run()
 
-        expect(mock_mobileClient.createProject).toBeCalled()
-        expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][0]).toBe(mock_projectInfo)
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][1]).toBe(mock_createResponse.details)
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsConfig)
-        expect(callback).toBeCalled()
+        expect(mock_mobileClient.deleteProject).toBeCalled()
+        expect(backendInfoManager.clearBackendInfo).toBeCalled()
+        expect(backendInfoManager.clearBackendInfo.mock.calls[0][0]).toBe(mock_projectInfo)
     })
 
     test('when api call rutnrs error', () => {
-        const callback = jest.fn()
         const mock_mobileClient = {
-            createProject: jest.fn((param, callback)=>{
-                callback(mock_createError, mock_createResponse)
+            deleteProject: jest.fn((param, callback)=>{
+                callback(mock_deleteError, mock_deleteResponse)
             })
         }
         awsClient.Mobile = jest.fn(()=>{
             return mock_mobileClient
         })
 
-        backendCreate.createBackendProject(mock_projectInfo, callback)
+        backendDelete.run()
 
-        expect(mock_mobileClient.createProject).toBeCalled()
+        expect(mock_mobileClient.deleteProject).toBeCalled()
+        expect(backendInfoManager.clearBackendInfo).not.toBeCalled()
         expect(awsExceptionHandler.handleMobileException).toBeCalled()
-        expect(awsExceptionHandler.handleMobileException.mock.calls[0][0]).toBe(mock_createError)
-        expect(callback).not.toBeCalled()
+        expect(awsExceptionHandler.handleMobileException.mock.calls[0][0]).toBe(mock_deleteError)
     })
 })
