@@ -58,7 +58,7 @@ The current set of commands supported by the awsmobile CLI are
 | awsmobile configure | Shows existing keys and allows them to be changed if already set. If keys aren’t set, deep links the user to the IAM console to create keys and then prompts for the access key and secret key. This command helps edit configuration settings for the aws account or the project |
 | awsmobile pull | Retrives the latest details of the backend Mobile Hub project, such as the access infromation file aws-exports.js |
 | awsmobile push | Updates the backend Mobile Hub project with the latest local developments |
-| awsmobile publish | Executes awsmobile push, then builds and publishes client-side applicatioin to S3 and Cloud Front |
+| awsmobile publish | Executes awsmobile push, then builds and publishes client-side application to S3 and Cloud Front |
 | awsmobile run | Executes awsmobile push, then executes the project's start command to test run the client-side application |
 | awsmobile console | Opens the web console of the backend Mobile Hub project |
 | awsmobile features | Shows available Mobile Hub project features, and allows them to be enabled/disabled |
