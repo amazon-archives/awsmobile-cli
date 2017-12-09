@@ -11,7 +11,7 @@ const awsClient = require('../../lib/aws-operations/aws-client.js')
 const awsExceptionHandler = require('../../lib/aws-operations/aws-exception-handler.js')
 const backendInfoManager = require('../../lib/backend-operations/backend-info-manager.js')
 
-describe('backend delete', () => {
+describe('backend retrieve', () => {
     
     const mock_projectInfo = {
         "ProjectName": 'projectName',

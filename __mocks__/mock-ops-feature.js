@@ -28,7 +28,11 @@ module.exports = {
     onFeatureTurnOn: jest.fn(),
     onFeatureTurnOff: jest.fn(),
     build: jest.fn(),
-    preBackendUpdate: jest.fn(),
+    preBackendUpdate: jest.fn((projectInfo, awsConfig, backendProjectDetails, callback) => {
+        if(callback){
+            callback()
+        }
+    }),
     syncCurrentBackendInfo: jest.fn(),
     syncToDevBackend: jest.fn(),
     getStateGroup: jest.fn(),

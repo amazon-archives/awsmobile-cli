@@ -54,6 +54,10 @@ describe('backend delete', () => {
     beforeAll(() => {
         global.console = {log: jest.fn()}
 
+        projectInfoManager.getProjectInfo = jest.fn(()=>{
+            return mock_projectInfo
+        })
+
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
             callback(mock_awsConfig)
         })
@@ -61,9 +65,7 @@ describe('backend delete', () => {
         mockirer(inquirer, {
             deleteBackend: true
         }) 
-        projectInfoManager.getProjectInfo = jest.fn(()=>{
-            return mock_projectInfo
-        })
+        
         backendInfoManager.clearBackendInfo = jest.fn()
     })
 
