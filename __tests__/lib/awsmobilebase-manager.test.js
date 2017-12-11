@@ -44,8 +44,6 @@ describe('awsmobile base manager functions', () => {
 
         expect(fs.existsSync).toBeCalled()
         expect(fs.existsSync.mock.calls[0][0]).toBe(awsmobilejsDirPath)
-        expect(fs.copySync).toBeCalled()
-        expect(fs.copySync.mock.calls[0][1]).toBe(awsmobilejsDirPath)
         expect(callback).toBeCalled()
     })
 
@@ -59,8 +57,6 @@ describe('awsmobile base manager functions', () => {
 
         expect(fs.emptydir).toBeCalled()
         expect(fs.emptydir.mock.calls[0][0]).toBe(awsmobilejsDirPath)
-        expect(fs.copySync).toBeCalled()
-        expect(fs.copySync.mock.calls[0][1]).toBe(awsmobilejsDirPath)
         expect(callback).toBeCalled()
     })
 })
