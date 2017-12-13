@@ -5,12 +5,12 @@
 </a>
 
 <p>
-  <a href="https://travis-ci.org/aws/aws-mobilecli">
-    <img src="https://travis-ci.org/aws/aws-mobilecli.svg?branch=master" alt="build:started">
+  <a href="https://travis-ci.org/aws/awsmobile-cli">
+    <img src="https://travis-ci.org/aws/awsmobile-cli.svg?branch=master" alt="build:started">
   </a>
 
-  <a href="https://codecov.io/gh/aws/aws-mobilecli">
-    <img src="https://codecov.io/gh/aws/aws-mobilecli/branch/master/graph/badge.svg" />
+  <a href="https://codecov.io/gh/aws/awsmobile-cli">
+    <img src="https://codecov.io/gh/aws/awsmobile-cli/branch/master/graph/badge.svg" />
   </a>
 </p>
 
