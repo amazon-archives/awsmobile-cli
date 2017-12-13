@@ -1,0 +1,8 @@
+language: node_js
+sudo: false
+node_js:
+  - 6
+install:
+  - npm install
+script:
+  - npm test && node node_modules/.bin/codecov || exit 0;

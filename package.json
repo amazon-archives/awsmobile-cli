@@ -16,7 +16,7 @@
     "awsmobile-run": "bin/awsmobile-run"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -52,7 +52,8 @@
     "proxy-agent": "^2.1.0",
     "unzip": "^0.1.11",
     "util": "^0.10.3",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "codecov": "^1.0.1"
   },
   "devDependencies": {
     "jest": "^21.2.1",
@@ -60,6 +61,10 @@
   },
   "jest": {
     "automock": false,
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/lib/aws-operations/mobile-yaml-schema.js"
+    ]
   }
 }

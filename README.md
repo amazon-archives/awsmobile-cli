@@ -1,5 +1,19 @@
 # awsmobile-CLI
 
+<a href="https://nodei.co/npm/aws-mobilecli/">
+  <img src="https://nodei.co/npm/aws-mobilecli.svg?downloads=true&downloadRank=true&stars=true">
+</a>
+
+<p>
+  <a href="https://travis-ci.org/aws/aws-mobilecli">
+    <img src="https://travis-ci.org/aws/aws-mobilecli.svg?branch=master" alt="build:started">
+  </a>
+
+  <a href="https://codecov.io/gh/aws/aws-mobilecli">
+    <img src="https://codecov.io/gh/aws/aws-mobilecli/branch/master/graph/badge.svg" />
+  </a>
+</p>
+
 The awsmobile-CLI, built on top of AWS Mobile Hub, provides a command line interface for frontend JavaScript developers to seamlessly enable and configure AWS services into their apps. With minimal configuration, you can start using all of the functionality provided by the AWS Mobile Hub from your favorite terminal program.
 
 * [Installation](#installation)
