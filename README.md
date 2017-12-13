@@ -1,7 +1,7 @@
 # awsmobile-CLI
 
-<a href="https://nodei.co/npm/aws-mobilecli/">
-  <img src="https://nodei.co/npm/aws-mobilecli.svg?downloads=true&downloadRank=true&stars=true">
+<a href="https://nodei.co/npm/awsmobile-cli/">
+  <img src="https://nodei.co/npm/awsmobile-cli.svg?downloads=true&downloadRank=true&stars=true">
 </a>
 
 <p>
