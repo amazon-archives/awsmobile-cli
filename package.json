@@ -15,6 +15,9 @@
     "awsmobile-features": "bin/awsmobile-features",
     "awsmobile-run": "bin/awsmobile-run"
   },
+  "scripts": {
+    "test": "jest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aws/awsmobile-cli.git"
@@ -47,6 +50,7 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "proxy-agent": "^2.1.0",
+    "unzip": "^0.1.11",
     "util": "^0.10.3",
     "uuid": "^3.1.0"
   },
