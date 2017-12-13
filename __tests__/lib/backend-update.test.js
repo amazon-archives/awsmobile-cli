@@ -82,7 +82,6 @@ describe('backend update', () => {
         })
     }
     
-
     beforeAll(() => {
         global.console = {log: jest.fn()}
         
