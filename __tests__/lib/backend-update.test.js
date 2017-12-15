@@ -89,6 +89,10 @@ describe('backend update', () => {
             return mock_projectInfo
         })
 
+        projectInfoManager.checkBackendProjectLastUpdateTime = jest.fn((projectInfo, backendDetails) => {
+            return true
+        })
+
         projectInfoManager.setProjectInfo = jest.fn()
 
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
