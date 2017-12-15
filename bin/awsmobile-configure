@@ -25,6 +25,7 @@ program
     .description('edit configuration settings of the aws account or the project')
     .usage('[aws|project] [options]')
     .option('-l, --list', 'list the current configuration settings')
+    .option('-p, --profile', 'configure aws to use named aws cli profile')
     .parse(process.argv)
 
 if (program.args.length < 1){
@@ -73,7 +74,7 @@ function configAWS(){
         awsConfigManager.listAWSConfig()
     }else{
         console.log(chalk.blue('configure aws'))
-        awsConfigManager.configureAWS()
+        awsConfigManager.configureAWS(program.profile)
     }
 }
 
