@@ -1,6 +1,6 @@
 {
   "name": "awsmobile-cli",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "awsmobile cli enables easy incorporation of aws features into your project",
   "main": "bin/awsmobile",
   "bin": {
@@ -33,6 +33,7 @@
     "aws-amplify": "^0.1.0",
     "aws-sdk": "^2.131.0",
     "chalk": "^2.0.1",
+    "codecov": "^1.0.1",
     "commander": "^2.11.0",
     "download-git-repo": "^1.0.1",
     "extract-zip": "^1.6.6",
@@ -50,10 +51,8 @@
     "os": "^0.1.1",
     "path": "^0.12.7",
     "proxy-agent": "^2.1.0",
-    "unzip": "^0.1.11",
     "util": "^0.10.3",
-    "uuid": "^3.1.0",
-    "codecov": "^1.0.1"
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "jest": "^21.2.1",

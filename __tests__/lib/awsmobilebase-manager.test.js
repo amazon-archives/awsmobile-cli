@@ -47,16 +47,8 @@ describe('awsmobile base manager functions', () => {
         expect(callback).toBeCalled()
     })
 
-    test('syncBase', () => {
-        const callback = jest.fn()
-        fs.readFileSync = jest.fn(()=>{
-            return JSON.stringify(mock_projectInfo, null, '\t')
-        })
-
-        baseManager.syncBase(projectPath, callback)
-
-        expect(fs.emptydir).toBeCalled()
-        expect(fs.emptydir.mock.calls[0][0]).toBe(awsmobilejsDirPath)
-        expect(callback).toBeCalled()
+    test('backupAwsmobileBase', () => {
+        baseManager.backupAwsmobileBase(projectPath)
+        expect(fs.renameSync).toBeCalled()
     })
 })

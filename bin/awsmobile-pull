@@ -24,7 +24,7 @@ program
 let projectInfo = projectInfoManager.getProjectInfo()
 if(projectInfo){
   if(projectInfo.BackendProjectID && projectInfo.BackendProjectID.length > 0){
-    backendRetrieve.getLatestBackend(projectInfo, projectInfo.BackendProjectID, 0, null)
+    backendRetrieve.pullBackend(projectInfo, projectInfo.BackendProjectID, 0, null)
   }else{
     console.log(chalk.red('backend awsmobile project unknown'))
   }

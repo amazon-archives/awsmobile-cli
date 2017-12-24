@@ -114,7 +114,7 @@ describe('backend retrieve', () => {
             return mock_mobileClient
         })
 
-        backendRetrieve.getLatestBackend(mock_projectInfo, mock_mobileProjectID, 1, callback)
+        backendRetrieve.pullBackend(mock_projectInfo, mock_mobileProjectID, 1, callback)
 
         expect(mock_mobileClient.describeProject).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
@@ -135,7 +135,7 @@ describe('backend retrieve', () => {
             return mock_mobileClient
         })
 
-        backendRetrieve.getLatestBackend(mock_projectInfo, mock_mobileProjectID, 1, callback)
+        backendRetrieve.pullBackend(mock_projectInfo, mock_mobileProjectID, 1, callback)
 
         expect(mock_mobileClient.describeProject).toBeCalled()
         expect(awsExceptionHandler.handleMobileException).toBeCalled()
