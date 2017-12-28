@@ -30,7 +30,7 @@
   "homepage": "https://github.com/aws/awsmobile-cli",
   "dependencies": {
     "archiver": "^2.1.0",
-    "aws-amplify": "^0.1.0",
+    "aws-amplify": "^0.1.x",
     "aws-sdk": "^2.131.0",
     "chalk": "^2.0.1",
     "codecov": "^1.0.1",
