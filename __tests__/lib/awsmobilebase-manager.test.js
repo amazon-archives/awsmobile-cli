@@ -33,7 +33,7 @@ describe('awsmobile base manager functions', () => {
     beforeEach(() => {
         fs.existsSync.mockClear()
         fs.renameSync.mockClear()
-        fs.emptydir.mockClear()
+        fs.emptyDirSync.mockClear()
         fs.copySync.mockClear()
     })
 
