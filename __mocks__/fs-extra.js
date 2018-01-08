@@ -82,7 +82,7 @@ fs.existsSync = jest.fn((path)=>{
 fs.writeFileSync = jest.fn()
 fs.rmdirSync = jest.fn()
 fs.renameSyn = jest.fn()
-fs.emptydir = jest.fn()
+fs.emptyDirSync = jest.fn()
 fs.copySync = jest.fn()
 
 module.exports = fs
