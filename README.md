@@ -81,7 +81,7 @@ The current set of commands supported by the awsmobile CLI are
 | awsmobile \<feature\> configure | Configures the definition of the objects in the feature |
 | awsmobile cloud-api invoke \<apiname\> \<method\> \<path\> [init] | Invokes the API for testing locally. This helps quickly test unsigned APIs in your local environment |
 | awsmobile delete | Deletes the Mobile hub project |
-| awsmobile hlep [cmd] | Displays help for [cmd] |
+| awsmobile help [cmd] | Displays help for [cmd] |
 
 
 
