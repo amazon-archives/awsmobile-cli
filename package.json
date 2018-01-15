@@ -1,6 +1,6 @@
 {
   "name": "awsmobile-cli",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "awsmobile cli enables easy incorporation of aws features into your project",
   "main": "bin/awsmobile",
   "bin": {

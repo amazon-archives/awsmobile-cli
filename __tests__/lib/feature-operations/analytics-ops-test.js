@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const analytics = require('../../../lib/feature-operations/scripts/analytics-ops')
-var mhYamlLib = require('../../../lib/feature-operations/scripts/lib/mh-yaml-lib.js');
+var yamlOps = require('../../../lib/aws-operations/mobile-yaml-ops');
+var yamlSchema = require('../../../lib/aws-operations/mobile-yaml-schema');
 var yaml = require('js-yaml');
 
 var consoleLogRegistry = [];
@@ -46,11 +47,12 @@ const mockirer = function (inquirer, answers) {
 	};
 };
 
-mhYamlLib.save = function (projectInfo, yaml, callback) { callback() }
+yamlOps.writeYamlFileSync = function (obj, ymlFilePath) { console.log('writing file', ymlFilePath); }
+yamlOps.writeJsonFileSync = function (obj, jsonFilePath) { console.log('writing file', jsonFilePath); }
 
 test('Enabling analytics (originally disabled)', () => {
 
-	mhYamlLib.load = function (projectInfo) {
+	yamlOps.readYamlFileSync = function (projectInfo) {
 		return new Promise(function (resolve, reject) {
 		var data =
 			"---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -63,7 +65,7 @@ test('Enabling analytics (originally disabled)', () => {
 			"region: us-east-1" + "\n" +
 			"uploads: []" + "\n" +
 			"sharedComponents: {}" + "\n";
-			resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
+			resolve(yaml.safeLoad(data, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 }));
         });
 	}
 
@@ -86,7 +88,7 @@ test('Enabling analytics (originally disabled)', () => {
 		"uploads: []" + "\n" +
 		"sharedComponents: {}" + "\n";
 
-	let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+	let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
 	let logResult = [ 'Currently Amazon Pinpoint analytics is disabled, do you want to enable it?'];
 	cleanConsoleLog();
 
@@ -100,7 +102,7 @@ test('Enabling analytics (originally disabled)', () => {
 
 test('Not enabling analytics (originally disabled)', () => {
 	
-		mhYamlLib.load = function (projectInfo) {
+		yamlOps.readYamlFileSync = function (projectInfo) {
 			return new Promise(function (resolve, reject) {
 			var data =
 				"---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -113,7 +115,7 @@ test('Not enabling analytics (originally disabled)', () => {
 				"region: us-east-1" + "\n" +
 				"uploads: []" + "\n" +
 				"sharedComponents: {}" + "\n";
-				resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
+				resolve(yaml.safeLoad(data, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 }));
 			});
 		}
 		mockirer(inquirer, {
@@ -132,7 +134,7 @@ test('Not enabling analytics (originally disabled)', () => {
 			"uploads: []" + "\n" +
 			"sharedComponents: {}" + "\n";
 	
-		let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+		let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
 		let logResult = [ 'Currently Amazon Pinpoint analytics is disabled, do you want to enable it?'];
 		cleanConsoleLog();
 	
@@ -146,7 +148,7 @@ test('Not enabling analytics (originally disabled)', () => {
 
 test('Disabling analytics (originally enabled)', () => {
 	// Setting yaml
-	mhYamlLib.load = function (projectInfo) {
+	yamlOps.readYamlFileSync = function (projectInfo) {
 		return new Promise(function (resolve, reject) {
 		var data =
 			"---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -162,7 +164,7 @@ test('Disabling analytics (originally enabled)', () => {
 			"region: us-east-1" + "\n" +
 			"uploads: []" + "\n" +
 			"sharedComponents: {}" + "\n";
-			resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
+			resolve(yaml.safeLoad(data, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 }));
         });
 	}
 
@@ -182,7 +184,7 @@ test('Disabling analytics (originally enabled)', () => {
 		"uploads: []" + "\n" +
 		"sharedComponents: {}" + "\n";
 
-	let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+	let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
 	let logResult = [ 'Currently Amazon Pinpoint analytics is enabled, do you want to keep it enabled?'];
 	cleanConsoleLog();
 
@@ -196,7 +198,7 @@ test('Disabling analytics (originally enabled)', () => {
 
 test('Confirm default analytics (originally disabled)', () => {
 	// Setting yaml
-	mhYamlLib.load = function (projectInfo) {
+	yamlOps.readYamlFileSync = function (projectInfo) {
 		return new Promise(function (resolve, reject) {
 		var data =
 			"---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -209,7 +211,7 @@ test('Confirm default analytics (originally disabled)', () => {
 			"region: us-east-1" + "\n" +
 			"uploads: []" + "\n" +
 			"sharedComponents: {}" + "\n";
-			resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
+			resolve(yaml.safeLoad(data, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 }));
         });
 	}
 
@@ -231,7 +233,7 @@ test('Confirm default analytics (originally disabled)', () => {
 		"uploads: []" + "\n" +
 		"sharedComponents: {}" + "\n";
 
-	let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+	let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
 	let logResult = [ 'Currently Amazon Pinpoint analytics is disabled, do you want to enable it?'];
 	cleanConsoleLog();
 
@@ -245,7 +247,7 @@ test('Confirm default analytics (originally disabled)', () => {
 
 test('Confirm default analytics (originally enabled)', () => {
 
-	mhYamlLib.load = function (projectInfo) {
+	yamlOps.readYamlFileSync = function (projectInfo) {
 		return new Promise(function (resolve, reject) {
 		var data =
 			"---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -261,7 +263,7 @@ test('Confirm default analytics (originally enabled)', () => {
 			"region: us-east-1" + "\n" +
 			"uploads: []" + "\n" +
 			"sharedComponents: {}" + "\n";
-			resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
+			resolve(yaml.safeLoad(data, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 }));
         });
 	}
 
@@ -284,7 +286,7 @@ test('Confirm default analytics (originally enabled)', () => {
 		"uploads: []" + "\n" +
 		"sharedComponents: {}" + "\n";
 
-	let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+	let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
 	let logResult = [ 'Currently Amazon Pinpoint analytics is enabled, do you want to keep it enabled?'];
 	cleanConsoleLog();
 
@@ -298,7 +300,7 @@ test('Confirm default analytics (originally enabled)', () => {
 
 test('Confirm default analytics (originally enabled)', () => {
 	
-		mhYamlLib.load = function (projectInfo) {
+		yamlOps.readYamlFileSync = function (projectInfo) {
 			return new Promise(function (resolve, reject) {
 			var data =
 				"---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -314,7 +316,7 @@ test('Confirm default analytics (originally enabled)', () => {
 				"region: us-east-1" + "\n" +
 				"uploads: []" + "\n" +
 				"sharedComponents: {}" + "\n";
-				resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
+				resolve(yaml.safeLoad(data, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 }));
 			});
 		}
 	
@@ -337,7 +339,7 @@ test('Confirm default analytics (originally enabled)', () => {
 			"uploads: []" + "\n" +
 			"sharedComponents: {}" + "\n";
 	
-		let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+		let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
 		let logResult = [ 'Currently Amazon Pinpoint analytics is enabled, do you want to keep it enabled?'];
 		cleanConsoleLog();
 	
