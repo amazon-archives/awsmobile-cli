@@ -60,7 +60,7 @@ cd <your-app>
 awsmobile init
 ```
 
-Runing this command enables your Mobile Hub project with two default features: (1) Analytics, for receiving the analytics sent from your app and (2) Hosting and Streaming for easily hosting your app in the cloud. The command also adds the [AWS Amplify](https://github.com/aws/aws-amplify#aws-amplify) JavaScript library to your app so you can easily integrate Analytics, as well as other features provided by AWS. These features can easily be enabled using the awsmobile cli commands below.
+Running this command enables your Mobile Hub project with two default features: (1) Analytics, for receiving the analytics sent from your app and (2) Hosting and Streaming for easily hosting your app in the cloud. The command also adds the [AWS Amplify](https://github.com/aws/aws-amplify#aws-amplify) JavaScript library to your app so you can easily integrate Analytics, as well as other features provided by AWS. These features can easily be enabled using the awsmobile cli commands below.
 
 ## Commands Summary
 
@@ -69,8 +69,8 @@ The current set of commands supported by the awsmobile CLI are
 | Command              | Description |
 | --- | --- |
 | awsmobile init | Initializes a new Mobile Hub project, checks for IAM keys, and pulls the aws-exports.js file |
-| awsmobile configure | Shows existing keys and allows them to be changed if already set. If keys aren’t set, deep links the user to the IAM console to create keys and then prompts for the access key and secret key. This command helps edit configuration settings for the aws account or the project |
-| awsmobile pull | Retrives the latest details of the backend Mobile Hub project, such as the access infromation file aws-exports.js |
+| awsmobile configure | Shows existing keys and allows them to be changed if already set. If keys aren't set, deep links the user to the IAM console to create keys and then prompts for the access key and secret key. This command helps edit configuration settings for the aws account or the project |
+| awsmobile pull | Retrieves the latest details of the backend Mobile Hub project, such as the access information file aws-exports.js |
 | awsmobile push | Updates the backend Mobile Hub project with the latest local developments |
 | awsmobile publish | Executes awsmobile push, then builds and publishes client-side application to S3 and Cloud Front |
 | awsmobile run | Executes awsmobile push, then executes the project's start command to test run the client-side application |
@@ -81,7 +81,7 @@ The current set of commands supported by the awsmobile CLI are
 | awsmobile \<feature\> configure | Configures the definition of the objects in the feature |
 | awsmobile cloud-api invoke \<apiname\> \<method\> \<path\> [init] | Invokes the API for testing locally. This helps quickly test unsigned APIs in your local environment |
 | awsmobile delete | Deletes the Mobile hub project |
-| awsmobile hlep [cmd] | Displays help for [cmd] |
+| awsmobile help [cmd] | Displays help for [cmd] |
 
 
 
