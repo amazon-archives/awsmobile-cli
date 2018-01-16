@@ -47,8 +47,8 @@ const mockirer = function (inquirer, answers) {
 	};
 };
 
-yamlOps.writeYamlFileSync = function (obj, ymlFilePath) { console.log('writing file', ymlFilePath); }
-yamlOps.writeJsonFileSync = function (obj, jsonFilePath) { console.log('writing file', jsonFilePath); }
+yamlOps.writeYamlFileSync = function (obj, ymlFilePath) {  }
+yamlOps.writeJsonFileSync = function (obj, jsonFilePath) {  }
 
 test('Enabling analytics (originally disabled)', () => {
 

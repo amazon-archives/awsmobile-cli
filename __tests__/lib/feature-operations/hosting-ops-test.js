@@ -4,7 +4,8 @@ jest.mock('child_process');
 
 const inquirer = require('inquirer');
 const hostingOps = require('../../../lib/feature-operations/scripts/hosting-ops')
-var mhYamlLib = require('../../../lib/feature-operations/scripts/lib/mh-yaml-lib.js');
+var yamlOps = require('../../../lib/aws-operations/mobile-yaml-ops');
+var yamlSchema = require('../../../lib/aws-operations/mobile-yaml-schema');
 var yaml = require('js-yaml');
 
 const projectInfo = {};
@@ -51,10 +52,10 @@ const mockirer = function (inquirer, answers) {
     };
 };
 
-mhYamlLib.save = function (projectInfo, yaml, callback) { }
-
+yamlOps.writeYamlFileSync = function (obj, ymlFilePath) {  }
+yamlOps.writeJsonFileSync = function (obj, jsonFilePath) {  }
 test('Enabling hosting originally disabled', () => {
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -105,7 +106,7 @@ test('Enabling hosting originally disabled', () => {
 });
 
 test('Disable hosting originally enabled', () => {
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -156,7 +157,7 @@ test('Disable hosting originally enabled', () => {
 });
 
 test('Default (enable) hosting originally disabled', () => {
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -207,7 +208,7 @@ test('Default (enable) hosting originally disabled', () => {
 });
 
 test('Default (enable) hosting originally enabled', () => {
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -264,7 +265,7 @@ test('Default (enable) hosting originally enabled', () => {
 });
 
 test('Not enabling hosting originally disabled', () => {
-    mhYamlLib.load = function (projectInfo, callback) {
+    yamlOps.readYamlFileSync = function (projectInfo, callback) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -309,7 +310,7 @@ test('Not enabling hosting originally disabled', () => {
 });
 
 test('Enabling hosting originally enabled', () => {
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +

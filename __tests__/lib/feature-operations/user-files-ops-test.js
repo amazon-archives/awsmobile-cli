@@ -4,7 +4,8 @@ jest.mock('child_process');
 
 const inquirer = require('inquirer');
 const user_data_ops = require('../../../lib/feature-operations/scripts/user-files-ops')
-var mhYamlLib = require('../../../lib/feature-operations/scripts/lib/mh-yaml-lib.js');
+var yamlOps = require('../../../lib/aws-operations/mobile-yaml-ops');
+var yamlSchema = require('../../../lib/aws-operations/mobile-yaml-schema');
 var yaml = require('js-yaml');
 
 const projectInfo = {};
@@ -51,11 +52,12 @@ const mockirer = function (inquirer, answers) {
     };
 };
 
-mhYamlLib.save = function (projectInfo, yaml, callback) { }
+yamlOps.writeYamlFileSync = function (obj, ymlFilePath) {  }
+yamlOps.writeJsonFileSync = function (obj, jsonFilePath) {  }
 
 test('Enabling user-files originally disabled', () => {
 
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -105,7 +107,7 @@ test('Enabling user-files originally disabled', () => {
 
 test('Disabling user-files originally enabled', () => {
 
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -154,7 +156,7 @@ test('Disabling user-files originally enabled', () => {
 
 test('Setting user-files default (enabled) from disabled', () => {
 
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -204,7 +206,7 @@ test('Setting user-files default (enabled) from disabled', () => {
 
 test('Setting user-files default (enabled) from enabled', () => {
 
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -258,7 +260,7 @@ test('Setting user-files default (enabled) from enabled', () => {
 
 test('Disabling user-files originally disabled', () => {
 
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
@@ -304,7 +306,7 @@ test('Disabling user-files originally disabled', () => {
 
 test('Enabling user-files originally enabled', () => {
 
-    mhYamlLib.load = function (projectInfo) {
+    yamlOps.readYamlFileSync = function (projectInfo) {
         return new Promise(function (resolve, reject) {
         var data =
             "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
