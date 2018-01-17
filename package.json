@@ -33,9 +33,7 @@
     "aws-amplify": "^0.1.x",
     "aws-sdk": "^2.131.0",
     "chalk": "^2.0.1",
-    "codecov": "^1.0.1",
     "commander": "^2.11.0",
-    "download-git-repo": "^1.0.1",
     "extract-zip": "^1.6.6",
     "fs-extra": "^4.0.2",
     "http": "0.0.0",
@@ -50,11 +48,11 @@
     "ora": "^1.3.0",
     "os": "^0.1.1",
     "path": "^0.12.7",
-    "proxy-agent": "^2.1.0",
     "util": "^0.10.3",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "codecov": "^3.0.0",
     "jest": "^21.2.1",
     "mockirer": "^2.0.1"
   },
