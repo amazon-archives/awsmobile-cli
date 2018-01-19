@@ -33,7 +33,7 @@ let projectInfo = projectInfoManager.getProjectInfo()
 if(projectInfo){
     if(projectInfo.StartCommand && projectInfo.StartCommand.length > 0){
         if(projectInfo.BackendProjectID && projectInfo.BackendProjectID.length > 0){
-            backendProjectUpdate.run(run, 0, -1)
+            backendProjectUpdate.run(run, -1)
         }
     }else{
         console.log(chalk.red('missing frontend start command')) 

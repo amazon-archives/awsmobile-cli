@@ -17,13 +17,6 @@ const handler = require('../lib/backend-update.js')
 
 program
   .description('push the local development of the awsmobile project to the cloud')
-  .usage('[options]')
-  .option('-n, --nowait', 'return right after the mobile api call, no wait for cloud-api')
   .parse(process.argv)
 
-let waitFlag = 0
-if(program.nowait){
-    waitFlag = -1
-}
-
-handler.run(null, waitFlag, -1)
+handler.run(null, -1)

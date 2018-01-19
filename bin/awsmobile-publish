@@ -42,7 +42,7 @@ if(program.frontendOnly){
 }else{
     backendUpdate.run(function(){
         pubilshFrontend()
-    }, 0, -1)
+    }, -1)
 }
 
 function pubilshFrontend(){
