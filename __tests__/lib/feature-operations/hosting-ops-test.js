@@ -1,15 +1,26 @@
 'use strict';
 
-jest.mock('child_process');
+jest.mock('fs-extra')
 
+const fs = require('fs-extra')
 const inquirer = require('inquirer');
 const hostingOps = require('../../../lib/feature-operations/scripts/hosting-ops')
-var yamlOps = require('../../../lib/aws-operations/mobile-yaml-ops');
-var yamlSchema = require('../../../lib/aws-operations/mobile-yaml-schema');
-var yaml = require('js-yaml');
+const yamlOps = require('../../../lib/aws-operations/mobile-yaml-ops');
+const yamlSchema = require('../../../lib/aws-operations/mobile-yaml-schema');
+const yaml = require('js-yaml');
+const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 
-const projectInfo = {};
-
+const projectPath = '/projectName';
+const projectName = 'projectName'
+const backendYmlFilePath = pathManager.getBackendSpecProjectYmlFilePath(projectPath)
+const mock_projectInfo = {
+    "ProjectName": projectName,
+    "ProjectPath": projectPath,
+    "SourceDir": "src",
+    "DistributionDir": "dist",
+    "BuildCommand": "npm run-script build",
+    "StartCommand": "npm run-script start",
+}
 var consoleLogRegistry = [];
 
 const addConsoleLog = function (message) {
@@ -52,24 +63,22 @@ const mockirer = function (inquirer, answers) {
     };
 };
 
-yamlOps.writeYamlFileSync = function (obj, ymlFilePath) {  }
-yamlOps.writeJsonFileSync = function (obj, jsonFilePath) {  }
 test('Enabling hosting originally disabled', () => {
-    yamlOps.readYamlFileSync = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer enable
     mockirer(inquirer, {
@@ -93,12 +102,13 @@ test('Enabling hosting originally disabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['Currently Hosting is disabled, do you want to host your web app including a global CDN?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return hostingOps.specify({})
+    return hostingOps.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -106,27 +116,27 @@ test('Enabling hosting originally disabled', () => {
 });
 
 test('Disable hosting originally enabled', () => {
-    yamlOps.readYamlFileSync = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery" + "\n" +
-            "    attributes:" + "\n" +
-            "      enabled: true" + "\n" +
-            "      visibility: public-global" + "\n" +
-            "    components:" + "\n" +
-            "      release: !com.amazonaws.mobilehub.v0.Bucket {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      visibility: public-global" + "\n" +
+        "    components:" + "\n" +
+        "      release: !com.amazonaws.mobilehub.v0.Bucket {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer disable
     mockirer(inquirer, {
@@ -144,12 +154,13 @@ test('Disable hosting originally enabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['Currently Hosting is enabled, do you want to keep it enabled?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return hostingOps.specify({})
+    return hostingOps.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -157,21 +168,21 @@ test('Disable hosting originally enabled', () => {
 });
 
 test('Default (enable) hosting originally disabled', () => {
-    yamlOps.readYamlFileSync = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // Default answer
     mockirer(inquirer, {
@@ -195,12 +206,13 @@ test('Default (enable) hosting originally disabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['Currently Hosting is disabled, do you want to host your web app including a global CDN?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return hostingOps.specify({})
+    return hostingOps.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -208,31 +220,31 @@ test('Default (enable) hosting originally disabled', () => {
 });
 
 test('Default (enable) hosting originally enabled', () => {
-    yamlOps.readYamlFileSync = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery" + "\n" +
-            "    attributes:" + "\n" +
-            "      enabled: true" + "\n" +
-            "      visibility: public-global" + "\n" +
-            "    components:" + "\n" +
-            "      release: !com.amazonaws.mobilehub.v0.Bucket {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      visibility: public-global" + "\n" +
+        "    components:" + "\n" +
+        "      release: !com.amazonaws.mobilehub.v0.Bucket {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // Default answer
     mockirer(inquirer, {
-        
+
     });
 
     var resultYaml =
@@ -252,12 +264,13 @@ test('Default (enable) hosting originally enabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['Currently Hosting is enabled, do you want to keep it enabled?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return hostingOps.specify({})
+    return hostingOps.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -265,21 +278,21 @@ test('Default (enable) hosting originally enabled', () => {
 });
 
 test('Not enabling hosting originally disabled', () => {
-    yamlOps.readYamlFileSync = function (projectInfo, callback) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer disable
     mockirer(inquirer, {
@@ -297,12 +310,13 @@ test('Not enabling hosting originally disabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['Currently Hosting is disabled, do you want to host your web app including a global CDN?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return hostingOps.specify({})
+    return hostingOps.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -310,27 +324,27 @@ test('Not enabling hosting originally disabled', () => {
 });
 
 test('Enabling hosting originally enabled', () => {
-    yamlOps.readYamlFileSync = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery" + "\n" +
-            "    attributes:" + "\n" +
-            "      enabled: true" + "\n" +
-            "      visibility: public-global" + "\n" +
-            "    components:" + "\n" +
-            "      release: !com.amazonaws.mobilehub.v0.Bucket {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  content-delivery: !com.amazonaws.mobilehub.v0.ContentDelivery" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      visibility: public-global" + "\n" +
+        "    components:" + "\n" +
+        "      release: !com.amazonaws.mobilehub.v0.Bucket {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer enable
     mockirer(inquirer, {
@@ -354,12 +368,13 @@ test('Enabling hosting originally enabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['Currently Hosting is enabled, do you want to keep it enabled?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return hostingOps.specify({})
+    return hostingOps.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);

@@ -76,7 +76,6 @@ fs.readdirSync = readdirSync
 fs.lstatSync = lstatSync
 fs.readFileSync = readFileSync
 fs.existsSync = jest.fn((path)=>{
-    console.log('mock fs exist sync' + path)
     return fsDetails.hasOwnProperty(path)
 })
 fs.writeFileSync = jest.fn()
@@ -84,5 +83,6 @@ fs.rmdirSync = jest.fn()
 fs.renameSyn = jest.fn()
 fs.emptyDirSync = jest.fn()
 fs.copySync = jest.fn()
+fs.mkdirSync = jest.fn()
 
 module.exports = fs

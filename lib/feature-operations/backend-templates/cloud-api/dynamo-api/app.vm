@@ -180,15 +180,23 @@ app.post(path, function(req, res) {
 ***************************************/
 
 app.delete('###OBJECT_PATH###', function(req, res) {
-  console.log('removing object ' + awsmobile.aws_dynamodb_table_schemas);
   var params = {};
   if (userIdPresent && req.apiGateway) {
     params[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   } else {
     params[partitionKeyName] = req.params[partitionKeyName];
+     try {
+      params[partitionKeyName] = convertUrlType(req.params[partitionKeyName], partitionKeyType);
+    } catch(err) {
+      res.json({error: 'Wrong column type ' + err});
+    }
   }
   if (hasSortKey) {
-    params[sortKeyName] = req.params[sortKeyName];
+    try {
+      params[sortKeyName] = convertUrlType(req.params[sortKeyName], sortKeyType);
+    } catch(err) {
+      res.json({error: 'Wrong column type ' + err});
+    }
   }
 
   let removeItemParams = {
