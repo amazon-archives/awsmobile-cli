@@ -1,13 +1,27 @@
 'use strict';
 
-jest.mock('child_process');
+jest.mock('fs-extra')
+
+const fs = require('fs-extra')
 
 const inquirer = require('inquirer');
 const user_data_ops = require('../../../lib/feature-operations/scripts/user-files-ops')
-var mhYamlLib = require('../../../lib/feature-operations/scripts/lib/mh-yaml-lib.js');
-var yaml = require('js-yaml');
+const yamlOps = require('../../../lib/aws-operations/mobile-yaml-ops');
+const yamlSchema = require('../../../lib/aws-operations/mobile-yaml-schema');
+const yaml = require('js-yaml');
+const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 
-const projectInfo = {};
+const projectPath = '/projectName';
+const projectName = 'projectName'
+const backendYmlFilePath = pathManager.getBackendSpecProjectYmlFilePath(projectPath)
+const mock_projectInfo = {
+    "ProjectName": projectName,
+    "ProjectPath": projectPath,
+    "SourceDir": "src",
+    "DistributionDir": "dist",
+    "BuildCommand": "npm run-script build",
+    "StartCommand": "npm run-script start",
+}
 
 var consoleLogRegistry = [];
 
@@ -51,25 +65,22 @@ const mockirer = function (inquirer, answers) {
     };
 };
 
-mhYamlLib.save = function (projectInfo, yaml, callback) { }
-
 test('Enabling user-files originally disabled', () => {
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
 
-    mhYamlLib.load = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer enable
     mockirer(inquirer, {
@@ -91,12 +102,13 @@ test('Enabling user-files originally disabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['This feature is for storing user files in the cloud, would you like to enable it?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return user_data_ops.specify({})
+    return user_data_ops.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -104,26 +116,25 @@ test('Enabling user-files originally disabled', () => {
 });
 
 test('Disabling user-files originally enabled', () => {
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  user-files: !com.amazonaws.mobilehub.v0.UserFiles" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      wildcard-cors-policy: true" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
 
-    mhYamlLib.load = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "  user-files: !com.amazonaws.mobilehub.v0.UserFiles" + "\n" +
-            "    attributes:" + "\n" +
-            "      enabled: true" + "\n" +
-            "      wildcard-cors-policy: true" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     mockirer(inquirer, {
         enableUserData: false
@@ -140,12 +151,13 @@ test('Disabling user-files originally enabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['User files storage is enabled, do you want to keep it enabled?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return user_data_ops.specify({})
+    return user_data_ops.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -153,22 +165,21 @@ test('Disabling user-files originally enabled', () => {
 });
 
 test('Setting user-files default (enabled) from disabled', () => {
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
 
-    mhYamlLib.load = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer default
     mockirer(inquirer, {
@@ -190,12 +201,13 @@ test('Setting user-files default (enabled) from disabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['This feature is for storing user files in the cloud, would you like to enable it?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return user_data_ops.specify({})
+    return user_data_ops.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -203,26 +215,25 @@ test('Setting user-files default (enabled) from disabled', () => {
 });
 
 test('Setting user-files default (enabled) from enabled', () => {
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  user-files: !com.amazonaws.mobilehub.v0.UserFiles" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      wildcard-cors-policy: true" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
 
-    mhYamlLib.load = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "  user-files: !com.amazonaws.mobilehub.v0.UserFiles" + "\n" +
-            "    attributes:" + "\n" +
-            "      enabled: true" + "\n" +
-            "      wildcard-cors-policy: true" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer default
     mockirer(inquirer, {
@@ -244,12 +255,13 @@ test('Setting user-files default (enabled) from enabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['User files storage is enabled, do you want to keep it enabled?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return user_data_ops.specify({})
+    return user_data_ops.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -257,22 +269,21 @@ test('Setting user-files default (enabled) from enabled', () => {
 });
 
 test('Disabling user-files originally disabled', () => {
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
 
-    mhYamlLib.load = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
 
     // answer disable
     mockirer(inquirer, {
@@ -290,12 +301,13 @@ test('Disabling user-files originally disabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['This feature is for storing user files in the cloud, would you like to enable it?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return user_data_ops.specify({})
+    return user_data_ops.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
@@ -303,26 +315,26 @@ test('Disabling user-files originally disabled', () => {
 });
 
 test('Enabling user-files originally enabled', () => {
+    // Setting yaml
+    var data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  user-files: !com.amazonaws.mobilehub.v0.UserFiles" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      wildcard-cors-policy: true" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
 
-    mhYamlLib.load = function (projectInfo) {
-        return new Promise(function (resolve, reject) {
-        var data =
-            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
-            "features:" + "\n" +
-            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
-            "    components:" + "\n" +
-            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
-            "  user-files: !com.amazonaws.mobilehub.v0.UserFiles" + "\n" +
-            "    attributes:" + "\n" +
-            "      enabled: true" + "\n" +
-            "      wildcard-cors-policy: true" + "\n" +
-            "name: '-2017-09-11-10-33-25'" + "\n" +
-            "region: us-east-1" + "\n" +
-            "uploads: []" + "\n" +
-            "sharedComponents: {}" + "\n";
-            resolve(yaml.safeLoad(data, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 }));
-        });
-    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
+
     // answer enabling
     mockirer(inquirer, {
         enableUserData: true
@@ -343,12 +355,13 @@ test('Enabling user-files originally enabled', () => {
         "uploads: []" + "\n" +
         "sharedComponents: {}" + "\n";
 
-    let result = yaml.safeLoad(resultYaml, { schema: mhYamlLib.YML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
     let logResult = ['User files storage is enabled, do you want to keep it enabled?'];
     cleanConsoleLog();
 
     expect.assertions(2);
-    return user_data_ops.specify({})
+    return user_data_ops.specify(mock_projectInfo)
         .then(currentDefiniton => {
             expect(currentDefiniton.yamlDefinition).toEqual(result);
             expect(consoleLogRegistry).toEqual(logResult);
