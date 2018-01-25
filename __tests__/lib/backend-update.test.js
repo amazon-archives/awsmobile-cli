@@ -48,6 +48,11 @@ describe('backend update', () => {
         "region": "us-east-1"
     }
 
+    const mock_awsDetails = {
+        info: null, 
+        config: mock_awsConfig
+    }
+
     const mock_backendProjectDetails = {}
 
     const mockOpsFeatureFilePath = path.normalize(path.join(__dirname, '../../__mocks__/mock-ops-feature.js'))
@@ -96,7 +101,7 @@ describe('backend update', () => {
         projectInfoManager.setProjectInfo = jest.fn()
 
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
-            callback(mock_awsConfig)
+            callback(mock_awsDetails)
         })
 
         awsExceptionHandler.handleMobileException = jest.fn()
