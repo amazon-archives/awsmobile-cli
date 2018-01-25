@@ -40,9 +40,7 @@ if(program.cloudFront){
 if(program.frontendOnly){
     pubilshFrontend()
 }else{
-    backendUpdate.run(function(){
-        pubilshFrontend()
-    }, -1)
+    backendUpdate.run(pubilshFrontend)
 }
 
 function pubilshFrontend(){

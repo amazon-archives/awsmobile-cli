@@ -19,4 +19,4 @@ program
   .description('push the local development of the awsmobile project to the cloud')
   .parse(process.argv)
 
-handler.run(null, -1)
+handler.run(null)

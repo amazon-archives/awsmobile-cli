@@ -144,7 +144,7 @@ describe('backend update', () => {
 
         backendCreate.createBackendProject = jest.fn()
 
-        backendUpdate.run(callback, waitFlag, syncToDevFlag)
+        backendUpdate.run(callback)
 
         expect(backendCreate.createBackendProject).toBeCalled()
         expect(mock_mobileClient.updateProject).not.toBeCalled()
@@ -172,7 +172,7 @@ describe('backend update', () => {
             }
         })
 
-        backendUpdate.run(callback, waitFlag, syncToDevFlag)
+        backendUpdate.run(callback)
 
         expect(backendCreate.createBackendProject).not.toBeCalled()
         expect(mock_mobileClient.updateProject).toBeCalled()
@@ -208,7 +208,7 @@ describe('backend update', () => {
             return 1
         })
 
-        backendUpdate.run(callback, waitFlag, syncToDevFlag)
+        backendUpdate.run(callback)
 
         expect(backendCreate.createBackendProject).not.toBeCalled()
         expect(mock_mobileClient.updateProject).toBeCalled()
