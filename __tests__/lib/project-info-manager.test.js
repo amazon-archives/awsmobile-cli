@@ -40,7 +40,6 @@ describe('project info manager functions', () => {
         "FrontendLastBuildTime": "",
         "LastPublishTime": "",
         "BackendFormat": "yml",
-        "BackendLastBuildTime": "",
         "BackendLastUpdateTime": "",
         "BackendLastUpdateSuccessful": false,
         "BackendProjectID": "",
