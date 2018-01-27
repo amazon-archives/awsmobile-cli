@@ -153,8 +153,6 @@ describe('backend update', () => {
 
     test('backend without cloud-api and without api call errors', () => {
         const callback = jest.fn()
-        const waitFlag = 1
-        const syncToDevFlag = 0
 
         mock_projectInfo.BackendProjectID = 'mock_backendProjectID'
         
@@ -175,14 +173,11 @@ describe('backend update', () => {
         backendUpdate.run(callback)
 
         expect(backendCreate.createBackendProject).not.toBeCalled()
-        expect(mock_mobileClient.updateProject).toBeCalled()
         expect(callback).toBeCalled()
     })
 
     test('backend with cloud-api and without api call errors', () => {
         const callback = jest.fn()
-        const waitFlag = 1
-        const syncToDevFlag = 0
 
         mock_projectInfo.BackendProjectID = 'mock_backendProjectID'
         
@@ -211,7 +206,6 @@ describe('backend update', () => {
         backendUpdate.run(callback)
 
         expect(backendCreate.createBackendProject).not.toBeCalled()
-        expect(mock_mobileClient.updateProject).toBeCalled()
         expect(mock_mobileClient.describeProject).toBeCalled()
         expect(callback).toBeCalled()
     })
