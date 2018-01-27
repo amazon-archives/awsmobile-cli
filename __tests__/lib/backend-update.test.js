@@ -127,7 +127,7 @@ describe('backend update', () => {
     })
 
     beforeEach(() => {
-        mock_projectInfo.BackendLastUpdateSuccessful = false
+        mock_projectInfo.BackendLastPushSuccessful = false
         backendCreate.createBackendProject.mockClear()
         backendInfoManager.syncCurrentBackendInfo.mockClear()
         awsExceptionHandler.handleMobileException.mockClear()
