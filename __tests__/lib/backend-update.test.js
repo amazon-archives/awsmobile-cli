@@ -94,7 +94,7 @@ describe('backend update', () => {
             return mock_projectInfo
         })
 
-        projectInfoManager.checkBackendProjectLastUpdateTime = jest.fn((projectInfo, backendDetails) => {
+        projectInfoManager.checkBackendUpdateNoConflict = jest.fn((projectInfo, backendDetails) => {
             return true
         })
 
