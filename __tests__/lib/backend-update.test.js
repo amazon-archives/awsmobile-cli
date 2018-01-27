@@ -146,7 +146,6 @@ describe('backend update', () => {
 
         backendUpdate.run(callback)
 
-        expect(backendCreate.createBackendProject).toBeCalled()
         expect(mock_mobileClient.updateProject).not.toBeCalled()
         expect(callback).not.toBeCalled()
     })
