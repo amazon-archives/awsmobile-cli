@@ -108,7 +108,7 @@ describe('backend retrieve', () => {
         expect(callback).not.toBeCalled()
     })
 
-    test('get when api call successful', () => {
+    test('pull when api call successful', () => {
         const callback = jest.fn()
         const mock_mobileClient = {
             describeProject: jest.fn((param, callback)=>{
@@ -129,7 +129,7 @@ describe('backend retrieve', () => {
         expect(callback).toBeCalled()
     })
 
-    test('get when api call rutnrs error', () => {
+    test('pull when api call rutnrs error', () => {
         const callback = jest.fn()
         const mock_mobileClient = {
             describeProject: jest.fn((param, callback)=>{
@@ -147,4 +147,43 @@ describe('backend retrieve', () => {
         expect(awsExceptionHandler.handleMobileException.mock.calls[0][0]).toBe(mock_describeError)
         expect(callback).not.toBeCalled()
     })
+
+    test('get when api call successful', () => {
+        const callback = jest.fn()
+        const mock_mobileClient = {
+            describeProject: jest.fn((param, callback)=>{
+                callback(null, mock_describeResponse)
+            })
+        }
+        awsClient.Mobile = jest.fn(()=>{
+            return mock_mobileClient
+        })
+
+        backendRetrieve.getLatestBackendDetails(mock_mobileProjectID, callback)
+
+        expect(mock_mobileClient.describeProject).toBeCalled()
+        expect(callback).toBeCalled()
+        expect(callback.mock.calls[0][0]).toBe(mock_describeResponse.details)
+    })
+
+    test('get when api call rutnrs error', () => {
+        const callback = jest.fn()
+        const mock_mobileClient = {
+            describeProject: jest.fn((param, callback)=>{
+                callback(mock_describeError, mock_describeResponse)
+            })
+        }
+        awsClient.Mobile = jest.fn(()=>{
+            return mock_mobileClient
+        })
+
+        backendRetrieve.getLatestBackendDetails(mock_mobileProjectID, callback)
+
+        expect(mock_mobileClient.describeProject).toBeCalled()
+        expect(awsExceptionHandler.handleMobileException).toBeCalled()
+        expect(awsExceptionHandler.handleMobileException.mock.calls[0][0]).toBe(mock_describeError)
+        expect(callback).not.toBeCalled()
+    })
+
+    
 })

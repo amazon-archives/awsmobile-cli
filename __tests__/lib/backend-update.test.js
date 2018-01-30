@@ -1,5 +1,6 @@
 jest.mock('fs-extra')
 jest.mock('ora')
+jest.mock('opn')
 jest.mock('../../lib/aws-operations/aws-client.js')
 jest.mock('../../lib/aws-operations/aws-config-manager.js')
 jest.mock('../../lib/aws-operations/aws-exception-handler.js')
@@ -13,13 +14,17 @@ jest.mock('../../lib/backend-operations/ops-cloud-api.js')
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 const path = require('path')
+const moment = require('moment')
+const opn = require('opn')
 
 const backendUpdate = require('../../lib/backend-update.js')
 
 const projectInfoManager = require('../../lib/project-info-manager.js')
-const backendCreate = require('../../lib/backend-create.js')
+const backendRetrieve = require('../../lib/backend-retrieve.js')
 const projectBackendBuilder = require('../../lib/project-backend-builder.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
+const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
+const dfops = require('../../lib/utils/directory-file-ops.js')
 const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js')
 const awsClient = require('../../lib/aws-operations/aws-client.js')
 const awsExceptionHandler = require('../../lib/aws-operations/aws-exception-handler.js')
@@ -53,7 +58,9 @@ describe('backend update', () => {
         config: mock_awsConfig
     }
 
-    const mock_backendProjectDetails = {}
+    const mock_backendProjectDetails = {
+        consoleUrl: 'mockConsoleUrl'
+    }
 
     const mockOpsFeatureFilePath = path.normalize(path.join(__dirname, '../../__mocks__/mock-ops-feature.js'))
     const mockOpsFeature = require(mockOpsFeatureFilePath)
@@ -89,7 +96,15 @@ describe('backend update', () => {
     
     beforeAll(() => {
         global.console = {log: jest.fn()}
-        
+
+        backendRetrieve.getLatestBackendDetails =  jest.fn((backendProjectID, callback)=>{
+            callback(mock_backendProjectDetails)
+        })
+
+        awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
+            callback(mock_awsDetails)
+        })
+
         projectInfoManager.getProjectInfo = jest.fn(()=>{
             return mock_projectInfo
         })
@@ -100,15 +115,7 @@ describe('backend update', () => {
 
         projectInfoManager.setProjectInfo = jest.fn()
 
-        awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
-            callback(mock_awsDetails)
-        })
-
         awsExceptionHandler.handleMobileException = jest.fn()
-
-        mockirer(inquirer, {
-            createBackend: true
-        }) 
         
         pathManager.getOpsFeatureFilePath = jest.fn(()=>{
             return mockOpsFeatureFilePath
@@ -116,6 +123,12 @@ describe('backend update', () => {
 
         awsClient.Mobile = jest.fn(()=>{
             return mock_mobileClient
+        })
+
+        projectBackendBuilder.build = jest.fn((callback) => {
+            if(callback){
+                callback()
+            }
         })
 
         backendInfoManager.syncCurrentBackendInfo = 
@@ -127,51 +140,99 @@ describe('backend update', () => {
     })
 
     beforeEach(() => {
-        mock_projectInfo.BackendLastPushSuccessful = false
-        backendCreate.createBackendProject.mockClear()
+        mock_projectInfo.BackendLastSyncTime = '2018-01-01-01-01-01'
+        mock_projectInfo.BackendLastPushTime = '2018-01-01-01-01-01'
+        dfops.getDirContentMTime  = jest.fn((dir, ignoredDirs, ignoredFiles) => {
+            return moment('2018-01-01-01-01-02',  awsmobileJSConstant.DateTimeFormatString)
+        })
+        projectInfoManager.checkBackendUpdateNoConflict = jest.fn((projectInfo, backendDetails)=>{
+            return true
+        })
+        mock_projectInfo.BackendProjectID = 'BackendProjectID'
+        mock_projectInfo.BackendLastPushSuccessful = true
+        projectBackendBuilder.build.mockClear()
+        projectInfoManager.checkBackendUpdateNoConflict.mockClear()
+        backendRetrieve.getLatestBackendDetails.mockClear()
         backendInfoManager.syncCurrentBackendInfo.mockClear()
         awsExceptionHandler.handleMobileException.mockClear()
         mock_mobileClient.updateProject.mockClear()
         mock_mobileClient.describeProject.mockClear()
     })
 
-    test('no existing backend', () => {
+    test('timestamp check fail', () => {
         const callback = jest.fn()
-        const waitFlag = 1
-        const syncToDevFlag = 0
 
-        mock_projectInfo.BackendProjectID = ''
-
-        backendCreate.createBackendProject = jest.fn()
+        dfops.getDirContentMTime  = jest.fn((dir, ignoredDirs, ignoredFiles) => {
+            return moment('2018-01-01-01-01-00',  awsmobileJSConstant.DateTimeFormatString)
+        })
 
         backendUpdate.run(callback)
 
+        expect(backendRetrieve.getLatestBackendDetails).not.toBeCalled()
         expect(mock_mobileClient.updateProject).not.toBeCalled()
         expect(callback).not.toBeCalled()
+    })
+
+    test('no existing backend', () => {
+        const callback = jest.fn()
+
+        mock_projectInfo.BackendProjectID = ''
+
+        backendUpdate.run(callback)
+
+        expect(backendRetrieve.getLatestBackendDetails).not.toBeCalled()
+        expect(mock_mobileClient.updateProject).not.toBeCalled()
+        expect(callback).not.toBeCalled()
+    })
+
+    test('backend updated by in cloud others, no force push', () => {
+        const callback = jest.fn()
+        projectInfoManager.checkBackendUpdateNoConflict = jest.fn((projectInfo, backendDetails)=>{
+            return false
+        })
+        
+        mockirer(inquirer, {
+            forcePush: false,
+            openConsole: true
+        }) 
+
+        backendUpdate.run(callback)
+
+        expect(backendRetrieve.getLatestBackendDetails).toBeCalled()
+        expect(opn).toBeCalled()
+        expect(opn.mock.calls[0][0]).toBe(mock_backendProjectDetails.consoleUrl)
+        expect(mock_mobileClient.updateProject).not.toBeCalled()
+        expect(callback).not.toBeCalled()
+    })
+
+    test('backend updated by in cloud others, force push', () => {
+        const callback = jest.fn()
+        projectInfoManager.checkBackendUpdateNoConflict = jest.fn((projectInfo, backendDetails)=>{
+            return false
+        })
+
+        mockirer(inquirer, {
+            forcePush: true,
+            openConsole: true
+        }) 
+
+        backendUpdate.run(callback)
+
+        expect(backendRetrieve.getLatestBackendDetails).toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(callback).toBeCalled()
     })
 
     test('backend without cloud-api and without api call errors', () => {
         const callback = jest.fn()
 
-        mock_projectInfo.BackendProjectID = 'mock_backendProjectID'
-        
-        backendInfoManager.getBackendDetails = jest.fn((projectPath) => {
-            return mock_backendProjectDetails
-        })
-
         backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
             return ['hosting']
         })
 
-        projectBackendBuilder.build = jest.fn((callback) => {
-            if(callback){
-                callback()
-            }
-        })
-
         backendUpdate.run(callback)
 
-        expect(backendCreate.createBackendProject).not.toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled()
         expect(callback).toBeCalled()
     })
 
@@ -179,19 +240,9 @@ describe('backend update', () => {
         const callback = jest.fn()
 
         mock_projectInfo.BackendProjectID = 'mock_backendProjectID'
-        
-        backendInfoManager.getBackendDetails = jest.fn((projectPath) => {
-            return mock_backendProjectDetails
-        })
 
         backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
             return ['cloud-api']
-        })
-
-        projectBackendBuilder.build = jest.fn((callback) => {
-            if(callback){
-                callback()
-            }
         })
 
         opsCloudApi.getFormationStateSummary = jest.fn((backendDetails) => {
@@ -204,10 +255,7 @@ describe('backend update', () => {
 
         backendUpdate.run(callback)
 
-        expect(backendCreate.createBackendProject).not.toBeCalled()
-        expect(mock_mobileClient.describeProject).toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled()
         expect(callback).toBeCalled()
     })
-
-
 })
