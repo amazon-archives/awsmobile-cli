@@ -223,26 +223,33 @@ describe('backend update', () => {
         expect(callback).toBeCalled()
     })
 
-    test('backend without cloud-api and without api call errors', () => {
+    test('backend update call failed', () => {
         const callback = jest.fn()
 
         backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
             return ['hosting']
         })
 
+        mock_mobileClient.updateProject = jest.fn((param, callback)=>{
+            callback({err: 'update call failed'}, mock_updateResponse)
+        })
+
         backendUpdate.run(callback)
 
         expect(mock_mobileClient.updateProject).toBeCalled()
-        expect(callback).toBeCalled()
+        expect(awsExceptionHandler.handleMobileException).toBeCalled()
+        expect(callback).not.toBeCalled()
     })
 
-    test('backend with cloud-api and without api call errors', () => {
+    test('backend update call successful, not wait needed', () => {
         const callback = jest.fn()
 
-        mock_projectInfo.BackendProjectID = 'mock_backendProjectID'
-
         backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
-            return ['cloud-api']
+            return ['hosting']
+        }) 
+        
+        mock_mobileClient.updateProject = jest.fn((param, callback)=>{
+            callback(null, mock_updateResponse)
         })
 
         opsCloudApi.getFormationStateSummary = jest.fn((backendDetails) => {
@@ -252,6 +259,84 @@ describe('backend update', () => {
         opsCloudApi.getStateGroup = jest.fn((cloudFormationState) => {
             return 1
         })
+
+        backendUpdate.run(callback)
+
+        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(callback).toBeCalled()
+    })
+
+    test('backend update call successful, wait needed and end in success', () => {
+        const callback = jest.fn()
+
+        backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
+            return ['cloud-api']
+        })
+
+        mock_mobileClient.updateProject = jest.fn((param, callback)=>{
+            callback(null, mock_updateResponse)
+        })
+
+        opsCloudApi.getFormationStateSummary = jest.fn((backendDetails) => {
+            return {}
+        })
+
+        opsCloudApi.getStateGroup = jest.fn()
+        opsCloudApi.getStateGroup.mockReturnValueOnce(0)
+        opsCloudApi.getStateGroup.mockReturnValueOnce(1)
+
+
+        backendUpdate.run(callback)
+
+        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(callback).toBeCalled()
+    })
+
+    test('backend update call successful, wait needed and end in interruption', () => {
+        const callback = jest.fn()
+
+        backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
+            return ['cloud-api']
+        })
+
+        mock_mobileClient.updateProject = jest.fn((param, callback)=>{
+            callback(null, mock_updateResponse)
+        })
+
+        opsCloudApi.getFormationStateSummary = jest.fn((backendDetails) => {
+            return {}
+        })
+
+        opsCloudApi.getStateGroup = jest.fn()
+        opsCloudApi.getStateGroup.mockReturnValueOnce(0)
+        opsCloudApi.getStateGroup.mockReturnValueOnce(-1)
+
+
+        backendUpdate.run(callback)
+
+        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(callback).toBeCalled()
+    })
+
+    test('backend update call successful, wait needed and end in failure', () => {
+        const callback = jest.fn()
+
+        backendSpecManager.getEnabledFeatures = jest.fn((projectInfo) => {
+            return ['cloud-api']
+        })
+
+        mock_mobileClient.updateProject = jest.fn((param, callback)=>{
+            callback(null, mock_updateResponse)
+        })
+
+        opsCloudApi.getFormationStateSummary = jest.fn((backendDetails) => {
+            return {}
+        })
+
+        opsCloudApi.getStateGroup = jest.fn()
+        opsCloudApi.getStateGroup.mockReturnValueOnce(0)
+        opsCloudApi.getStateGroup.mockReturnValueOnce(2)
+
 
         backendUpdate.run(callback)
 
