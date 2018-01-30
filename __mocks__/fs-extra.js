@@ -72,7 +72,9 @@ function readFileSync(filePath) {
 }
 
 fs.__setMockFiles = __setMockFiles
-fs.readdirSync = readdirSync
+fs.readdirSync = jest.fn((path)=>{
+    return readdirSync(path)
+})
 fs.lstatSync = lstatSync
 fs.readFileSync = readFileSync
 fs.existsSync = jest.fn((path)=>{
