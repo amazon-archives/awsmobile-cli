@@ -40,7 +40,17 @@ describe('command init', () => {
 
     const mock_mobile_project_id = 'mock_mobile_project_id'
 
-    
+    const mock_projectInfo = {
+        "ProjectName": 'projectName',
+        "ProjectPath": '/projectName',
+        "SourceDir": "src",
+        "DistributionDir": "dist",
+        "BuildCommand": "npm run-script build",
+        "StartCommand": "npm run-script start",
+        'BackendProjectName': 'BackendProjectName', 
+        'BackendProjectID': 'BackendProjectID', 
+    }
+
     beforeAll(() => {
         global.console = {log: jest.fn()}
 
@@ -48,55 +58,78 @@ describe('command init', () => {
             confirmInit: true
         }) 
 
-
-
-
-        projectInfoManager.setProjectInfo = jest.fn()
-
-        backendSpecManager.getBackendProjectObject = jest.fn((projectInfo)=>{
-            return mock_backendProject
+        awsmobileBaseManager.backupAwsmobileBase = jest.fn()
+        awsmobileBaseManager.placeAwsmobileBase = jest.fn((projectPath, callback)=>{
+            callback()
+        })
+        gitManager.initialize = jest.fn()
+        projectInfoManager.configureProjectInfo = jest.fn((callback)=>{
+            if(callback){
+                callback(mock_projectInfo, mock_projectInfo)
+            }
+        })
+        backendRetrieve.linkToBackend = jest.fn((projectInfo, mobileProjectID, flag, callback)=>{
+            callback(projectInfo)
+        })
+        backendCreate.createBackendProject = jest.fn((projectInfo, callback)=>{
+            callback(projectInfo)
         })
 
-        pathManager.getOpsFeatureFilePath = jest.fn((featureName)=>{
-            return path.normalize(path.join(__dirname +'/../../lib/backend-operations', featureOpsMapping[featureName]))
-        })
-
-        backendSpecManager.getEnabledFeaturesFromObject = jest.fn((backendProject) => {
-            return ['cloud-api']
-        })
-
-        opeCloudApi.build = jest.fn((projectInfo, backendProject, callback)=>{
-            callback(true)
-        })
-
-        opsProject.build = jest.fn((projectInfo, backendProject, callback)=>{
-            callback(true)
-        })
+        pathManager.getDotAWSMobileDirPath_relative = jest.fn((path)=>{return path + 'relative'})
+        pathManager.getCurrentBackendInfoDirPath_relative = jest.fn((path)=>{return path + 'relative'})
+        pathManager.getBackendDirPath_relative = jest.fn((path)=>{return path + 'relative'})
     })
 
     beforeEach(() => {
+        awsmobileBaseManager.backupAwsmobileBase.mockClear()
+        awsmobileBaseManager.placeAwsmobileBase.mockClear()
+        backendRetrieve.linkToBackend.mockClear()
+        backendCreate.createBackendProject.mockClear()
     })
 
     test('int without mobile project id', () => {
         commandInit.init()
+        
+        expect(awsmobileBaseManager.backupAwsmobileBase).toBeCalled()
+        expect(awsmobileBaseManager.placeAwsmobileBase).toBeCalled()
+        expect(backendRetrieve.linkToBackend).not.toBeCalled()
+        expect(backendCreate.createBackendProject).toBeCalled()
+
     })
 
     test('int with mobile project id', () => {
         commandInit.init(mock_mobile_project_id)
+        
+        expect(awsmobileBaseManager.backupAwsmobileBase).toBeCalled()
+        expect(awsmobileBaseManager.placeAwsmobileBase).toBeCalled()
+        expect(backendRetrieve.linkToBackend).toBeCalled()
+        expect(backendCreate.createBackendProject).not.toBeCalled()
     })
 
     test('int on valid awsmobilejs project without mobile project id', () => {
+        projectValidator.validate = jest.fn((projectPath)=>{return true})
+
         pathManager.getProjectInfoFilePath = jest.fn((projectPath)=>{
             return path.normalize(__dirname +'/../../_mocks_/mock-project-info.json')
         }) 
+
         commandInit.init()
+
+        expect(backendRetrieve.linkToBackend).not.toBeCalled()
+        expect(backendCreate.createBackendProject).toBeCalled()
     })
 
     test('int on valid awsmobilejs project with mobile project id', () => {
+       projectValidator.validate = jest.fn((projectPath)=>{return true})
+
         pathManager.getProjectInfoFilePath = jest.fn((projectPath)=>{
             return path.normalize(__dirname +'/../../_mocks_/mock-project-info.json')
         }) 
+
         commandInit.init(mock_mobile_project_id)
+
+        expect(backendRetrieve.linkToBackend).toBeCalled()
+        expect(backendCreate.createBackendProject).not.toBeCalled()
     })
     
 })
