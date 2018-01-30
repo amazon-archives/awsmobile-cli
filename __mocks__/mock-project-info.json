@@ -1,0 +1,10 @@
+{
+    "ProjectName": "projectName",
+    "ProjectPath": "/projectName",
+    "SourceDir": "src",
+    "DistributionDir": "dist",
+    "BuildCommand": "npm run-script build",
+    "StartCommand": "npm run-script start",
+    "BackendProjectName": "BackendProjectName", 
+    "BackendProjectID": "BackendProjectID"
+}

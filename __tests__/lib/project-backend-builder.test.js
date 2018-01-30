@@ -6,8 +6,6 @@ jest.mock('../../lib/backend-operations/backend-spec-manager.js')
 jest.mock('../../lib/backend-operations/ops-project.js')
 jest.mock('../../lib/backend-operations/ops-cloud-api.js')
 
-const moment = require('moment')
-const fs = require('fs-extra')
 const path = require('path')
 
 const projectInfoManager = require('../../lib/project-info-manager.js')
