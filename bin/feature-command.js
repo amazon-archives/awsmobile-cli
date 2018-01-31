@@ -20,6 +20,7 @@ const _ = require('lodash')
 const projectInfoManager = require('../lib/project-info-manager.js')
 const pathManager = require('../lib/utils/awsmobilejs-path-manager.js')
 const backendSpecManager = require('../lib/backend-operations/backend-spec-manager.js')
+const mobileFeatures = require('../lib/aws-operations/mobile-features.js')
 
 let _featureName
 let _args
@@ -142,6 +143,15 @@ function displayHelp(subcommand){
     }
 }
 
+function list(){
+    console.log()
+    console.log(chalk.gray('    #awsmobile features'))
+    for(let i = 0; i < mobileFeatures.length; i++){
+        console.log('      ' + mobileFeatures[i])
+    }
+}
+
 module.exports = {
-    run
+    run, 
+    list
 }
