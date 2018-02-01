@@ -71,7 +71,7 @@ describe('command init', () => {
         backendRetrieve.linkToBackend = jest.fn((projectInfo, mobileProjectID, flag, callback)=>{
             callback(projectInfo)
         })
-        backendCreate.createBackendProject = jest.fn((projectInfo, callback)=>{
+        backendCreate.createBackendProject = jest.fn((projectInfo, contentZipFilePath, callback)=>{
             callback(projectInfo)
         })
 
