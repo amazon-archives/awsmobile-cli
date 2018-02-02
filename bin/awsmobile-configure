@@ -23,8 +23,10 @@ const options = ['aws', 'project']
 
 program
     .description('edit configuration settings of the aws account or the project')
-    .usage('[aws|project] [options]')
+    .usage('<aws|project> [options]')
     .option('-l, --list', 'list the current configuration settings')
+    .option('-p, --profile <name>', '(aws) use named profile for aws access')
+    .option('-n, --new-user', '(aws) walk through the steps to setup aws access')
     .parse(process.argv)
 
 if (program.args.length < 1){
@@ -69,11 +71,12 @@ function configure(selection)
 
 function configAWS(){
     if(program.list){
-        console.log('here\'s the current configurations for aws')
         awsConfigManager.listAWSConfig()
+    }else if(program.newUser){
+        awsConfigManager.newUserSetup()
     }else{
         console.log(chalk.blue('configure aws'))
-        awsConfigManager.configureAWS()
+        awsConfigManager.configureAWS(program.profile)
     }
 }
 
@@ -82,7 +85,6 @@ function configProject(){
     let projectInfo = projectInfoManager.getProjectInfo()
     if(projectInfo){
         if(program.list){
-            console.log('here\'s the current configurations for the project')
             projectInfoManager.listProjectInfo()
         }else{
             console.log(chalk.blue('configure project'))

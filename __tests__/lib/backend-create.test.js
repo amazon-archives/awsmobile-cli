@@ -41,6 +41,11 @@ describe('backend create', () => {
         "region": "us-east-1"
     }
 
+    const mock_awsDetails = {
+        info: null, 
+        config: mock_awsConfig
+    }
+
     const mock_mobileProjectName = 'mock_mobileProjectName'
 
     const mock_createError = {
@@ -57,7 +62,7 @@ describe('backend create', () => {
         global.console = {log: jest.fn()}
         fs.__setMockFiles(MOCK_FILE_INFO) 
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
-            callback(mock_awsConfig)
+            callback(mock_awsDetails)
         })
         awsExceptionHandler.handleMobileException = jest.fn()
         mockirer(inquirer, {
@@ -88,7 +93,7 @@ describe('backend create', () => {
         expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][0]).toBe(mock_projectInfo)
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][1]).toBe(mock_createResponse.details)
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsConfig)
+        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsDetails)
         expect(callback).toBeCalled()
     })
 
