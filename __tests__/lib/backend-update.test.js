@@ -315,7 +315,7 @@ describe('backend update', () => {
         backendUpdate.run(callback)
 
         expect(mock_mobileClient.updateProject).toBeCalled()
-        expect(callback).toBeCalled()
+        expect(callback).not.toBeCalled()
     })
 
     test('backend update call successful, wait needed and end in failure', () => {
@@ -341,6 +341,6 @@ describe('backend update', () => {
         backendUpdate.run(callback)
 
         expect(mock_mobileClient.updateProject).toBeCalled()
-        expect(callback).toBeCalled()
+        expect(callback).not.toBeCalled()
     })
 })
