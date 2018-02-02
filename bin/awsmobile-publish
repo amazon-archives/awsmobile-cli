@@ -38,11 +38,11 @@ if(program.cloudFront){
 }
 
 if(program.frontendOnly){
-    pubilshFrontend()
+    publishFrontend()
 }else{
-    backendUpdate.run(pubilshFrontend)
+    backendUpdate.run(publishFrontend)
 }
 
-function pubilshFrontend(){
+function publishFrontend(){
     publisher.publish(testFlag, cloudFrontFlag)
 }

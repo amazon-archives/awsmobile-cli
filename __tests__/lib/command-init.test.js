@@ -87,7 +87,7 @@ describe('command init', () => {
         backendCreate.createBackendProject.mockClear()
     })
 
-    test('int without mobile project id', () => {
+    test('init without mobile project id', () => {
         commandInit.init()
         
         expect(awsmobileBaseManager.backupAwsmobileBase).toBeCalled()
@@ -97,7 +97,7 @@ describe('command init', () => {
 
     })
 
-    test('int with mobile project id', () => {
+    test('init with mobile project id', () => {
         commandInit.init(mock_mobile_project_id)
         
         expect(awsmobileBaseManager.backupAwsmobileBase).toBeCalled()
@@ -106,7 +106,7 @@ describe('command init', () => {
         expect(backendCreate.createBackendProject).not.toBeCalled()
     })
 
-    test('int on valid awsmobilejs project without mobile project id', () => {
+    test('init on valid awsmobilejs project without mobile project id', () => {
         projectValidator.validate = jest.fn((projectPath)=>{return true})
 
         pathManager.getProjectInfoFilePath = jest.fn((projectPath)=>{
@@ -119,7 +119,7 @@ describe('command init', () => {
         expect(backendCreate.createBackendProject).toBeCalled()
     })
 
-    test('int on valid awsmobilejs project with mobile project id', () => {
+    test('init on valid awsmobilejs project with mobile project id', () => {
        projectValidator.validate = jest.fn((projectPath)=>{return true})
 
         pathManager.getProjectInfoFilePath = jest.fn((projectPath)=>{
