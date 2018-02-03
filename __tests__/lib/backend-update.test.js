@@ -170,7 +170,7 @@ describe('backend update', () => {
 
         expect(backendRetrieve.getLatestBackendDetails).not.toBeCalled()
         expect(mock_mobileClient.updateProject).not.toBeCalled()
-        expect(callback).not.toBeCalled()
+        expect(callback).toBeCalled()
     })
 
     test('no existing backend', () => {
