@@ -1,6 +1,6 @@
 {
   "name": "awsmobile-cli",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "awsmobile cli enables easy incorporation of aws features into your project",
   "main": "bin/awsmobile",
   "bin": {
@@ -31,7 +31,7 @@
   "homepage": "https://github.com/aws/awsmobile-cli",
   "dependencies": {
     "archiver": "^2.1.0",
-    "aws-amplify": "^0.1.x",
+    "aws-amplify": "^0.2.0",
     "aws-sdk": "^2.131.0",
     "chalk": "^2.0.1",
     "commander": "^2.11.0",
