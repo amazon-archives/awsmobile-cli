@@ -16,6 +16,7 @@ const program = require('commander')
 const chalk = require('chalk')
 
 const commandStart= require('../lib/command-start.js')
+const starterRepoMapping = require('../lib/utils/starter-repo-mapping.js')
 
 program.on('--help', function () {
   console.log()
@@ -27,7 +28,10 @@ program.on('--help', function () {
   console.log(chalk.gray('    # start an awsmobilejs project using the react starter templates'))
   console.log('    $ awsmobile start myapp react')
   console.log()
-  commandStart.list()
+  console.log(chalk.gray('    # awsmobile features'))
+  for(var starter in starterRepoMapping){
+      console.log('      ' + starter)
+  }
 })
 
 program
