@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* 
- * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
  * the License. A copy of the License is located at
@@ -28,7 +28,7 @@ program.on('--help', function () {
   console.log(chalk.gray('    # start an awsmobilejs project using the react starter templates'))
   console.log('    $ awsmobile start myapp react')
   console.log()
-  console.log(chalk.gray('    # awsmobile features'))
+  console.log(chalk.gray('    # awsmobile starters'))
   for(var starter in starterRepoMapping){
       console.log('      ' + starter)
   }
