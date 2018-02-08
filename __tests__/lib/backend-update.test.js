@@ -10,6 +10,7 @@ jest.mock('../../lib/project-backend-builder.js')
 jest.mock('../../lib/utils/awsmobilejs-path-manager.js')
 jest.mock('../../lib/backend-operations/backend-spec-manager.js')
 jest.mock('../../lib/backend-operations/ops-cloud-api.js')
+jest.mock('../../lib/backend-operations/ops-project.js')
 
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
@@ -31,6 +32,7 @@ const awsExceptionHandler = require('../../lib/aws-operations/aws-exception-hand
 const backendInfoManager = require('../../lib/backend-operations/backend-info-manager.js')
 const backendSpecManager = require('../../lib/backend-operations/backend-spec-manager.js')
 const opsCloudApi = require('../../lib/backend-operations/ops-cloud-api.js')
+const opsProject = require('../../lib/backend-operations/ops-project.js')
 
 describe('backend update', () => {
     
@@ -136,6 +138,10 @@ describe('backend update', () => {
             if(callback){
                 callback()
             }
+        })
+
+        opsProject.isInNormalState = jest.fn((backendDetails) => {
+            return true
         })
     })
 
