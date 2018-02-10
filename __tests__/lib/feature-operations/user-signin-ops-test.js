@@ -204,6 +204,72 @@ test('Enabling advance cognito settings', () => {
         })
 });
 
+test('Enabling advance cognito settings no phone, no mfa', () => {
+    // Setting yaml
+        var data =
+            "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+            "features:" + "\n" +
+            "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+            "    components:" + "\n" +
+            "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+            "name: '-2017-09-11-10-33-25'" + "\n" +
+            "region: us-east-1" + "\n" +
+            "uploads: []" + "\n" +
+            "sharedComponents: {}" + "\n";
+            
+            var MOCK_FILE_INFO = {}
+            MOCK_FILE_INFO[backendYmlFilePath] = data;
+            fs.__setMockFiles(MOCK_FILE_INFO)
+
+    // answer enable
+    mockirer(inquirer, {
+        mainOptions: 'advance',
+        selectSignInOptions: 'cognito',
+        selectionUserLogin: ['email'],
+        password_length: '8',
+        selectionPassword: ['require-upper-case', 'require-lower-case', 'require-numbers', 'require-symbols']
+    });
+
+    var resultYaml =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  sign-in: !com.amazonaws.mobilehub.v0.SignIn" + "\n" +
+        "    attributes:" + "\n" +
+        "      enabled: true" + "\n" +
+        "      optional-sign-in: false" + "\n" +
+        "    components:" + "\n" +
+        "      sign-in-user-pools: !com.amazonaws.mobilehub.v0.UserPoolsIdentityProvider" + "\n" +
+        "        attributes:" + "\n" +
+        "          alias-attributes:" + "\n" +
+        "            - email" + "\n" +
+        "          name: userpool" + "\n" +
+        "          password-policy: !com.amazonaws.mobilehub.ConvertibleMap" + "\n" +
+        "            min-length: 8" + "\n" +
+        "            require-lower-case: true" + "\n" +
+        "            require-numbers: true" + "\n" +
+        "            require-symbols: true" + "\n" +
+        "            require-upper-case: true" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
+    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advance settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "How are users going to login", "Email", "Username", "Phone number (required for multifactor authentication)", "Password minimum length (number of characters)", "Password character requirements", "uppercase", "lowercase", "numbers", "special characters"];
+    cleanConsoleLog();
+
+    expect.assertions(2);
+    return userSignInOps.specify(mock_projectInfo)
+        .then(currentDefiniton => {
+            expect(currentDefiniton.yamlDefinition).toEqual(result);
+            expect(consoleLogRegistry).toEqual(logResult);
+        })
+});
+
 test('Enabling facebook', () => {
     // Setting yaml
         var data =
