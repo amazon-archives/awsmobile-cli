@@ -17,7 +17,7 @@ const chalk = require('chalk')
 const opn = require('opn')
 
 const backendUpdate = require('../lib/backend-update.js')
-const publisher = require('../lib/project-publisher.js')
+const publisher = require('../lib/command-publish.js')
 
 program
     .description('execute push and then publish the frontend to S3 hosting bucket')

@@ -2,7 +2,7 @@ jest.mock('fs-extra')
 
 const fs = require('fs-extra')
 
-const baseManager = require('../../lib/awsmobilebase-manager.js')
+const baseManager = require('../../lib/awsm-base-manager.js')
 
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 

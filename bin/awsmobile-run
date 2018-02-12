@@ -19,7 +19,7 @@ const ora = require('ora')
 const { spawn } = require('child_process')
 
 const projectInfoManager = require('../lib/project-info-manager.js')
-const projectAppBuilder = require('../lib/project-frontend-builder.js')
+const projectAppBuilder = require('../lib/build-frontend.js')
 const backendProjectUpdate = require('../lib/backend-update.js')
 const nameManager = require('../lib/utils/awsmobilejs-name-manager.js')
 
