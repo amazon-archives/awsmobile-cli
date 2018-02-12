@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* 
- * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
  * the License. A copy of the License is located at
@@ -24,18 +24,14 @@ process.on('exit', function () {
 })
 
 program.on('--help', function () {
-  console.log()
-  console.log('    # awsmobile features')
-  console.log()
-  for(let i = 0; i < mobileFeatures.length; i++){
-    console.log('      ' + mobileFeatures[i])
-  }
+  featureCommand.list()
 })
 
 program
   .version(require('../package').version)
   .description('awsmobile cli enables easy incorporation of aws features into your project')
   .usage('<command> [options]')
+  .command('start', 'start an awsmobilejs project using one of our starter templates')
   .command('init', 'initialize the current project with awsmobile features')
   .command('pull', 'pull the latest details of the awsmobile project from the cloud')
   .command('push', 'push the local development of the awsmobile project to the cloud')
@@ -48,7 +44,6 @@ program
   .command('<feature>', 'contains subcommands of the specified awsmobile feature')
   .parse(process.argv)
 
-  
 if(!program.runningCommand){
   if(program.args.length > 0){
     let featureName = program.args[0]
