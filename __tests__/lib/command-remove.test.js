@@ -51,7 +51,7 @@ describe('command remove', () => {
         })
 
         mobileExportJSFileManager.onClearBackend = jest.fn()
-        gitManager.onAWSMobileJSRemove = jest.fn()
+        gitManager.removeAwsmobilejs = jest.fn()
       
     })
 

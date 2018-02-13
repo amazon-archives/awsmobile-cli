@@ -62,7 +62,7 @@ describe('command init', () => {
         awsmobileBaseManager.placeAwsmobileBase = jest.fn((projectPath, callback)=>{
             callback()
         })
-        gitManager.initialize = jest.fn()
+        gitManager.insertAwsmobilejs = jest.fn()
         projectInfoManager.configureProject = jest.fn((callback)=>{
             if(callback){
                 callback(mock_projectInfo, mock_projectInfo)
