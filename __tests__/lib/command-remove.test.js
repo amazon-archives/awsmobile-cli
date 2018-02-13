@@ -59,7 +59,7 @@ describe('command remove', () => {
         commandRemove.removeAWSMobileJS()
         
         expect(mobileExportJSFileManager.onClearBackend).toBeCalled()
-        expect(gitManager.onAWSMobileJSRemove).toBeCalled()
+        expect(gitManager.removeAwsmobilejs).toBeCalled()
         expect(fs.readdirSync).toBeCalled()
         expect(fs.removeSync).toBeCalled()
     })

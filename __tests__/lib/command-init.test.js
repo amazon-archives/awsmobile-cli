@@ -59,9 +59,7 @@ describe('command init', () => {
         }) 
 
         awsmobileBaseManager.backupAwsmobileBase = jest.fn()
-        awsmobileBaseManager.placeAwsmobileBase = jest.fn((projectPath, callback)=>{
-            callback()
-        })
+        awsmobileBaseManager.placeAwsmobileBase = jest.fn()
         gitManager.insertAwsmobilejs = jest.fn()
         projectInfoManager.configureProject = jest.fn((callback)=>{
             if(callback){
