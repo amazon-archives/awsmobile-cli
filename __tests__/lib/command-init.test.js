@@ -63,7 +63,7 @@ describe('command init', () => {
             callback()
         })
         gitManager.initialize = jest.fn()
-        projectInfoManager.configureProjectInfo = jest.fn((callback)=>{
+        projectInfoManager.configureProject = jest.fn((callback)=>{
             if(callback){
                 callback(mock_projectInfo, mock_projectInfo)
             }

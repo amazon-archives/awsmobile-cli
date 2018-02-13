@@ -85,10 +85,10 @@ function configProject(){
     let projectInfo = projectInfoManager.getProjectInfo()
     if(projectInfo){
         if(program.list){
-            projectInfoManager.listProjectInfo()
+            projectInfoManager.listProjectConfig()
         }else{
             console.log(chalk.blue('configure project'))
-            projectInfoManager.configureProjectInfo(function(projectInfo_old, projectInfo){
+            projectInfoManager.configureProject(function(projectInfo_old, projectInfo){
                 backendInfoManager.onProjectConfigChange(projectInfo_old, projectInfo)
             })
         }
