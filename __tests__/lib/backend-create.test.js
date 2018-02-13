@@ -92,7 +92,7 @@ describe('backend create', () => {
             return mock_mobileClient
         })
 
-        backendCreate.createBackendProject(mock_projectInfo, null, callback)
+        backendCreate.createBackendProject(mock_projectInfo, {useDefault: true, syncToDevFlag: 1}, callback)
 
         expect(mock_mobileClient.createProject).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
@@ -113,7 +113,7 @@ describe('backend create', () => {
             return mock_mobileClient
         })
 
-        backendCreate.createBackendProject(mock_projectInfo, null, callback)
+        backendCreate.createBackendProject(mock_projectInfo, {useDefault: true, syncToDevFlag: 1}, callback)
 
         expect(mock_mobileClient.createProject).toBeCalled()
         expect(awsExceptionHandler.handleMobileException).toBeCalled()
