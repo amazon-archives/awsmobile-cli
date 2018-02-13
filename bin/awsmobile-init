@@ -16,7 +16,8 @@ const program = require('commander')
 const inquirer = require('inquirer')
 const chalk = require('chalk')
 
-const commandInit= require('../lib/command-init.js')
+// const commandInit= require('../lib/command-init.js')
+const commandInit= require('../lib/command-init-new.js')
 const commandRemove = require('../lib/command-remove.js')
 
 program.on('--help', function () {
