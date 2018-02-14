@@ -1,133 +1,93 @@
-jest.mock('fs-extra')
-jest.mock('../../lib/project-info-manager')
-jest.mock('../../lib/awsm-base-manager.js')
-jest.mock('../../lib/project-validator.js')
-jest.mock('../../lib/backend-create.js')
-jest.mock('../../lib/backend-retrieve.js')
-jest.mock('../../lib/utils/git-manager')
-jest.mock('../../lib/utils/awsmobilejs-path-manager.js')
-jest.mock('../../lib/utils/awsmobilejs-name-manager.js')
-jest.mock('../../lib/backend-operations/backend-spec-manager.js')
-jest.mock('../../lib/backend-operations/backend-info-manager.js')
-jest.mock('../../lib/backend-operations/ops-project.js')
-jest.mock('../../lib/aws-operations/aws-client.js')
-jest.mock('../../lib/aws-operations/aws-config-manager')
-jest.mock('../../lib/aws-operations/aws-exception-handler.js')
+jest.mock('../../lib/init-steps/s1-analyze-project.js')
+jest.mock('../../lib/init-steps/s2-choose-strategy.js')
+jest.mock('../../lib/init-steps/s3-initialize.js')
+jest.mock('../../lib/init-steps/s4-configure.js')
+jest.mock('../../lib/init-steps/s5-setup-backend.js')
+jest.mock('../../lib/init-steps/s60-on-success.js')
+jest.mock('../../lib/init-steps/s61-on-failure.js')
 
-const fs = require('fs-extra')
-const path = require('path')
-const inquirer = require('inquirer')
-const mockirer = require('mockirer')
-
-const projectInfoManager = require('../../lib/project-info-manager')
-const awsmobileBaseManager = require('../../lib/awsm-base-manager.js')
-const projectValidator = require('../../lib/project-validator.js')
-const backendCreate = require('../../lib/backend-create.js')
-const backendRetrieve = require('../../lib/backend-retrieve.js')
-const gitManager = require('../../lib/utils/git-manager')
-const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
-const nameManager = require('../../lib/utils/awsmobilejs-name-manager.js')
-const backendSpecManager = require('../../lib/backend-operations/backend-spec-manager.js')
-const backendInfoManager = require('../../lib/backend-operations/backend-info-manager.js')
-const opsProject = require('../../lib/backend-operations/ops-project.js')
-const awsClient = require('../../lib/aws-operations/aws-client.js')
-const awsConfigManager = require('../../lib/aws-operations/aws-config-manager')
-const awsExceptionHandler = require('../../lib/aws-operations/aws-exception-handler.js')
+const analyzeProject = require('../../lib/init-steps/s1-analyze-project.js')
+const chooseStrategy = require('../../lib/init-steps/s2-choose-strategy.js')
+const initialize = require('../../lib/init-steps/s3-initialize.js')
+const configure = require('../../lib/init-steps/s4-configure.js')
+const setupBackend = require('../../lib/init-steps/s5-setup-backend.js')
+const onSuccess = require('../../lib/init-steps/s60-on-success.js')
+const onFailure = require('../../lib/init-steps/s61-on-failure.js')
 
 const commandInit = require('../../lib/command-init.js')
 
 describe('command init', () => {
 
-    const mock_mobile_project_id = 'mock_mobile_project_id'
-
-    const mock_projectInfo = {
-        "ProjectName": 'projectName',
-        "ProjectPath": '/projectName',
-        "SourceDir": "src",
-        "DistributionDir": "dist",
-        "BuildCommand": "npm run-script build",
-        "StartCommand": "npm run-script start",
-        'BackendProjectName': 'BackendProjectName', 
-        'BackendProjectID': 'BackendProjectID', 
-    }
+    const mockInitInfo = {}
 
     beforeAll(() => {
         global.console = {log: jest.fn()}
 
-        mockirer(inquirer, {
-            confirmInit: true
-        }) 
-
-        awsmobileBaseManager.backupAwsmobileBase = jest.fn()
-        awsmobileBaseManager.placeAwsmobileBase = jest.fn()
-        gitManager.insertAwsmobilejs = jest.fn()
-        projectInfoManager.configureProject = jest.fn((callback)=>{
-            if(callback){
-                callback(mock_projectInfo, mock_projectInfo)
-            }
+        analyzeProject.run = jest.fn((projectPath, mobileProjectID)=>{
+            console.log(projectPath)
+            console.log(mobileProjectID)
+            return new Promise((resolve, reject)=>{
+                console.log('call resolve')
+                resolve(mockInitInfo)
+            }) 
         })
-        backendRetrieve.linkToBackend = jest.fn((projectInfo, mobileProjectID, flag, callback)=>{
-            callback(projectInfo)
+        chooseStrategy.run = jest.fn((initInfo)=>{
+            return initInfo
         })
-        backendCreate.createBackendProject = jest.fn((projectInfo, options, callback)=>{
-            callback(projectInfo)
+        initialize.run = jest.fn((initInfo)=>{
+            return initInfo
         })
-
-        pathManager.getDotAWSMobileDirPath_relative = jest.fn((path)=>{return path + 'relative'})
-        pathManager.getCurrentBackendInfoDirPath_relative = jest.fn((path)=>{return path + 'relative'})
-        pathManager.getBackendDirPath_relative = jest.fn((path)=>{return path + 'relative'})
+        configure.run = jest.fn((initInfo)=>{
+            return initInfo
+        })
+        setupBackend.run = jest.fn((initInfo)=>{
+            return initInfo
+        })
+        onSuccess.run = jest.fn((initInfo)=>{
+            console.log('success')
+        })
+        onFailure.run = jest.fn((e)=>{
+            console.log('exception')
+        })
     })
 
     beforeEach(() => {
-        awsmobileBaseManager.backupAwsmobileBase.mockClear()
-        awsmobileBaseManager.placeAwsmobileBase.mockClear()
-        backendRetrieve.linkToBackend.mockClear()
-        backendCreate.createBackendProject.mockClear()
+        analyzeProject.run.mockClear()
+        chooseStrategy.run.mockClear()
+        initialize.run.mockClear()
+        configure.run.mockClear()
+        setupBackend.run.mockClear()
+        onSuccess.run.mockClear()
+        onFailure.run.mockClear()
     })
 
-    test('init without mobile project id', () => {
-        commandInit.init()
-        
-        expect(awsmobileBaseManager.backupAwsmobileBase).toBeCalled()
-        expect(awsmobileBaseManager.placeAwsmobileBase).toBeCalled()
-        expect(backendRetrieve.linkToBackend).not.toBeCalled()
-        expect(backendCreate.createBackendProject).toBeCalled()
-
+    test('init succeeds', () => {
+        return commandInit.init('mobileProjectID').then(() => {
+            expect(analyzeProject.run).toBeCalled()
+            expect(chooseStrategy.run).toBeCalled()
+            expect(initialize.run).toBeCalled()
+            expect(configure.run).toBeCalled()
+            expect(setupBackend.run).toBeCalled()
+            expect(onSuccess.run).toBeCalled()
+            expect(onFailure.run).not.toBeCalled()
+        })
     })
 
-    test('init with mobile project id', () => {
-        commandInit.init(mock_mobile_project_id)
-        
-        expect(awsmobileBaseManager.backupAwsmobileBase).toBeCalled()
-        expect(awsmobileBaseManager.placeAwsmobileBase).toBeCalled()
-        expect(backendRetrieve.linkToBackend).toBeCalled()
-        expect(backendCreate.createBackendProject).not.toBeCalled()
+    test('init fails', () => {
+
+        setupBackend.run = jest.fn((initInfo)=>{
+            throw new Error()
+        })
+
+        return commandInit.init('mobileProjectID').then(() => {
+            expect(analyzeProject.run).toBeCalled()
+            expect(chooseStrategy.run).toBeCalled()
+            expect(initialize.run).toBeCalled()
+            expect(configure.run).toBeCalled()
+            expect(setupBackend.run).toBeCalled()
+            expect(onSuccess.run).not.toBeCalled()
+            expect(onFailure.run).toBeCalled()
+        })
     })
 
-    test('init on valid awsmobilejs project without mobile project id', () => {
-        projectValidator.validate = jest.fn((projectPath)=>{return true})
-
-        pathManager.getProjectInfoFilePath = jest.fn((projectPath)=>{
-            return path.normalize(__dirname +'/../../_mocks_/mock-project-info.json')
-        }) 
-
-        commandInit.init()
-
-        expect(backendRetrieve.linkToBackend).not.toBeCalled()
-        expect(backendCreate.createBackendProject).toBeCalled()
-    })
-
-    test('init on valid awsmobilejs project with mobile project id', () => {
-       projectValidator.validate = jest.fn((projectPath)=>{return true})
-
-        pathManager.getProjectInfoFilePath = jest.fn((projectPath)=>{
-            return path.normalize(__dirname +'/../../_mocks_/mock-project-info.json')
-        }) 
-
-        commandInit.init(mock_mobile_project_id)
-
-        expect(backendRetrieve.linkToBackend).toBeCalled()
-        expect(backendCreate.createBackendProject).not.toBeCalled()
-    })
-    
 })

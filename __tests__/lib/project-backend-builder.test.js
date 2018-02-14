@@ -58,10 +58,7 @@ describe('backend builder', () => {
             callback(true)
         })
     })
-
-    beforeEach(() => {
-    })
-
+    
     test('build', () => {
         const callback = jest.fn()
 
