@@ -15,7 +15,7 @@ const fs = require('fs-extra')
 const chalk = require('chalk')
 const moment = require('moment')
 
-const npmManager = require('../utils/npm-manager')
+const dependencyManager = require('../utils/dependency-manager')
 const gitManager = require('../utils/git-manager')
 const pathManager = require('../utils/awsmobilejs-path-manager.js')
 const awsmobileJSConstant = require('../utils/awsmobilejs-constant.js')
@@ -23,7 +23,7 @@ const awsmobileJSConstant = require('../utils/awsmobilejs-constant.js')
 function run(initInfo){
     if(initInfo.strategy){
 
-        npmManager.insertAmplifyDependency(initInfo.projectPath)
+        dependencyManager.insertAmplifyDependency(initInfo.projectPath)
         gitManager.insertAwsmobilejs(initInfo.projectPath)
 
         delete initInfo.projectInfo.SourceDir
