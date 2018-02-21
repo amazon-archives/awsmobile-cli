@@ -15,17 +15,21 @@ const fs = require('fs-extra')
 const chalk = require('chalk')
 const moment = require('moment')
 
+const npmManager = require('../utils/npm-manager')
+const gitManager = require('../utils/git-manager')
 const pathManager = require('../utils/awsmobilejs-path-manager.js')
 const awsmobileJSConstant = require('../utils/awsmobilejs-constant.js')
 
 function run(initInfo){
     if(initInfo.strategy){
 
+        npmManager.insertAmplifyDependency(initInfo.projectPath)
+        gitManager.insertAwsmobilejs(initInfo.projectPath)
+
         delete initInfo.projectInfo.SourceDir
         delete initInfo.projectInfo.DistributionDir
         delete initInfo.projectInfo.BuildCommand
         delete initInfo.projectInfo.StartCommand
-        initInfo.projectInfo.Framework = initInfo.framework
         initInfo.projectInfo.InitializationTime = moment().format(awsmobileJSConstant.DateTimeFormatString)  
 		const jsonString = JSON.stringify(initInfo.projectInfo, null, '\t')
 		const projectInfoFilePath = pathManager.getProjectInfoFilePath(initInfo.projectPath)

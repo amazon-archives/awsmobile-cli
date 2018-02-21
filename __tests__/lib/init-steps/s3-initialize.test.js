@@ -18,8 +18,6 @@ const moment = require('moment')
 const awsmobileBaseManager = require('../awsm-base-manager.js')
 const pathManager = require('../utils/awsmobilejs-path-manager.js')
 const awsmobileJSConstant = require('../utils/awsmobilejs-constant.js')
-const npmManager = require('../utils/npm-manager.js')
-const gitManager = require('../utils/git-manager.js')
 
 function run(initInfo){
 	if(initInfo.strategy){
@@ -40,7 +38,6 @@ function run(initInfo){
 	
 		projectInfo.ProjectName = path.basename(initInfo.projectPath)
 		projectInfo.ProjectPath = initInfo.projectPath
-		projectInfo.Framework = initInfo.framework
 	
 		let jsonString = JSON.stringify(projectInfo, null, '\t')
 		const projectInfoFilePath = pathManager.getProjectInfoFilePath(initInfo.projectPath)
@@ -50,13 +47,8 @@ function run(initInfo){
 		jsonString = JSON.stringify(initInfo, null, '\t')
 		const initInfoFilePath = pathManager.getInitInfoFilePath(initInfo.projectPath)
 		fs.writeFileSync(initInfoFilePath, jsonString, 'utf8')
-
-		gitManager.insertAwsmobilejs(initInfo.projectPath)
-		
-        return npmManager.setupAmplifyDependency(initInfo)
-	}else{
-		return initInfo
 	}
+    return initInfo
 }
 
 function cloneAWSMobileBase(projectPath){
@@ -70,7 +62,7 @@ function cloneAWSMobileBase(projectPath){
 	}
   
 	return backupAWSMobileJSDirPath
-}
+  }
 
 const projectInfoTemplate = {
 	"ProjectName": "",
