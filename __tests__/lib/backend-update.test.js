@@ -315,7 +315,7 @@ describe('backend update', () => {
 
         opsCloudApi.getStateGroup = jest.fn()
         opsCloudApi.getStateGroup.mockReturnValueOnce(0)
-        opsCloudApi.getStateGroup.mockReturnValueOnce(-1)
+        opsCloudApi.getStateGroup.mockReturnValueOnce(-2)
 
 
         backendUpdate.run(callback)
