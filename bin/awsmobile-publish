@@ -44,5 +44,5 @@ if(program.frontendOnly){
 }
 
 function publishFrontend(){
-    publisher.publish(testFlag, cloudFrontFlag)
+    publisher.run(testFlag, cloudFrontFlag)
 }
