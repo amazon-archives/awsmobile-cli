@@ -47,7 +47,7 @@ yarn global add awsmobile-cli
 awsmobile configure
 ```
 
-If prompted for credentials, follow the steps provided by the CLI. 
+Check [here](#awsmobile-configure) for more details about configuration
 
 ## Getting Started
 
@@ -84,7 +84,6 @@ The current set of commands supported by the awsmobile CLI are
 | awsmobile help [cmd] | Displays help for [cmd] |
 
 
-
 Supported Features:
 1. user-signin (Cognito)
 2. user-files (AWS S3)
@@ -93,7 +92,19 @@ Supported Features:
 5. analytics (Pinpoint)
 6. hosting (S3 and CloudFront Distribution)
 
-For a comprehensive description of the awsmobile-cli, please visit [AWSMobile CLI Reference](http://docs.aws.amazon.com/aws-mobile/latest/developerguide/aws-mobile-cli-reference.html)
+## awsmobile configure
+
+```
+awsmobile configure
+```
+
+#### There are two levels in the aws credential and region configurations for the awsmobile-cli
+- general
+- per project
+
+When you run `awsmobile configure` outside of a valid awsmobilejs project, it sets the general configuration. The general configuration is applied when you run 'awsmobile init` or `awsmobile start` command. And its values are copied as the initial per project configuration for the newly initialized project
+
+When you run `awsmobile configure` inside a valid awsmobilejs project, it sets the per project configuration for the project. Tt does NOT change the general configuration or the per project configuration for other projects.
 
 ## Usage
 
