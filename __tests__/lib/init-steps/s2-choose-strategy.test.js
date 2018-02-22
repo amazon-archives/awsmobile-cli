@@ -1,258 +1,124 @@
-/* 
- * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
- * the License. A copy of the License is located at
- *
- *     http://aws.amazon.com/apache2.0/
- *
- * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
- * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
- * and limitations under the License.
-*/
-"use strict";
-const chalk = require('chalk')
+jest.mock('fs-extra')
+
+const fs = require('fs-extra')
+const path = require('path')
+const mockirer = require('mockirer')
 const inquirer = require('inquirer')
 
-//if initInfo.strategy is not set, the setup-backend step will not carry out any functions
-const strategy = [
-    'create', //use the default yaml to create a mobile project as the backend
-    'import', //if a valid backend spec is already in the project, create a mobile project based on it as the backend
-    'link', //if a mobile project id is in the command arguments, link to it as the backend
-]
+const chooseStrategy = require('../../../lib/init-steps/s2-choose-strategy.js')
+const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 
-function run(initInfo){
-    let result = initInfo
+describe('s2 choose strategy', () => {
+    const projectName = 'projectName'
+    const projectPath = path.join('/', projectName)
+    const projectInfoFilePath = pathManager.getProjectInfoFilePath(projectPath)
+    const projectConfigFilePath = pathManager.getProjectConfigFilePath(projectPath)
+    const backendYmlFilePath = pathManager.getBackendSpecProjectYmlFilePath(projectPath)
+   
+    const mock_mobileProjectID = 'mock_mobileProjectID'
+    const mock_projectInfo = {}
+    const mock_projectConfig = {}
+    const mock_backendProject = {}
+    const mock_packageJson = {}
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
+    MOCK_FILE_INFO[projectConfigFilePath] = JSON.stringify(mock_projectConfig, null, '\t')
+    MOCK_FILE_INFO[backendYmlFilePath] = JSON.stringify('--- !com.amazonaws.mobilehub.v0.Project', null, '\t')
 
-    if(initInfo.mobileProjectID){
-        initInfo.strategy = 'link'
-    }else{
-        initInfo.strategy = 'create'
+    let mock_initInfo = {
+        projectPath: projectPath,
+        mobileProjectID: mock_mobileProjectID + '-diff',
+        backupAWSMobileJSDirPath: undefined,
+        projectInfo: mock_projectInfo,
+        projectConfig: mock_projectConfig,
+        backendProject: mock_backendProject,
+        packageJson: mock_packageJson,
+        framework: undefined,
+        initialStage: 'clean-slate'
     }
 
-    switch(initInfo.initialStage){
-        case 'clean-slate':
-            //nothing extra
-        break
-        case 'invalid': 
-            //nothing extra
-        break
-        case 'backend-valid':
-            result = chooseForBackendValid(initInfo)
-        break
-        case 'project-info-valid':
-            result = chooseForProjectInfoValid(initInfo)
-        break
-        case 'valid': 
-            result = chooseForValid(initInfo)
-        break
-    }
-
-    return result
-}
-
-function chooseForBackendValid(initInfo){
-    let result = initInfo
-
-    if(initInfo.mobileProjectID){
-        initInfo.strategy = 'link'
-    }else{ //if no mobile project id, will import.
-        console.log('A valid backend specification is detected in this project')
-        result = chooseImportOrCreate(initInfo)
-    }
-
-    return result
-}
-
-function chooseForProjectInfoValid(initInfo){
-    let result = initInfo
-    initInfo.strategy = undefined
-
-    console.log('this project\'s backend is currently set to be ' + chalk.blue(initInfo.projectInfo.BackendProjectName))
-    console.log('with mobile project id = ' + chalk.blue(initInfo.projectInfo.BackendProjectID))
-    console.log('and was initialized at ' + chalk.blue(initInfo.projectInfo.InitializationTime))
-
-    if(initInfo.mobileProjectID){
-        if(initInfo.mobileProjectID != initInfo.projectInfo.BackendProjectID){
-            result = confirmToSwitchBackend(initInfo).then((initInfo)=>{
-                if(!initInfo.strategy){ //user declined to switch backend
-                    return confirmToReEstablishBackend(initInfo)
-                }else{
-                    return initInfo
-                }
-            })
-        }else{
-            prepReEstablish(initInfo)
-        }
-    }else{
-        result = chooseReEstablishOrCreate(initInfo)
-    }
-
-    return result
-}
-
-function chooseForValid(initInfo){
-    let result = initInfo
-    initInfo.strategy = undefined
-
-    console.log('this project\'s current backend is ' + chalk.blue(initInfo.projectInfo.BackendProjectName))
-    console.log('with mobile project id = ' + chalk.blue(initInfo.projectInfo.BackendProjectID))
-    console.log('and was initialized at ' + chalk.blue(initInfo.projectInfo.InitializationTime))
-
-    if(initInfo.mobileProjectID){
-        if(initInfo.mobileProjectID != initInfo.projectInfo.BackendProjectID){
-            result = confirmToSwitchBackend(initInfo)
-        }else{
-            console.log('you have specified the same id: ' + chalk.blue(initInfo.projectInfo.BackendProjectID))
-            console.log('init is aborted')
-            console.log(chalk.gray('# to retrieve the latest details of the backend awsmobile project'))
-            console.log('    $ awsmobile pull')
-        }
-    }else{
-        result = confirmToCreateNewBackend(initInfo)
-    }
-
-    return result
-}
-
-function confirmToCreateNewBackend(initInfo){
-    initInfo.strategy = undefined
-
-    let question = {
-        type: 'confirm',
-        name: 'confirmCreateNew',
-        message: 'create a new awsmobile project as the backend',
-        default: false
-    }
-
-    return inquirer.prompt(question).then(function (answers) {
-        if(answers.confirmCreateNew){
-            prepCreateNew(initInfo)
-        }
-        return initInfo
+    beforeAll(() => {
+        global.console = {log: jest.fn()}
+        process.cwd = jest.fn(()=>{ return projectPath })
+        fs.__setMockFiles(MOCK_FILE_INFO)   
+        mockirer(inquirer, {
+            confirmCreateNew: true, 
+            confirmReEstablish: true,
+            confirmSwitch: true,
+            ReEstablishOrNew: 'reestablish',
+            ImportOrNew: 'import'
+        }) 
     })
-}
 
-function confirmToReEstablishBackend(initInfo){
-    initInfo.strategy = undefined
-
-    let question = {
-        type: 'confirm',
-        name: 'confirmReEstablish',
-        message: 're-establish association with the original backend awsmobile project',
-        default: true
-    }
-
-    return inquirer.prompt(question).then(function (answers) {
-        if(answers.confirmReEstablish){
-            prepReEstablish(initInfo)
-        }
-        return initInfo
+    beforeEach(() => {
+        fs.writeFileSync.mockClear()
+        mock_initInfo.mobileProjectID = undefined
+        mock_initInfo.initialStage = undefined
     })
-}
 
-function confirmToSwitchBackend(initInfo){
-    initInfo.strategy = undefined
-
-    let question = {
-        type: 'confirm',
-        name: 'confirmSwitch',
-        message: 'switch backend to awsmobile project with id = ' + initInfo.mobileProjectID,
-        default: false
-    }
-
-    return inquirer.prompt(question).then(function (answers) {
-        if(answers.confirmSwitch){
-            prepSwitch(initInfo)
-        }
-        return initInfo
+    test('initial stage is clean-slate', () => {
+        mock_initInfo.initialStage = 'clean-slate'
+        chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('create')
     })
-}
 
-function chooseReEstablishOrCreate(initInfo){
-    initInfo.strategy = undefined
-
-    let question = {
-        type: 'list',
-        name: 'ReEstablishOrNew',
-        message: 'create a new backend or re-establish association with the original backend',
-        choices: [
-            {
-              name: 'create a new backend',
-              value: 'create'
-            },
-            {
-              name: 're-establish association',
-              value: 'reestablish'
-            }
-          ]
-        }
-
-    return inquirer.prompt(question).then(function (answers) {
-        switch (answers.ReEstablishOrNew) {
-            case 'create': 
-                prepCreateNew(initInfo)
-            break
-            case 'reestablish': 
-                prepReEstablish(initInfo)
-            break
-          }
-        return initInfo
+    test('initial stage is invalid', () => {
+        mock_initInfo.initialStage = 'invalid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('create')
     })
-}
 
-function chooseImportOrCreate(initInfo){
-    initInfo.strategy = undefined
-
-    let question = {
-        type: 'list',
-        name: 'CloneOrNew',
-        message: 'create the new backend with default features or specified features',
-        choices: [
-            {
-              name: 'specified features',
-              value: 'import'
-            },
-            {
-              name: 'default features',
-              value: 'create'
-            }
-          ]
-        }
-
-    return inquirer.prompt(question).then(function (answers) {
-        switch (answers.CloneOrNew) {
-            case 'create': 
-                prepCreateNew(initInfo)
-            break
-            case 'import': 
-                prepImport(initInfo)
-            break
-          }
-        return initInfo
+    test('initial stage is backend-valid', () => {
+        mock_initInfo.initialStage = 'backend-valid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('import')
     })
-}
 
-function prepCreateNew(initInfo){
-    // console.log('init will now try to create a new backend awsmobile project')
-    initInfo.strategy = 'create'
-}
+    test('initial stage is project-info-valid', () => {
+        mock_initInfo.initialStage = 'project-info-valid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('link')
+    })
 
-function prepSwitch(initInfo){
-    console.log('init will now try to switch to the newly specified backend')
-    initInfo.strategy = 'link'
-}
+    test('initial stage is valid', () => {
+        mock_initInfo.initialStage = 'valid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('create')
+    })
 
-function prepReEstablish(initInfo){
-    console.log('init will now try to re-establish the association with the backend awsmobile project')
-    initInfo.strategy = 'link'
-    initInfo.mobileProjectID = initInfo.projectInfo.BackendProjectID
-}
+    test('with mobile project id and initial stage is clean-slate', () => {
+        mock_initInfo.mobileProjectID = mock_mobileProjectID
+        mock_initInfo.initialStage = 'clean-slate'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('link')
+    })
 
-function prepImport(initInfo){
-    initInfo.strategy = 'import'
-}
+    test('with mobile project id and initial stage is invalid', () => {
+        mock_initInfo.mobileProjectID = mock_mobileProjectID
+        mock_initInfo.initialStage = 'invalid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('link')
+    })
 
-module.exports = {
-    run
-}
+    test('with mobile project id and initial stage is backend-valid', () => {
+        mock_initInfo.mobileProjectID = mock_mobileProjectID
+        mock_initInfo.initialStage = 'backend-valid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('link')
+    })
+
+    // test('with mobile project id and initial stage is project-info-valid', () => {
+    //     mock_initInfo.mobileProjectID = mock_mobileProjectID
+    //     mock_initInfo.initialStage = 'project-info-valid'
+    //     return chooseStrategy.run(mock_initInfo).then((initInfo)=>{
+    //         expect(initInfo.strategy).toBe('link')
+    //     })
+    // })
+
+    test('with mobile project id and initial stage is valid', () => {
+        mock_initInfo.mobileProjectID = mock_mobileProjectID
+        mock_initInfo.initialStage = 'valid'
+        let resultInitInfo = chooseStrategy.run(mock_initInfo)
+        expect(mock_initInfo.strategy).toBe('link')
+    })
+})
