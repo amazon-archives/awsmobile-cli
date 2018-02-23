@@ -32,16 +32,14 @@ npm install -g awsmobile-cli
 
 or
 
-yarn install -g awsmobile-cli
+yarn global add awsmobile-cli
 ```
 
 ## Configuration
 
 * [Sign up for the AWS Free Tier](https://aws.amazon.com/free/) to learn and prototype at little or no cost.
 
-* [Activate AWS Mobile Hub](https://console.aws.amazon.com/mobilehub/home?region=us-east-1#/activaterole/) to let AWS Mobile use your AWS credentials  to create and manage your AWS services.
-
-* Install [Node.js](https://nodejs.org/en/download/) with NPM.
+* [Enable AWS Mobile Hub Service Role](https://console.aws.amazon.com/mobilehub/home?region=us-east-1#/activaterole/) to let AWS Mobile use your AWS credentials  to create and manage your AWS services.
 
 * Configure the CLI with your AWS credentials. To setup permissions for the toolchain used by the CLI, run:
 
@@ -49,7 +47,7 @@ yarn install -g awsmobile-cli
 awsmobile configure
 ```
 
-If prompted for credentials, follow the steps provided by the CLI. For more information, see provide IAM credentials to AWS Mobile CLI.
+Check [here](#awsmobile-configure) for more details about configuration
 
 ## Getting Started
 
@@ -68,8 +66,10 @@ The current set of commands supported by the awsmobile CLI are
 
 | Command              | Description |
 | --- | --- |
-| awsmobile init | Initializes a new Mobile Hub project, checks for IAM keys, and pulls the aws-exports.js file |
-| awsmobile configure | Shows existing keys and allows them to be changed if already set. If keys aren't set, deep links the user to the IAM console to create keys and then prompts for the access key and secret key. This command helps edit configuration settings for the aws account or the project |
+| awsmobile start | Starts an awsmobilejs project using one of our starter templates, sets up the backend mobile hub project in the cloud and pulls the aws-exports.js file |
+| awsmobile init | Initializes the current project with awsmobilejs features, sets up the backend mobile hub project in the cloud and pulls the aws-exports.js file |
+| awsmobile configure [aws] | Configures the aws access credentials and aws region for awsmobile-cli |
+| awsmobile configure project | Configures the attributes of your project for awsmobile-cli |
 | awsmobile pull | Retrieves the latest details of the backend Mobile Hub project, such as the access information file aws-exports.js |
 | awsmobile push | Updates the backend Mobile Hub project with the latest local developments |
 | awsmobile publish | Executes awsmobile push, then builds and publishes client-side application to S3 and Cloud Front |
@@ -84,7 +84,6 @@ The current set of commands supported by the awsmobile CLI are
 | awsmobile help [cmd] | Displays help for [cmd] |
 
 
-
 Supported Features:
 1. user-signin (Cognito)
 2. user-files (AWS S3)
@@ -93,7 +92,19 @@ Supported Features:
 5. analytics (Pinpoint)
 6. hosting (S3 and CloudFront Distribution)
 
-For a comprehensive description of the awsmobile-cli, please visit [AWSMobile CLI Reference](http://docs.aws.amazon.com/aws-mobile/latest/developerguide/aws-mobile-cli-reference.html)
+## awsmobile configure
+
+```
+awsmobile configure
+```
+
+#### There are two levels in the aws credential and region configurations for the awsmobile-cli
+- general
+- per project
+
+When you run `awsmobile configure` outside of a valid awsmobilejs project, it sets the general configuration. The general configuration is applied when you run 'awsmobile init` or `awsmobile start` command. And its values are copied as the initial per project configuration for the newly initialized project
+
+When you run `awsmobile configure` inside a valid awsmobilejs project, it sets the per project configuration for the project. It does NOT change the general configuration or the per project configuration for other projects.
 
 ## Usage
 
