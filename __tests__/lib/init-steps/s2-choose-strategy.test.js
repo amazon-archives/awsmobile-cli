@@ -107,14 +107,6 @@ describe('s2 choose strategy', () => {
         expect(mock_initInfo.strategy).toBe('link')
     })
 
-    // test('with mobile project id and initial stage is project-info-valid', () => {
-    //     mock_initInfo.mobileProjectID = mock_mobileProjectID
-    //     mock_initInfo.initialStage = 'project-info-valid'
-    //     return chooseStrategy.run(mock_initInfo).then((initInfo)=>{
-    //         expect(initInfo.strategy).toBe('link')
-    //     })
-    // })
-
     test('with mobile project id and initial stage is valid', () => {
         mock_initInfo.mobileProjectID = mock_mobileProjectID
         mock_initInfo.initialStage = 'valid'
