@@ -46,7 +46,7 @@ describe('backend builder', () => {
             return path.normalize(path.join(__dirname +'/../../lib/backend-operations', featureOpsMapping[featureName]))
         })
 
-        backendSpecManager.getEnabledFeaturesFromObject = jest.fn((backendProject) => {
+        backendSpecManager.getEnabledFeatures = jest.fn((projectInfo, backendProject) => {
             return ['cloud-api']
         })
 
