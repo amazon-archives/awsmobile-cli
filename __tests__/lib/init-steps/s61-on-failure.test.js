@@ -10,7 +10,7 @@ const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 
 const onFailure = require('../../../lib/init-steps/s61-on-failure.js')
 
-describe('s5 setup backend', () => {
+describe('s61 on failure', () => {
   
     const projectName = 'projectName'
     const projectPath = '/' + projectName
