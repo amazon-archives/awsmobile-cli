@@ -6,21 +6,20 @@ const mockirer = require('mockirer')
 const inquirer = require('inquirer')
 
 const projectInfoManager = require('../../lib/project-info-manager.js')
-
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
-const templateValidator = require('../../lib/project-validator.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
-const backendFormats = require('../../lib/backend-operations/backend-formats.js')
 
 describe('project info manager functions', () => {
     const projectName = 'projectName'
     const projectPath = path.join('/', projectName)
     const projectInfoFilePath = pathManager.getProjectInfoFilePath(projectPath)
+    const projectConfigFilePath = pathManager.getProjectConfigFilePath(projectPath)
     const backendYmlFilePath = pathManager.getBackendSpecProjectYmlFilePath(projectPath)
     
     const mock_projectInfo = {}
+    const mock_projectConfig = {}
     var MOCK_FILE_INFO = {}
     MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
+    MOCK_FILE_INFO[projectConfigFilePath] = JSON.stringify(mock_projectConfig, null, '\t')
     MOCK_FILE_INFO[backendYmlFilePath] = JSON.stringify('--- !com.amazonaws.mobilehub.v0.Project', null, '\t')
 
     const mock_srcDir = '/src'
@@ -39,7 +38,6 @@ describe('project info manager functions', () => {
         "LastNPMInstallTime": "",
         "FrontendLastBuildTime": "",
         "LastPublishTime": "",
-        "BackendFormat": "yml",
         "BackendLastSyncTime": "",
         "BackendLastBuildTime": "",
         "BackendLastPushTime": "",
@@ -74,10 +72,10 @@ describe('project info manager functions', () => {
         expect(fs.writeFileSync.mock.calls[0][0]).toBe(projectInfoFilePath)
     })
 
-    test('configureProjectInfo', () => {
+    test('configureProject', () => {
        // process.cwd = jest.fn(()=>{ return projectPath })
         const callback = jest.fn()
-        projectInfoManager.configureProjectInfo(callback)
+        projectInfoManager.configureProject(callback)
 
         expect(callback).toBeCalled()
         expect(callback.mock.calls[0][1].SourceDir).toBe(mock_srcDir)

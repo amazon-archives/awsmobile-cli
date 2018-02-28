@@ -16,7 +16,7 @@ const backendSpecManager = require('../../lib/backend-operations/backend-spec-ma
 const opsProject = require('../../lib/backend-operations/ops-project.js')
 const opeCloudApi = require('../../lib/backend-operations/ops-cloud-api.js')
 
-const backendBuilder = require('../../lib/project-backend-builder.js')
+const backendBuilder = require('../../lib/build-backend.js')
 
 describe('backend builder', () => {
     const mock_projectInfo = {
@@ -58,10 +58,7 @@ describe('backend builder', () => {
             callback(true)
         })
     })
-
-    beforeEach(() => {
-    })
-
+    
     test('build', () => {
         const callback = jest.fn()
 
