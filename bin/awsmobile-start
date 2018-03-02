@@ -36,7 +36,8 @@ program.on('--help', function () {
 
 program
   .description('start an awsmobilejs project using one of our starter templates')
-  .usage('<projectName> [templateName]')
+  .usage('<projectName> [templateName] [options]')
+  .option('-y, --yes', 'suppress console input and use default in the start procedure')
   .parse(process.argv)
 
 let projectName
@@ -49,4 +50,4 @@ if(program.args && program.args.length > 0){
   }
 }
 
-commandStart.start(projectName, starterName)
+commandStart.start(projectName, starterName, program.yes)
