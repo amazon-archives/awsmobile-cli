@@ -41,7 +41,7 @@ yarn global add awsmobile-cli
 
 * [Enable AWS Mobile Hub Service Role](https://console.aws.amazon.com/mobilehub/home?region=us-east-1#/activaterole/) to let AWS Mobile use your AWS credentials  to create and manage your AWS services.
 
-* Configure the CLI with your AWS credentials. To setup permissions for the toolchain used by the CLI, run:
+* Configure the CLI with your AWS credentials
 
 ```
 awsmobile configure
@@ -102,7 +102,7 @@ awsmobile configure
 - general
 - per project
 
-When you run `awsmobile configure` outside of a valid awsmobilejs project, it sets the general configuration. The general configuration is applied when you run 'awsmobile init` or `awsmobile start` command. And its values are copied as the initial per project configuration for the newly initialized project
+When you run `awsmobile configure` outside of a valid awsmobilejs project, it sets the general configuration. The general configuration is applied when you run `awsmobile init` or `awsmobile start` command. And its values are copied as the initial per project configuration for the newly initialized project
 
 When you run `awsmobile configure` inside a valid awsmobilejs project, it sets the configuration for this project only. It does NOT change the general configuration or the configuration of other projects.
 
