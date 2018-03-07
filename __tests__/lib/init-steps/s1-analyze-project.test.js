@@ -94,7 +94,13 @@ describe('s1 analyze project', () => {
     })
 
     test('run', () => {
-        return analyzeProject.run('mock_mobileProjectID').then((initInfo) => {
+        
+        let initInfo = {
+            projectPath: projectPath,
+            yesFlag: false,
+            mobileProjectID: 'mock_mobileProjectID'
+        }
+        return analyzeProject.run(initInfo).then((initInfo) => {
             expect(initInfo.projectPath).toBe(projectPath)
         })
     })
