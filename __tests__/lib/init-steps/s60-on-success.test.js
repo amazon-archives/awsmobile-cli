@@ -11,7 +11,7 @@ const gitManager = require('../../../lib/utils/git-manager.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 const onSuccess = require('../../../lib/init-steps/s60-on-success.js')
 
-describe('s5 setup backend', () => {
+describe('s60 on success', () => {
   
     const projectName = 'projectName'
     const projectPath = '/' + projectName

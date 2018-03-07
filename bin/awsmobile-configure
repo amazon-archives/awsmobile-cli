@@ -18,8 +18,9 @@ const chalk = require('chalk')
 const projectInfoManager = require('../lib/project-info-manager.js')
 const awsConfigManager = require('../lib/aws-operations/aws-config-manager.js')
 const backendInfoManager = require('../lib/backend-operations/backend-info-manager.js')
+const awsMobileRegions = require('../lib/aws-operations/aws-regions.js').regions
 
-const options = ['aws', 'project']
+const configurables = ['aws', 'project']
 
 program
     .description('edit configuration settings of the aws account or the project')
@@ -29,14 +30,21 @@ program
     .option('-n, --new-user', '(aws) walk through the steps to setup aws access')
     .parse(process.argv)
 
-if (program.args.length < 1){
+if(program.args.length < 1){
     configure('aws')
+}else if(program.args[0] == 'aws' && 
+        program.args.length == 4 && 
+        awsMobileRegions.includes(program.args[3])){
+    let keyID = program.args[1]
+    let key = program.args[2]
+    let region = program.args[3]
+    configureAWSWithKeyAndRegion(keyID, key, region)
 }else{
-    let selection = program.args[0]
-    if(!options.includes(selection)){
+    let configurable = program.args[0]
+    if(!configurables.includes(configurable)){
         promptForInput(configure)
     }else{
-        configure(selection)
+        configure(configurable)
     }
 }
 
@@ -47,7 +55,7 @@ function promptForInput(callback)
             type: 'list',
             name: 'selection',
             message: "configure",
-            choices: options,
+            choices: configurables,
             default: 'aws'
         }
     ]).then(function (answers) {
@@ -80,6 +88,9 @@ function configAWS(){
     }
 }
 
+function configureAWSWithKeyAndRegion(keyID, key, region){
+    awsConfigManager.configureWithKeyAndRegion(keyID, key, region)
+}
 
 function configProject(){
     let projectInfo = projectInfoManager.getProjectInfo()
