@@ -1,0 +1,61 @@
+{
+    "AppSyncEnabled": true,
+    "DataSources": [
+        {
+            "name": "",
+            "type-name": "",
+            "table-name": "",
+            "role": "",
+            "region": ""
+        },
+        {
+            "name": "",
+            "type-name": "",
+            "table-name": "",
+            "role": "",
+            "region": ""
+        }
+    ],
+    "Resolvers": [
+        {
+            "type-name": "Query",
+            "field-name": "",
+            "data-source-name": "",
+            "request-mapping-template": "",
+            "response-mapping-template":  "",
+            "region": ""
+        },
+        {
+            "type-name": "Query",
+            "field-name": "",
+            "data-source-name": "",
+            "request-mapping-template": "",
+            "response-mapping-template":  "",
+            "region": ""
+        },
+        {
+            "type-name": "Query",
+            "field-name": "",
+            "data-source-name": "",
+            "request-mapping-template": "",
+            "response-mapping-template":  "",
+            "region": ""
+        },
+        {
+            "type-name": "Query",
+            "field-name": "",
+            "data-source-name": "",
+            "request-mapping-template": "",
+            "response-mapping-template":  "",
+            "region": ""
+        },
+        {
+            "type-name": "Query",
+            "field-name": "",
+            "data-source-name": "",
+            "request-mapping-template": "",
+            "response-mapping-template":  "",
+            "region": ""
+        }
+    ]
+}

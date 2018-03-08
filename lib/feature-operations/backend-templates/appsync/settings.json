@@ -1,5 +1,4 @@
 {
-	"APIName": "src",
-    "AuthorizationType": "APIKey", 
-    "APIKeys": "da2-rux56omtgasdfbgkzhuiquwuhj4gfi"
+	"APIName": "awsmboile-cli-appsync-api",
+    "AuthorizationType": "API_KEY"
 }
