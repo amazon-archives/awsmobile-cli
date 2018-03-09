@@ -2,60 +2,79 @@
     "AppSyncEnabled": true,
     "DataSources": [
         {
-            "name": "",
-            "type-name": "",
-            "table-name": "",
+            "name": "AppSyncCommentTable",
+            "type-name": "AMAZON_DYNAMODB",
+            "table-name": "AppSyncCommentTable",
+            "primary-partition-key": "eventId",
+            "primary-sort-key": "commentId",
             "role": "",
-            "region": ""
+            "region": "us-east-1"
         },
         {
-            "name": "",
-            "type-name": "",
-            "table-name": "",
+            "name": "AppSyncEventTable",
+            "type-name": "AMAZON_DYNAMODB",
+            "table-name": "AppSyncEventTable",
+            "primary-partition-key": "id",
+            "primary-sort-key": "",
             "role": "",
-            "region": ""
+            "region": "us-east-1"
+        },
+        {
+            "name": "AppSyncLambda",
+            "type-name": "AWS_LAMBDA",
+            "function-arn": "",
+            "role": "",
+            "region": "us-east-1"
         }
     ],
     "Resolvers": [
         {
-            "type-name": "Query",
-            "field-name": "",
-            "data-source-name": "",
-            "request-mapping-template": "",
-            "response-mapping-template":  "",
-            "region": ""
+            "type-name": "Event",
+            "field-name": "comments(...):CommentConnection",
+            "data-source-name": "AppSyncCommentTable",
+            "request-mapping-template": "Event.comments.request",
+            "response-mapping-template":  "Event.comments.response",
+            "region": "use-east-1"
+        },
+        {
+            "type-name": "Mutation",
+            "field-name": "deleteEvent(...):Event",
+            "data-source-name": "AppSyncEventTable",
+            "request-mapping-template": "Mutation.deleteEvent.request",
+            "response-mapping-template":  "passthrough.response",
+            "region": "use-east-1"
+        },
+        {
+            "type-name": "Mutation",
+            "field-name": "createEvent(...):Event",
+            "data-source-name": "AppSyncEventTable",
+            "request-mapping-template": "Mutation.createEvent.request",
+            "response-mapping-template":  "passthrough.response",
+            "region": "use-east-1"
+        },
+        {
+            "type-name": "Mutation",
+            "field-name": "commentOnEvent(...):Comment",
+            "data-source-name": "AppSyncCommentTable",
+            "request-mapping-template": "Mutation.commentOnEvent.request",
+            "response-mapping-template":  "passthrough.response",
+            "region": "use-east-1"
         },
         {
             "type-name": "Query",
-            "field-name": "",
-            "data-source-name": "",
-            "request-mapping-template": "",
-            "response-mapping-template":  "",
-            "region": ""
+            "field-name": "getEvent(...):Event",
+            "data-source-name": "AppSyncEventTable",
+            "request-mapping-template": "Query.getEvent.request",
+            "response-mapping-template":  "passthrough.response",
+            "region": "use-east-1"
         },
         {
             "type-name": "Query",
-            "field-name": "",
-            "data-source-name": "",
-            "request-mapping-template": "",
-            "response-mapping-template":  "",
-            "region": ""
-        },
-        {
-            "type-name": "Query",
-            "field-name": "",
-            "data-source-name": "",
-            "request-mapping-template": "",
-            "response-mapping-template":  "",
-            "region": ""
-        },
-        {
-            "type-name": "Query",
-            "field-name": "",
-            "data-source-name": "",
-            "request-mapping-template": "",
-            "response-mapping-template":  "",
-            "region": ""
+            "field-name": "listEvent(...):EventConnection",
+            "data-source-name": "AppSyncEventTable",
+            "request-mapping-template": "Query.listEvents.request",
+            "response-mapping-template":  "Query.listEvents.response",
+            "region": "use-east-1"
         }
     ]
 }
