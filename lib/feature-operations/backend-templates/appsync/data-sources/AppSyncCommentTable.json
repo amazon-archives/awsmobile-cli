@@ -1,10 +1,65 @@
 {
-  "AttributeDefinitions": {},
-  "TableName": {},
-  "KeySchema": {},
-  "LocalSecondaryIndexes": {},
-  "GlobalSecondaryIndexes": {},
-  "ProvisionedThroughput": {},
-  "StreamSpecification": {},
-  "SSESpecification": {}
+  "TableName": "AppSyncCommentTable",
+  "AttributeDefinitions": [{
+    "AttributeName": "att1",
+    "AttributeType": "S"
+  }],
+  "KeySchema": [
+    {
+      "AttributeName": "eventId",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "commentId",
+      "KeyType": "RANGE"
+    }
+  ],
+  "LocalSecondaryIndexes": [ {
+    "IndexName": "string",
+    "KeySchema": [
+      {
+        "AttributeName": "hashkey",
+        "KeyType": "HASH"
+      },
+      {
+        "AttributeName": "rangekey",
+        "KeyType": "RANGE"
+      }
+    ],
+    "Projection": {
+      "ProjectionType": "ALL",
+      "NonKeyAttributes": [""]
+    }
+  }],
+  "GlobalSecondaryIndexes":[ {
+    "IndexName": "string",
+    "KeySchema": [
+      {
+        "AttributeName": "hashkey",
+        "KeyType": "HASH"
+      },
+      {
+        "AttributeName": "rangekey",
+        "KeyType": "RANGE"
+      }
+    ],
+    "Projection": {
+      "ProjectionType": "ALL",
+      "NonKeyAttributes": [""]
+    },
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    }
+  }],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  },
+  "StreamSpecification": {
+    "StreamEnabled": false
+  },
+  "SSESpecification": {
+    "Enabled": false 
+  }
 }
