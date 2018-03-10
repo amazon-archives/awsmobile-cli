@@ -4,74 +4,62 @@
     "DataSources": [
         {
             "name": "AppSyncCommentTable",
-            "type": "AMAZON_DYNAMODB",
-            "table-name": "AppSyncCommentTable",
-            "role": "",
-            "region": "us-east-1"
+            "description": "",
+            "type": "AMAZON_DYNAMODB"
         },
         {
             "name": "AppSyncEventTable",
-            "type": "AMAZON_DYNAMODB",
-            "table-name": "AppSyncEventTable",
-            "role": "",
-            "region": "us-east-1"
+            "description": "",
+            "type": "AMAZON_DYNAMODB"
         },
         {
             "name": "AppSyncLambda",
-            "type": "AWS_LAMBDA",
-            "function-arn": "",
-            "role": "",
-            "region": "us-east-1"
+            "description": "",
+            "type": "AWS_LAMBDA"
         }
     ],
     "Resolvers": [
         {
-            "type-name": "Event",
-            "field-name": "comments(...):CommentConnection",
-            "data-source-name": "AppSyncCommentTable",
-            "request-mapping-template": "Event.comments.request",
-            "response-mapping-template":  "Event.comments.response",
-            "region": "use-east-1"
+            "typeName": "Event",
+            "fieldName": "comments(...):CommentConnection",
+            "dataSourceName": "AppSyncCommentTable",
+            "requestMappingTemplate": "Event.comments.request",
+            "responseMappingTemplate":  "Event.comments.response"
         },
         {
-            "type-name": "Mutation",
-            "field-name": "deleteEvent(...):Event",
-            "data-source-name": "AppSyncEventTable",
-            "request-mapping-template": "Mutation.deleteEvent.request",
-            "response-mapping-template":  "passthrough.response",
-            "region": "use-east-1"
+            "typeName": "Mutation",
+            "fieldName": "deleteEvent(...):Event",
+            "dataSourceName": "AppSyncEventTable",
+            "requestMappingTemplate": "Mutation.deleteEvent.request",
+            "responseMappingTemplate":  "passthrough.response"
         },
         {
-            "type-name": "Mutation",
-            "field-name": "createEvent(...):Event",
-            "data-source-name": "AppSyncEventTable",
-            "request-mapping-template": "Mutation.createEvent.request",
-            "response-mapping-template":  "passthrough.response",
-            "region": "use-east-1"
+            "typeName": "Mutation",
+            "fieldName": "createEvent(...):Event",
+            "dataSourceName": "AppSyncEventTable",
+            "requestMappingTemplate": "Mutation.createEvent.request",
+            "responseMappingTemplate":  "passthrough.response"
         },
         {
-            "type-name": "Mutation",
-            "field-name": "commentOnEvent(...):Comment",
-            "data-source-name": "AppSyncCommentTable",
-            "request-mapping-template": "Mutation.commentOnEvent.request",
-            "response-mapping-template":  "passthrough.response",
-            "region": "use-east-1"
+            "typeName": "Mutation",
+            "fieldName": "commentOnEvent(...):Comment",
+            "dataSourceName": "AppSyncCommentTable",
+            "requestMappingTemplate": "Mutation.commentOnEvent.request",
+            "responseMappingTemplate":  "passthrough.response"
         },
         {
-            "type-name": "Query",
-            "field-name": "getEvent(...):Event",
-            "data-source-name": "AppSyncEventTable",
-            "request-mapping-template": "Query.getEvent.request",
-            "response-mapping-template":  "passthrough.response",
-            "region": "use-east-1"
+            "typeName": "Query",
+            "fieldName": "getEvent(...):Event",
+            "dataSourceName": "AppSyncEventTable",
+            "requestMappingTemplate": "Query.getEvent.request",
+            "responseMappingTemplate":  "passthrough.response"
         },
         {
-            "type-name": "Query",
-            "field-name": "listEvent(...):EventConnection",
-            "data-source-name": "AppSyncEventTable",
-            "request-mapping-template": "Query.listEvents.request",
-            "response-mapping-template":  "Query.listEvents.response",
-            "region": "use-east-1"
+            "typeName": "Query",
+            "fieldName": "listEvent(...):EventConnection",
+            "dataSourceName": "AppSyncEventTable",
+            "requestMappingTemplate": "Query.listEvents.request",
+            "responseMappingTemplate":  "Query.listEvents.response"
         }
     ]
 }
