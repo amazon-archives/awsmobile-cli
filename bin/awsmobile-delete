@@ -16,11 +16,13 @@ const program = require('commander')
 const handler = require('../lib/backend-delete.js')
 
 program
-  .description('delete the awsmobile project in the cloud')
+  .description('delete the backend awsmobile project in the cloud')
+  .usage('[options]')
+  .option('-f, --force', 'force deleting the backend awsmobile project without prompt for confirmation')
   .parse(process.argv)
 
 if(program.args.length > 0){
   program.help()
 }else{
-  handler.run()
+  handler.run(program.force)
 }
