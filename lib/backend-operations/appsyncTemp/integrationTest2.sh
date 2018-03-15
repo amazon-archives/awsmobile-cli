@@ -13,7 +13,7 @@ cd blankproject
 ../node_modules/awsmobile-cli/bin/awsmobile analytics enable
 ../node_modules/awsmobile-cli/bin/awsmobile hosting enable
 ../node_modules/awsmobile-cli/bin/awsmobile push
-../node_modules/awsmobile-cli/bin/awsmobile delete
+../node_modules/awsmobile-cli/bin/awsmobile delete -f
 cd ..
 rm -rf blankproject
 echo end
