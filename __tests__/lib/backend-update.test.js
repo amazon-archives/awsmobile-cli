@@ -11,6 +11,7 @@ jest.mock('../../lib/utils/awsmobilejs-path-manager.js')
 jest.mock('../../lib/backend-operations/backend-spec-manager.js')
 jest.mock('../../lib/backend-operations/ops-cloud-api.js')
 jest.mock('../../lib/backend-operations/ops-project.js')
+jest.mock('../../lib/backend-operations/ops-appsync.js')
 
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
@@ -33,6 +34,7 @@ const backendInfoManager = require('../../lib/backend-operations/backend-info-ma
 const backendSpecManager = require('../../lib/backend-operations/backend-spec-manager.js')
 const opsCloudApi = require('../../lib/backend-operations/ops-cloud-api.js')
 const opsProject = require('../../lib/backend-operations/ops-project.js')
+const opsAppSync = require('../../lib/backend-operations/ops-appsync.js')
 
 describe('backend update', () => {
     
@@ -132,6 +134,13 @@ describe('backend update', () => {
                 callback()
             }
         })
+
+        opsAppSync.update = jest.fn((projectInfo, awsDetails, callback)=>{
+            if(callback){
+                callback()
+            }
+        })
+
 
         backendInfoManager.syncCurrentBackendInfo = 
         jest.fn((projectInfo, backendDetails, awsConfig, syncToDevFlag, callback) => {
@@ -242,7 +251,7 @@ describe('backend update', () => {
 
         backendUpdate.run(callback)
 
-        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled() 
         expect(awsExceptionHandler.handleMobileException).toBeCalled()
         expect(callback).not.toBeCalled()
     })
@@ -268,7 +277,7 @@ describe('backend update', () => {
 
         backendUpdate.run(callback)
 
-        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled() 
         expect(callback).toBeCalled()
     })
 
@@ -290,7 +299,6 @@ describe('backend update', () => {
         opsCloudApi.getStateGroup = jest.fn()
         opsCloudApi.getStateGroup.mockReturnValueOnce(0)
         opsCloudApi.getStateGroup.mockReturnValueOnce(1)
-
 
         backendUpdate.run(callback)
 
