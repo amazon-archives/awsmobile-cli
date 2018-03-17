@@ -13,10 +13,10 @@
 */
 "use strict";
 const program = require('commander')
-const handler = require('../lib/backend-update.js')
+const backendUpdate = require('../lib/backend-update.js')
 
 program
   .description('push the local development of the awsmobile project to the cloud')
   .parse(process.argv)
 
-handler.run(null)
+  backendUpdate.run(null)
