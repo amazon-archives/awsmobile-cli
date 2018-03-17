@@ -45,6 +45,7 @@ describe('s61 on failure', () => {
     beforeAll(() => {
         global.console = {log: jest.fn()}
         process.cwd = jest.fn(()=>{ return projectPath })
+        process.exit = jest.fn((code)=>{return code})
         fs.__setMockFiles(MOCK_FILE_INFO) 
 
         dfOps.readJsonFile = jest.fn((path)=>{
