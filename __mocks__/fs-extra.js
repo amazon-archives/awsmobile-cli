@@ -81,6 +81,7 @@ fs.existsSync = jest.fn((path)=>{
     return fsDetails.hasOwnProperty(path)
 })
 fs.writeFileSync = jest.fn()
+fs.appendFileSync = jest.fn()
 fs.rmdirSync = jest.fn()
 fs.renameSyn = jest.fn()
 fs.emptyDirSync = jest.fn()
