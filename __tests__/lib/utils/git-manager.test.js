@@ -2,6 +2,7 @@ jest.mock('fs-extra')
 jest.mock('../../../lib/utils/awsmobilejs-path-manager.js')
 
 const fs = require('fs-extra')
+const os = require('os')
 const path = require('path')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 
@@ -12,8 +13,15 @@ describe('git manager functions', () => {
     const projectPath = path.join('/', projectName)
     const gitIgnoreFilePath = path.join(projectPath, '.gitignore')
     
-    var MOCK_FILE_INFO = {}
-    MOCK_FILE_INFO[gitIgnoreFilePath] = 'mockignorefile'
+    let MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[gitIgnoreFilePath] = 'line1' + os.EOL + 'line2' + os.EOL + 
+        '#awsmobilejs' + os.EOL +
+        'aws-info.json' + os.EOL +
+        'project-info.json' + os.EOL +
+        'aws-exports.js' + os.EOL +
+        'awsmobilejs/.awsmobile/backend-build' + os.EOL +
+        'awsmobilejs/\\#current-backend-info' + os.EOL +
+        '~awsmobilejs-*/'
 
     beforeAll(() => {
         fs.__setMockFiles(MOCK_FILE_INFO) 
