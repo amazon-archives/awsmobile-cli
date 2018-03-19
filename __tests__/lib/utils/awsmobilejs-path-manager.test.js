@@ -54,7 +54,6 @@ describe('path manager get paths', () => {
         pathManager.getAWSExportFilePath_relative(projectPath)
         pathManager.getBackendFeatureDirPath(projectPath, featureName)
         pathManager.getBackendSpecProjectYmlFilePath(projectPath)
-        pathManager.getBackendSpecProjectJsonFilePath(projectPath)
         pathManager.getBackendContentZipFilePath(projectPath)
         pathManager.getBackendBuildYamlFilePath(projectPath)
         pathManager.getBackendBuildFeatureDirPath(projectPath, featureName)
