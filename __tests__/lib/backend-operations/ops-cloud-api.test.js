@@ -44,7 +44,7 @@ describe('ops analytics', () => {
     const mock_awsDetails = {}
 
     beforeAll(() => {
-        // global.console = {log: jest.fn()}
+        global.console = {log: jest.fn()}
         lambdaBuilder.build = jest.fn((projectInfo, backendProject, featureName, callback)=>{
             if(callback){
                 callback(true)
