@@ -1,62 +1,23 @@
 {
-    "TableName": "AppSyncEventTable",
-    "AttributeDefinitions": [{
-      "AttributeName": "att1",
-      "AttributeType": "S"
-    }],
-    "KeySchema": [
-      {
-        "AttributeName": "id",
-        "KeyType": "HASH"
-      }
-    ],
-    "LocalSecondaryIndexes": [ {
-      "IndexName": "string",
-      "KeySchema": [
-        {
-          "AttributeName": "hashkey",
-          "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "rangekey",
-          "KeyType": "RANGE"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "ALL",
-        "NonKeyAttributes": [""]
-      }
-    }],
-    "GlobalSecondaryIndexes":[ {
-      "IndexName": "string",
-      "KeySchema": [
-        {
-          "AttributeName": "hashkey",
-          "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "rangekey",
-          "KeyType": "RANGE"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "ALL",
-        "NonKeyAttributes": [""]
-      },
-      "ProvisionedThroughput": {
-        "ReadCapacityUnits": 5,
-        "WriteCapacityUnits": 5
-      }
-    }],
-    "ProvisionedThroughput": {
-      "ReadCapacityUnits": 5,
-      "WriteCapacityUnits": 5
-    },
-    "StreamSpecification": {
-      "StreamEnabled": false
-    },
-    "SSESpecification": {
-      "Enabled": false 
+  "TableName": "AppSyncEventTable",
+  "AttributeDefinitions": [{
+    "AttributeName": "id",
+    "AttributeType": "S"
+  }],
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
     }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
+  },
+  "StreamSpecification": {
+    "StreamEnabled": false
+  },
+  "SSESpecification": {
+    "Enabled": false 
   }
-  
+}

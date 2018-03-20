@@ -1,9 +1,19 @@
 {
   "TableName": "AppSyncCommentTable",
-  "AttributeDefinitions": [{
-    "AttributeName": "att1",
-    "AttributeType": "S"
-  }],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "eventId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "commentId",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "createdAt",
+      "AttributeType": "S"
+    }
+  ],
   "KeySchema": [
     {
       "AttributeName": "eventId",
@@ -15,41 +25,20 @@
     }
   ],
   "LocalSecondaryIndexes": [ {
-    "IndexName": "string",
+    "IndexName": "LSI-AppSyncCommentTable-by-eventId-createdAt",
     "KeySchema": [
       {
-        "AttributeName": "hashkey",
+        "AttributeName": "eventId",
         "KeyType": "HASH"
       },
       {
-        "AttributeName": "rangekey",
+        "AttributeName": "createdAt",
         "KeyType": "RANGE"
       }
     ],
     "Projection": {
       "ProjectionType": "ALL",
-      "NonKeyAttributes": [""]
-    }
-  }],
-  "GlobalSecondaryIndexes":[ {
-    "IndexName": "string",
-    "KeySchema": [
-      {
-        "AttributeName": "hashkey",
-        "KeyType": "HASH"
-      },
-      {
-        "AttributeName": "rangekey",
-        "KeyType": "RANGE"
-      }
-    ],
-    "Projection": {
-      "ProjectionType": "ALL",
-      "NonKeyAttributes": [""]
-    },
-    "ProvisionedThroughput": {
-      "ReadCapacityUnits": 5,
-      "WriteCapacityUnits": 5
+      "NonKeyAttributes": ["commentId"]
     }
   }],
   "ProvisionedThroughput": {
