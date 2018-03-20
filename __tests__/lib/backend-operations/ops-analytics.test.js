@@ -7,12 +7,10 @@ const opsAnalytics = require('../../../lib/backend-operations/ops-analytics.js')
 describe('ops analytics', () => {
     const mock_projectInfo = {}
     const mock_backendProjectSpec = {}
+    const mock_awsDetails = {}
 
     beforeAll(() => {
         global.console = {log: jest.fn()}
-        featureOps.specify = jest.fn()
-        featureOps.onFeatureTurnOn = jest.fn()
-        featureOps.onFeatureTurnOff = jest.fn()
     })
 
     beforeEach(() => {
@@ -36,16 +34,48 @@ describe('ops analytics', () => {
 
     test('specify', () => {
         opsAnalytics.specify(mock_projectInfo)
+        featureOps.specify = jest.fn()
+        opsAnalytics.specify(mock_projectInfo)
         expect(featureOps.specify).toBeCalled()
     })
 
     test('onFeatureTurnOn', () => {
+        opsAnalytics.onFeatureTurnOn(mock_projectInfo, mock_backendProjectSpec)
+        featureOps.onFeatureTurnOn = jest.fn()
         opsAnalytics.onFeatureTurnOn(mock_projectInfo, mock_backendProjectSpec)
         expect(featureOps.onFeatureTurnOn).toBeCalled()
     })
 
     test('onFeatureTurnOff', () => {
         opsAnalytics.onFeatureTurnOff(mock_projectInfo, mock_backendProjectSpec)
+        featureOps.onFeatureTurnOff = jest.fn()
+        opsAnalytics.onFeatureTurnOff(mock_projectInfo, mock_backendProjectSpec)
         expect(featureOps.onFeatureTurnOff).toBeCalled()
+    })
+
+    test('hasCommand', () => {
+        opsAnalytics.hasCommand('commandName')
+    })
+
+    test('runCommand', () => {
+        opsAnalytics.runCommand('commandName')
+    })
+
+    test('build', () => {
+        let callback = jest.fn()
+        opsAnalytics.build(mock_projectInfo, mock_backendProjectSpec, callback)
+        expect(callback).toBeCalled()
+    })
+
+    test('preBackendUpdate', () => {
+        let callback = jest.fn()
+        opsAnalytics.preBackendUpdate(mock_projectInfo, mock_backendProjectSpec, mock_awsDetails, callback)
+        expect(callback).toBeCalled()
+    })
+
+    test('syncCurrentBackendInfo', () => {
+        let callback = jest.fn()
+        opsAnalytics.syncCurrentBackendInfo(mock_projectInfo, mock_backendProjectSpec, mock_awsDetails, callback)
+        expect(callback).toBeCalled()
     })
 })
