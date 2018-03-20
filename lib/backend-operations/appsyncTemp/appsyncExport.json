@@ -1,6 +1,0 @@
-{
-    "graphqlEndpoint": "https://x2f33e6djbf7lpatqfiaxl36gi.appsync-api.us-east-1.amazonaws.com/graphql",
-    "region": "us-east-1",
-    "authenticationType": "API_KEY",
-    "apiKey": "da2-6gq7ew35ffhyffnzn3qlkgfnpa"
-}
