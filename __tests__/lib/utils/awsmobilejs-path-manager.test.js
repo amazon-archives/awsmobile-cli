@@ -62,7 +62,7 @@ describe('path manager get paths', () => {
         pathManager.getProjectInfoFilePath(projectPath)
         pathManager.getInitInfoFilePath(projectPath)
         pathManager.getProjectConfigFilePath(projectPath)
-        pathManager.getProjectFeatureOpsFilePath(projectPath, featureName)
+        pathManager.getProjectFeatureOpsFilePath(featureName)
         pathManager.getFeatureYmlTemplateFilePath(featureName)
         pathManager.getProjectCreationContentZipFilePath()
         pathManager.getSrcDirPath(projectInfo)
