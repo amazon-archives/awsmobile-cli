@@ -1,0 +1,29 @@
+{ TableDescription:
+    { AttributeDefinitions: [ [Object], [Object], [Object] ],     TableName: 'AppSyncCommentTable3',
+      KeySchema: [ [Object], [Object] ],
+      TableStatus: 'CREATING',
+      CreationDateTime: 2018-03-20T23:51:06.884Z,
+      ProvisionedThroughput:
+       { NumberOfDecreasesToday: 0,
+         ReadCapacityUnits: 5,
+         WriteCapacityUnits: 5 },
+      TableSizeBytes: 0,
+      ItemCount: 0,
+      TableArn: 'arn:aws:dynamodb:us-east-1:466632810889:table/AppSyncCommentTable3',
+      TableId: 'e3716589-5325-4d00-8237-f2c6bb040660',
+      LocalSecondaryIndexes: [ [Object] ] } }
+      
+ { TableDescription:
+    { AttributeDefinitions: [ [Object] ],
+      TableName: 'AppSyncEventTable3',
+      KeySchema: [ [Object] ],
+      TableStatus: 'CREATING',
+      CreationDateTime: 2018-03-20T23:51:07.121Z,
+      ProvisionedThroughput:
+       { NumberOfDecreasesToday: 0,
+         ReadCapacityUnits: 5,
+         WriteCapacityUnits: 5 },
+      TableSizeBytes: 0,
+      ItemCount: 0,
+      TableArn: 'arn:aws:dynamodb:us-east-1:466632810889:table/AppSyncEventTable3',
+      TableId: 'cd38a641-fcf2-40f5-9399-554f74c6a381' } }
