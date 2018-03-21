@@ -37,8 +37,7 @@
       }
     ],
     "Projection": {
-      "ProjectionType": "ALL",
-      "NonKeyAttributes": ["commentId"]
+      "ProjectionType": "ALL"
     }
   }],
   "ProvisionedThroughput": {
