@@ -1,29 +1,30 @@
 { TableDescription:
-    { AttributeDefinitions: [ [Object], [Object], [Object] ],     TableName: 'AppSyncCommentTable3',
-      KeySchema: [ [Object], [Object] ],
-      TableStatus: 'CREATING',
-      CreationDateTime: 2018-03-20T23:51:06.884Z,
-      ProvisionedThroughput:
-       { NumberOfDecreasesToday: 0,
-         ReadCapacityUnits: 5,
-         WriteCapacityUnits: 5 },
-      TableSizeBytes: 0,
-      ItemCount: 0,
-      TableArn: 'arn:aws:dynamodb:us-east-1:466632810889:table/AppSyncCommentTable3',
-      TableId: 'e3716589-5325-4d00-8237-f2c6bb040660',
-      LocalSecondaryIndexes: [ [Object] ] } }
-      
- { TableDescription:
     { AttributeDefinitions: [ [Object] ],
-      TableName: 'AppSyncEventTable3',
+      TableName: 'AppSyncEventTable-u2XLVKUX',
       KeySchema: [ [Object] ],
       TableStatus: 'CREATING',
-      CreationDateTime: 2018-03-20T23:51:07.121Z,
+      CreationDateTime: 2018-03-21T21:30:23.929Z,
       ProvisionedThroughput:
        { NumberOfDecreasesToday: 0,
          ReadCapacityUnits: 5,
          WriteCapacityUnits: 5 },
       TableSizeBytes: 0,
       ItemCount: 0,
-      TableArn: 'arn:aws:dynamodb:us-east-1:466632810889:table/AppSyncEventTable3',
-      TableId: 'cd38a641-fcf2-40f5-9399-554f74c6a381' } }
+      TableArn: 'arn:aws:dynamodb:us-east-1:466632810889:table/AppSyncEventTable-u2XLVKUX',
+      TableId: 'ca52b5f8-d8e0-4f91-b8c4-edbaa556c16e' } }
+ create table AppSyncCommentTable-5h9tyQEy response
+ { TableDescription:
+    { AttributeDefinitions: [ [Object], [Object], [Object] ],
+      TableName: 'AppSyncCommentTable-5h9tyQEy',
+      KeySchema: [ [Object], [Object] ],
+      TableStatus: 'CREATING',
+      CreationDateTime: 2018-03-21T21:30:24.336Z,
+      ProvisionedThroughput:
+       { NumberOfDecreasesToday: 0,
+         ReadCapacityUnits: 5,
+         WriteCapacityUnits: 5 },
+      TableSizeBytes: 0,
+      ItemCount: 0,
+      TableArn: 'arn:aws:dynamodb:us-east-1:466632810889:table/AppSyncCommentTable-5h9tyQEy',
+      TableId: '9acc8ac0-b1e6-470c-938b-aa5b2dfb34b5',
+      LocalSecondaryIndexes: [ [Object] ] } }
