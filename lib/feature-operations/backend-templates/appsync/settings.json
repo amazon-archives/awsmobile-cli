@@ -21,42 +21,42 @@
     "Resolvers": [
         {
             "typeName": "Event",
-            "fieldName": "comments(...):CommentConnection",
+            "fieldName": "comments",
             "dataSourceName": "AppSyncCommentTable",
             "requestMappingTemplate": "Event.comments.request",
             "responseMappingTemplate":  "Event.comments.response"
         },
         {
             "typeName": "Mutation",
-            "fieldName": "deleteEvent(...):Event",
+            "fieldName": "deleteEvent",
             "dataSourceName": "AppSyncEventTable",
             "requestMappingTemplate": "Mutation.deleteEvent.request",
             "responseMappingTemplate":  "passthrough.response"
         },
         {
             "typeName": "Mutation",
-            "fieldName": "createEvent(...):Event",
+            "fieldName": "createEvent",
             "dataSourceName": "AppSyncEventTable",
             "requestMappingTemplate": "Mutation.createEvent.request",
             "responseMappingTemplate":  "passthrough.response"
         },
         {
             "typeName": "Mutation",
-            "fieldName": "commentOnEvent(...):Comment",
+            "fieldName": "commentOnEvent",
             "dataSourceName": "AppSyncCommentTable",
             "requestMappingTemplate": "Mutation.commentOnEvent.request",
             "responseMappingTemplate":  "passthrough.response"
         },
         {
             "typeName": "Query",
-            "fieldName": "getEvent(...):Event",
+            "fieldName": "getEvent",
             "dataSourceName": "AppSyncEventTable",
             "requestMappingTemplate": "Query.getEvent.request",
             "responseMappingTemplate":  "passthrough.response"
         },
         {
             "typeName": "Query",
-            "fieldName": "listEvent(...):EventConnection",
+            "fieldName": "listEvents",
             "dataSourceName": "AppSyncEventTable",
             "requestMappingTemplate": "Query.listEvents.request",
             "responseMappingTemplate":  "Query.listEvents.response"
