@@ -1,5 +1,5 @@
 {
-	"APIName": "awsmboile-cli-appsync-api",
+	"APIName": "{auto-generate}",
     "AuthorizationType": "API_KEY",
     "DataSources": [
         {

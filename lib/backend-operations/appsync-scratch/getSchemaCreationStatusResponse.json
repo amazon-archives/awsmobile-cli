@@ -1,3 +1,7 @@
+schema created: kc5cclr5d5exdens36g4tbjty4
+{ status: 'PROCESSING' }
+
+
 getSchemaCreationStatus:
 { status: 'SUCCESS',
   details: 'Successfully created schema with 8 types.' }
