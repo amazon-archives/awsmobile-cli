@@ -38,6 +38,7 @@
     "download-git-repo": "^1.0.2",
     "extract-zip": "^1.6.6",
     "fs-extra": "^4.0.2",
+    "graphql": "^0.13.2",
     "http": "0.0.0",
     "https": "^1.0.0",
     "inquirer": "^3.2.1",
