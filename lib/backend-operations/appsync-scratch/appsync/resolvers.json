@@ -1,0 +1,50 @@
+[
+	{
+		"typeName": "Event",
+		"fieldName": "comments",
+		"dataSourceName": "AppSyncCommentTable",
+		"resolverArn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu/types/Event/resolvers/comments",
+		"requestMappingTemplate": "Event.comments.request",
+		"responseMappingTemplate": "Event.comments.response"
+	},
+	{
+		"typeName": "Mutation",
+		"fieldName": "commentOnEvent",
+		"dataSourceName": "AppSyncCommentTable",
+		"resolverArn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu/types/Mutation/resolvers/commentOnEvent",
+		"requestMappingTemplate": "Mutation.commentOnEvent.request",
+		"responseMappingTemplate": "Mutation.commentOnEvent.response"
+	},
+	{
+		"typeName": "Mutation",
+		"fieldName": "createEvent",
+		"dataSourceName": "AppSyncEventTable",
+		"resolverArn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu/types/Mutation/resolvers/createEvent",
+		"requestMappingTemplate": "Mutation.createEvent.request",
+		"responseMappingTemplate": "Mutation.createEvent.response"
+	},
+	{
+		"typeName": "Mutation",
+		"fieldName": "deleteEvent",
+		"dataSourceName": "AppSyncEventTable",
+		"resolverArn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu/types/Mutation/resolvers/deleteEvent",
+		"requestMappingTemplate": "Mutation.deleteEvent.request",
+		"responseMappingTemplate": "Mutation.deleteEvent.response"
+	},
+	{
+		"typeName": "Query",
+		"fieldName": "getEvent",
+		"dataSourceName": "AppSyncEventTable",
+		"resolverArn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu/types/Query/resolvers/getEvent",
+		"requestMappingTemplate": "Query.getEvent.request",
+		"responseMappingTemplate": "Query.getEvent.response"
+	},
+	{
+		"typeName": "Query",
+		"fieldName": "listEvents",
+		"dataSourceName": "AppSyncEventTable",
+		"resolverArn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu/types/Query/resolvers/listEvents",
+		"requestMappingTemplate": "Query.listEvents.request",
+		"responseMappingTemplate": "Query.listEvents.response"
+	}
+]

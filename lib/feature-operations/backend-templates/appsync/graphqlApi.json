@@ -1,0 +1,9 @@
+{
+	"name": "My AppSync App",
+	"apiId": "r366aqetnve5nc4cgn33pb5wxu",
+	"authenticationType": "API_KEY",
+	"arn": "arn:aws:appsync:us-east-1:466632810889:apis/r366aqetnve5nc4cgn33pb5wxu",
+	"uris": {
+		"GRAPHQL": "https://5jouyhewjvcjbatw3xwrkdp4xi.appsync-api.us-east-1.amazonaws.com/graphql"
+	}
+}

@@ -1,0 +1,94 @@
+[
+	{
+		"name": "AppSyncCommentTable",
+		"description": null,
+		"type": "AMAZON_DYNAMODB",
+		"dynamodbConfig": {
+			"tableName": "AppSyncCommentTable-MOVFtVQj",
+			"awsRegion": "us-east-1",
+			"useCallerCredentials": false
+		},
+		"spec": {
+			"Table": {
+				"AttributeDefinitions": [
+					{
+						"AttributeName": "commentId",
+						"AttributeType": "S"
+					},
+					{
+						"AttributeName": "createdAt",
+						"AttributeType": "S"
+					},
+					{
+						"AttributeName": "eventId",
+						"AttributeType": "S"
+					}
+				],
+				"TableName": "AppSyncCommentTable-MOVFtVQj",
+				"KeySchema": [
+					{
+						"AttributeName": "eventId",
+						"KeyType": "HASH"
+					},
+					{
+						"AttributeName": "commentId",
+						"KeyType": "RANGE"
+					}
+				],
+				"ProvisionedThroughput": {
+					"ReadCapacityUnits": 5,
+					"WriteCapacityUnits": 5
+				},
+				"LocalSecondaryIndexes": [
+					{
+						"IndexName": "LSI-AppSyncCommentTable-by-eventId-createdAt",
+						"KeySchema": [
+							{
+								"AttributeName": "eventId",
+								"KeyType": "HASH"
+							},
+							{
+								"AttributeName": "createdAt",
+								"KeyType": "RANGE"
+							}
+						],
+						"Projection": {
+							"ProjectionType": "ALL"
+						}
+					}
+				]
+			}
+		}
+	},
+	{
+		"name": "AppSyncEventTable",
+		"description": null,
+		"type": "AMAZON_DYNAMODB",
+		"dynamodbConfig": {
+			"tableName": "AppSyncEventTable-MOVFtVQj",
+			"awsRegion": "us-east-1",
+			"useCallerCredentials": false
+		},
+		"spec": {
+			"Table": {
+				"AttributeDefinitions": [
+					{
+						"AttributeName": "id",
+						"AttributeType": "S"
+					}
+				],
+				"TableName": "AppSyncEventTable",
+				"KeySchema": [
+					{
+						"AttributeName": "id",
+						"KeyType": "HASH"
+					}
+				],
+				"ProvisionedThroughput": {
+					"ReadCapacityUnits": 5,
+					"WriteCapacityUnits": 5
+				}
+			}
+		}
+	}
+]

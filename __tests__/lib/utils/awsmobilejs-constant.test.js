@@ -31,7 +31,6 @@ describe('awsmobilejs constants', () => {
         expect(awsmobilejsConstant.BackendProjectYamlFileName).toBeDefined()
         expect(awsmobilejsConstant.BackendProjectJsonFileName).toBeDefined()
         expect(awsmobilejsConstant.DressedByFeatureFlag).toBeDefined()
-        expect(awsmobilejsConstant.ClientSubDirName).toBeDefined()
         expect(awsmobilejsConstant.AWSExportFileName).toBeDefined()
         expect(awsmobilejsConstant.BackendSubDirName).toBeDefined()
         expect(awsmobilejsConstant.DateTimeFormatString).toBeDefined()
