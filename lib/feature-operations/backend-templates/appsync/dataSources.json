@@ -19,7 +19,7 @@
 						"AttributeType": "S"
 					}
 				],
-				"TableName": "AppSyncCommentTable",
+				"TableName": "AppSyncCommentTable{suffix}",
 				"KeySchema": [
 					{
 						"AttributeName": "eventId",
@@ -67,7 +67,7 @@
 						"AttributeType": "S"
 					}
 				],
-				"TableName": "AppSyncEventTable",
+				"TableName": "AppSyncEventTable{suffix}",
 				"KeySchema": [
 					{
 						"AttributeName": "id",
