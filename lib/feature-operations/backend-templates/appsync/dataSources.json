@@ -3,11 +3,6 @@
 		"name": "AppSyncCommentTable",
 		"description": null,
 		"type": "AMAZON_DYNAMODB",
-		"dynamodbConfig": {
-			"tableName": "AppSyncCommentTable-MOVFtVQj",
-			"awsRegion": "us-east-1",
-			"useCallerCredentials": false
-		},
 		"spec": {
 			"Table": {
 				"AttributeDefinitions": [
@@ -24,7 +19,7 @@
 						"AttributeType": "S"
 					}
 				],
-				"TableName": "AppSyncCommentTable-MOVFtVQj",
+				"TableName": "AppSyncCommentTable",
 				"KeySchema": [
 					{
 						"AttributeName": "eventId",
@@ -64,11 +59,6 @@
 		"name": "AppSyncEventTable",
 		"description": null,
 		"type": "AMAZON_DYNAMODB",
-		"dynamodbConfig": {
-			"tableName": "AppSyncEventTable-MOVFtVQj",
-			"awsRegion": "us-east-1",
-			"useCallerCredentials": false
-		},
 		"spec": {
 			"Table": {
 				"AttributeDefinitions": [
