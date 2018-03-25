@@ -38,7 +38,7 @@ describe('aws-config-profile-reader', () => {
     let credentialsLineIndex = 0
 
     beforeAll(() => {
-        global.console = {log: jest.fn()}
+        //global.console = {log: jest.fn()}
         fs.__setMockFiles(MOCK_FILE_INFO) 
         pathManager.getSysAwsConfigFilePath = jest.fn(()=>{
             return awsConfigFilePath
@@ -89,8 +89,19 @@ describe('aws-config-profile-reader', () => {
         expect(sysConfig).not.toBeDefined()
     })
 
-    test('getSystemConfig system config files not exist', () => {
-        fs.__setMockFiles({}) 
+    test('getSystemConfig aws config file not exist', () => {
+        fs.__setMockFiles({
+            awsCredentialsFilePath: mock_credentials_content_lines.join(os.EOL)
+        }) 
+        let sysConfig = configProfileReader.getSystemConfig('profile1')
+        expect(fs.existsSync).toBeCalled()
+        expect(sysConfig).not.toBeDefined()
+    })
+
+    test('getSystemConfig aws credentials file not exist', () => {
+        fs.__setMockFiles({
+            awsConfigFilePath: mock_config_content_lines.join(os.EOL)
+        }) 
         let sysConfig = configProfileReader.getSystemConfig('profile1')
         expect(fs.existsSync).toBeCalled()
         expect(sysConfig).not.toBeDefined()
