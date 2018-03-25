@@ -16,6 +16,9 @@ describe('aws-config-profile-reader', () => {
         ' ',
         '[profile profile1]',
         'region = us-east-2',
+        ' ',
+        '[profile profile2]',
+        'region = us-west-2',
     ]
 
     const mock_credentials_content_lines = [
@@ -25,6 +28,10 @@ describe('aws-config-profile-reader', () => {
         ' ',
         '[profile1]',
         'aws_access_key_id = profile1accesskeyid',
+        'aws_secret_access_key = profile1accesskey',
+        ' ',
+        '[profile3]',
+        'aws_access_key_id = profile3accesskeyid',
         'aws_secret_access_key = profile1accesskey',
     ]
     
@@ -38,7 +45,7 @@ describe('aws-config-profile-reader', () => {
     let credentialsLineIndex = 0
 
     beforeAll(() => {
-        //global.console = {log: jest.fn()}
+        global.console = {log: jest.fn()}
         fs.__setMockFiles(MOCK_FILE_INFO) 
         pathManager.getSysAwsConfigFilePath = jest.fn(()=>{
             return awsConfigFilePath
@@ -84,6 +91,20 @@ describe('aws-config-profile-reader', () => {
 
     test('getSystemConfig profile not exists', () => {
         let sysConfig = configProfileReader.getSystemConfig('non-existing-profile')
+
+        expect(fs.existsSync).toBeCalled()
+        expect(sysConfig).not.toBeDefined()
+    })
+
+    test('getSystemConfig profile not exists in config', () => {
+        let sysConfig = configProfileReader.getSystemConfig('profile2')
+
+        expect(fs.existsSync).toBeCalled()
+        expect(sysConfig).not.toBeDefined()
+    })
+
+    test('getSystemConfig profile not exists in credentials', () => {
+        let sysConfig = configProfileReader.getSystemConfig('profile3')
 
         expect(fs.existsSync).toBeCalled()
         expect(sysConfig).not.toBeDefined()
