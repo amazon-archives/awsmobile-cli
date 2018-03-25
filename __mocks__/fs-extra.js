@@ -11,13 +11,15 @@ function __setMockFiles(newMockFileInfos) {
             fsDetails[itemPath] = { 
                 content: newMockFileInfos[itemPath], 
                 isFile: function(){ return true }, 
-                isDirectory: function(){ return false}
+                isDirectory: function(){ return false},
+                mtime: new Date()
             }
             if (!fsDetails[dirPath]){
                 fsDetails[dirPath] = {
                     content: [path.basename(itemPath)], 
                     isFile: function(){ return false }, 
-                    isDirectory: function(){ return true}
+                    isDirectory: function(){ return true},
+                    mtime: new Date()
                 }
             }else{
                 fsDetails[dirPath].content.push(path.basename(itemPath))
@@ -26,7 +28,8 @@ function __setMockFiles(newMockFileInfos) {
             fsDetails[itemPath] = { 
                 content: null, 
                 isFile: function(){ return false }, 
-                isDirectory: function(){ return true}
+                isDirectory: function(){ return true},
+                mtime: new Date()
             }
             dirPath = itemPath
         }
@@ -40,7 +43,8 @@ function __setMockFiles(newMockFileInfos) {
                     fsDetails[parentPath] = {
                         content: [path.basename(dirPath)], 
                         isFile: function(){ return false }, 
-                        isDirectory: function(){ return true}
+                        isDirectory: function(){ return true},
+                        mtime: new Date()
                     }
                 }else if(!fsDetails[parentPath].content.includes(path.basename(dirPath))){
                     fsDetails[parentPath].content.push(path.basename(dirPath))
@@ -59,10 +63,6 @@ function readdirSync(directoryPath) {
     return result
 }
 
-function lstatSync(path) {
-    return fsDetails[path]
-}
-
 function readFileSync(filePath) {
     var result 
     if(fsDetails[filePath] && fsDetails[filePath].isFile()){
@@ -75,7 +75,12 @@ fs.__setMockFiles = __setMockFiles
 fs.readdirSync = jest.fn((path)=>{
     return readdirSync(path)
 })
-fs.lstatSync = lstatSync
+fs.lstatSync = jest.fn((path)=>{
+    return fsDetails[path]
+})
+fs.statSync = jest.fn((path)=>{
+    return fsDetails[path]
+})
 fs.readFileSync = readFileSync
 fs.existsSync = jest.fn((path)=>{
     return fsDetails.hasOwnProperty(path)
