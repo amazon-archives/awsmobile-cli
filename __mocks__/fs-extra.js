@@ -5,6 +5,7 @@ var fsDetails = {}
 
 function __setMockFiles(newMockFileInfos) {
     fsDetails = {}
+    let singleMtime = new Date()
     for (const itemPath in newMockFileInfos) {
         var dirPath = path.dirname(itemPath)
         if(newMockFileInfos[itemPath]){
@@ -12,14 +13,14 @@ function __setMockFiles(newMockFileInfos) {
                 content: newMockFileInfos[itemPath], 
                 isFile: function(){ return true }, 
                 isDirectory: function(){ return false},
-                mtime: new Date()
+                mtime: singleMtime
             }
             if (!fsDetails[dirPath]){
                 fsDetails[dirPath] = {
                     content: [path.basename(itemPath)], 
                     isFile: function(){ return false }, 
                     isDirectory: function(){ return true},
-                    mtime: new Date()
+                    mtime: singleMtime
                 }
             }else{
                 fsDetails[dirPath].content.push(path.basename(itemPath))
@@ -29,7 +30,7 @@ function __setMockFiles(newMockFileInfos) {
                 content: null, 
                 isFile: function(){ return false }, 
                 isDirectory: function(){ return true},
-                mtime: new Date()
+                mtime: singleMtime
             }
             dirPath = itemPath
         }
@@ -44,7 +45,7 @@ function __setMockFiles(newMockFileInfos) {
                         content: [path.basename(dirPath)], 
                         isFile: function(){ return false }, 
                         isDirectory: function(){ return true},
-                        mtime: new Date()
+                        mtime: singleMtime
                     }
                 }else if(!fsDetails[parentPath].content.includes(path.basename(dirPath))){
                     fsDetails[parentPath].content.push(path.basename(dirPath))
