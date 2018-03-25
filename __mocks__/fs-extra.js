@@ -88,6 +88,7 @@ fs.emptyDirSync = jest.fn()
 fs.copySync = jest.fn()
 fs.mkdirSync = jest.fn()
 fs.ensureDirSync = jest.fn()
+fs.createReadStream = jest.fn()
 fs.createWriteStream = jest.fn()
 
 module.exports = fs
