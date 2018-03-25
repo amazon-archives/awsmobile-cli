@@ -52,7 +52,6 @@ describe('project info manager functions', () => {
 
     test('setupNewUser', () => {
         let callback = jest.fn()
-
         return configNewUser.setupNewUser(mock_awsDetails, callback).then(() => {
             expect(callback).toBeCalled()
         })
