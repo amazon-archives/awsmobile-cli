@@ -1,94 +1,124 @@
 jest.mock('fs-extra')
-
-jest.mock('../../../lib/aws-operations/aws-client.js')
-jest.mock('../../../lib/aws-operations/aws-exception-handler.js')
-jest.mock('../../../lib/utils/directory-file-ops.js')
-jest.mock('../../../lib/aws-operations/aws-config-manager.js')
+jest.mock('archiver')
+jest.mock('../../../lib/backend-operations/backend-spec-manager.js')
 
 const fs = require('fs-extra')
 const path = require('path')
+const archiver = require('archiver')
+const moment = require('moment')
+const { Writable } = require('stream')
 
-const awsClient = require('../../../lib/aws-operations/aws-client.js')
+const backendSpecManager = require('../../../lib/backend-operations/backend-spec-manager.js')
+const dfops = require('../../../lib/utils/directory-file-ops.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
+const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const opsCloudApi = require('../../../lib/backend-operations/ops-cloud-api.js')
 
-const lambdaUploader = require('../../../lib/backend-operations/cloud-api-lambda-uploader.js')
+const lambdaBuilder = require('../../../lib/backend-operations/cloud-api-lambda-builder.js')
 
-describe('cloud-api-lambda-uploader', () => {
+describe('cloud-api-lambda-builder', () => {
+   
     const projectName = 'projectName'
     const projectPath = path.join('/', projectName)
     const projectInfoFilePath = pathManager.getProjectInfoFilePath(projectPath)
-    const featureBuildDirPath = pathManager.getBackendBuildFeatureDirPath(projectPath, opsCloudApi.featureName)
-    const builtZipFilePath1 = path.join(featureBuildDirPath, 'lambda1.zip')
-    const builtZipFilePath2 = path.join(featureBuildDirPath, 'lambda2.zip')
-
+    
     const mock_projectInfo = {
+        ProjectName: projectName,
         ProjectPath: projectPath
     }
-    
-    const mock_awsConfig = {
-        "accessKeyId":"mockAccessKeyID",
-        "secretAccessKey":"mockSecretAccessKey",
-        "region": 'us-east-1'
-    }
 
-    const mock_awsInfo = {
-        "IsUsingProfile": false,
-        "ProfileName": 'default',
-        "AWSConfigFilePath": 'awsConfigFilePath_project',
-        "AWSInfoFilePath": 'awsInfoFilePath_project',
-        "LastProfileSyncTime": "2018-01-01-01-01-01"
-    }
-    
-    const mock_awsDetails = {
-        info: mock_awsInfo, 
-        config: mock_awsConfig
-    }
+    const backendCloudApiDirPath = pathManager.getBackendFeatureDirPath(mock_projectInfo.ProjectPath, opsCloudApi.featureName)
+    const lambdaCodeDirPath1 = path.join(backendCloudApiDirPath, 'lambda1')
+    const lambdaCodeDirPath2 = path.join(backendCloudApiDirPath, 'lambda2')
+    const lambdaHandlerFilePath1 = path.join(lambdaCodeDirPath1, 'lambda.js')
+    const lambdaHandlerFilePath2 = path.join(lambdaCodeDirPath2, 'lambda.js')
 
-    const mock_backendProjectDetails = {
-        resources: [
-            {
-                'type': 'AWS::S3::Bucket',
-                'feature': 'common',
-                'name': 'myapp-deployments-mobilehub-1234323445',
-                'attributes': {
-                    'region': 'us-east-1',
-                    's3-bucket-console-url': 'https://s3.console.aws.amazon.com/s3/buckets/myapp-deployments-mobilehub-1234323445'
+    const cloudApiBuildDirPath = pathManager.getBackendBuildFeatureDirPath(mock_projectInfo.ProjectPath, opsCloudApi.featureName)
+    const lambdaZipFilePath1 = path.join(cloudApiBuildDirPath, 'lambda1.zip')
+    const lambdaZipFilePath2 = path.join(cloudApiBuildDirPath, 'lambda2.zip')
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
+    MOCK_FILE_INFO[lambdaHandlerFilePath1] = 'exports.handler = (event, context) => {console.log("handler")}'
+    MOCK_FILE_INFO[lambdaHandlerFilePath2] = 'exports.handler = (event, context) => {console.log("handler")}'
+    MOCK_FILE_INFO[lambdaZipFilePath1] = 'mock-zip-contents-1'
+    MOCK_FILE_INFO[lambdaZipFilePath2] = 'mock-zip-contents-2'
+
+    const mock_backendProject = {
+        features: {
+            cloudlogic: {
+                components: {
+                    api1: {
+                        attributes: {
+                            name: 'api1', 
+                            'requires-signin': false, 
+                        },
+                        paths: {
+                            '/items:': {
+                                name: 'lambda1',
+                                codeFilename: 'uploads/lambda1.zip',
+                                handler: 'lambda.handler',
+                                enableCORS: true,
+                                runtime: 'nodejs6.10',
+                                environment: {},
+                            },
+                            '/items/{proxy+}': {
+                                name: 'lambda1',
+                                codeFilename: 'uploads/lambda1.zip',
+                                handler: 'lambda.handler',
+                                enableCORS: true,
+                                runtime: 'nodejs6.10',
+                                environment: {},
+                            }
+                        }
+                    }, 
+                    api2: {
+                        attributes: {
+                            name: 'api2', 
+                            'requires-signin': false, 
+                        },
+                        paths: {
+                            '/items:': {
+                                name: 'lambda2',
+                                codeFilename: 'uploads/lambda2.zip',
+                                handler: 'lambda.handler',
+                                enableCORS: true,
+                                runtime: 'nodejs6.10',
+                                environment: {},
+                            },
+                            '/items/{proxy+}': {
+                                name: 'lambda2',
+                                codeFilename: 'uploads/lambda2.zip',
+                                handler: 'lambda.handler',
+                                enableCORS: true,
+                                runtime: 'nodejs6.10',
+                                environment: {},
+                            }
+                        }
+                    }
                 }
             }
-        ]
+        }
     }
-
-    let MOCK_FILE_INFO = {}
-    MOCK_FILE_INFO[builtZipFilePath1] = 'mock-zip-content-1'
-    MOCK_FILE_INFO[builtZipFilePath2] = 'mock-zip-content-2'
-
+    
     beforeAll(() => {
         global.console = {log: jest.fn()}
         fs.__setMockFiles(MOCK_FILE_INFO) 
-        fs.createReadStream = jest.fn((filePath)=>{
-            return {
-                on: jest.fn((event, callback)=>{
-                    callback()
-                }),
-            }
+        fs.createWriteStream = jest.fn((filePath)=>{
+            return new Writable()
         })
-        const mock_s3Client = {
-            headObject: jest.fn((param, callback)=>{
-                callback({}, {}) //invoke callback with err, means no such object is in S3, go ahead with the upload
-            }), 
-            upload: jest.fn((param, callback)=>{
-                callback(null, {}) 
-            })
-        }
-        awsClient.S3 = jest.fn(()=>{
-            return mock_s3Client
+        archiver.create = jest.fn((format, options)=>{
+            return {
+                pipe: (writable)=>{this.outStream = writable},
+                directory: jest.fn(),
+                finalize: ()=>{this.outStream.emit('close')}
+            }
         })
     })
 
-    test('uploadLambdaZipFiles', () => {
+    test('build', () => {
         let callback = jest.fn()
-        lambdaUploader.uploadLambdaZipFiles(mock_projectInfo, mock_awsDetails, mock_backendProjectDetails, opsCloudApi.featureName, callback)
-        expect(callback).toBeCalled()
+        lambdaBuilder.build(mock_projectInfo, mock_backendProject, opsCloudApi.featureName, callback)
+        expect(callback).toBeCalled()  
     })
 })
