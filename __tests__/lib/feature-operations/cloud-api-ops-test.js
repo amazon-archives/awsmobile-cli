@@ -838,6 +838,8 @@ test('Edit cloud api, add path', () => {
         "            enableCORS: true" + "\n" +
         "            runtime: nodejs6.10" + "\n" +
         "            environment: {}" + "\n" +
+        "            timeout: 3" + "\n" +
+        "            version: UrehgjJG9esomZC8Tyy2gf2jwBqi4rNB" + "\n" +
         "          '/items/{proxy+}': !com.amazonaws.mobilehub.v0.Function " + "\n" +
         "            name: sampleLambda" + "\n" +
         "            codeFilename: uploads/sampleLambda.zip" + "\n" +
@@ -845,6 +847,8 @@ test('Edit cloud api, add path', () => {
         "            enableCORS: true" + "\n" +
         "            runtime: nodejs6.10" + "\n" +
         "            environment: {}" + "\n" +
+        "            timeout: 3" + "\n" +
+        "            version: UrehgjJG9esomZC8Tyy2gf2jwBqi4rNB" + "\n" +
         "name: '-2017-09-11-10-33-25'" + "\n" +
         "region: us-east-1" + "\n" +
         "uploads: []" + "\n" +
@@ -894,6 +898,8 @@ test('Edit cloud api, add path', () => {
         "            enableCORS: true" + "\n" +
         "            runtime: nodejs6.10" + "\n" +
         "            environment: {}" + "\n" +
+        "            timeout: 3" + "\n" +
+        "            version: UrehgjJG9esomZC8Tyy2gf2jwBqi4rNB" + "\n" +
         "          '/items/{proxy+}': !com.amazonaws.mobilehub.v0.Function " + "\n" +
         "            name: sampleLambda" + "\n" +
         "            codeFilename: uploads/sampleLambda.zip" + "\n" +
@@ -901,6 +907,8 @@ test('Edit cloud api, add path', () => {
         "            enableCORS: true" + "\n" +
         "            runtime: nodejs6.10" + "\n" +
         "            environment: {}" + "\n" +
+        "            timeout: 3" + "\n" +
+        "            version: UrehgjJG9esomZC8Tyy2gf2jwBqi4rNB" + "\n" +
         "          /items2: !com.amazonaws.mobilehub.v0.Function " + "\n" +
         "            name: sampleLambda" + "\n" +
         "            codeFilename: uploads/sampleLambda.zip" + "\n" +
