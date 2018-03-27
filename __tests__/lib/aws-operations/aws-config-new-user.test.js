@@ -1,7 +1,7 @@
 jest.mock('fs-extra')
 jest.mock('opn')
 jest.mock('../../../lib/aws-operations/aws-config-info-manager.js')
-jest.mock('../../../lib/utils/press-any-key-to-continue.js')
+jest.mock('../../../lib/utils/press-enter-to-continue.js')
 
 const fs = require('fs-extra')
 const opn = require('opn')
@@ -10,7 +10,7 @@ const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
 const awsConfigFileManager = require('../../../lib/aws-operations/aws-config-info-manager.js')
-let pressAnyKeyToContinue = require('../../../lib/utils/press-any-key-to-continue.js')
+let pressEnterKeyToContinue = require('../../../lib/utils/press-enter-to-continue.js')
 
 const configNewUser = require('../../../lib/aws-operations/aws-config-new-user.js')
 
@@ -31,7 +31,7 @@ describe('project info manager functions', () => {
 
     beforeAll(() => {
         global.console = {log: jest.fn()}
-        pressAnyKeyToContinue.run = jest.fn((handle)=>{
+        pressEnterKeyToContinue.run = jest.fn((handle)=>{
             return new Promise((resolve, reject)=>{
                 resolve(handle)
             })
