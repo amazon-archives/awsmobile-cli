@@ -2,7 +2,13 @@
 	{
 		"name": "AppSyncCommentTable",
 		"description": null,
-		"type": "AMAZON_DYNAMODB",
+		"type": "AMAZON_DYNAMODB",	
+		"serviceRoleArn": "{by-awsmobile-cli}",
+		"dynamodbConfig": {
+			"tableName": "{by-awsmobile-cli}",
+			"awsRegion": "us-east-1",
+			"useCallerCredentials": false
+		},
 		"spec": {
 			"Table": {
 				"AttributeDefinitions": [
@@ -19,7 +25,7 @@
 						"AttributeType": "S"
 					}
 				],
-				"TableName": "AppSyncCommentTable{suffix}",
+				"TableName": "{by-awsmobile-cli}",
 				"KeySchema": [
 					{
 						"AttributeName": "eventId",
@@ -59,6 +65,11 @@
 		"name": "AppSyncEventTable",
 		"description": null,
 		"type": "AMAZON_DYNAMODB",
+		"dynamodbConfig": {
+			"tableName": "{by-awsmobile-cli}",
+			"awsRegion": "us-east-1",
+			"useCallerCredentials": false
+		},
 		"spec": {
 			"Table": {
 				"AttributeDefinitions": [
@@ -67,7 +78,7 @@
 						"AttributeType": "S"
 					}
 				],
-				"TableName": "AppSyncEventTable{suffix}",
+				"TableName": "{by-awsmobile-cli}",
 				"KeySchema": [
 					{
 						"AttributeName": "id",
