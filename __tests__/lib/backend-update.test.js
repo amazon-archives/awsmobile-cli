@@ -38,7 +38,7 @@ const projectInfoManager = require('../../lib/project-info-manager.js')
 const backendRetrieve = require('../../lib/backend-retrieve.js')
 const projectBackendBuilder = require('../../lib/build-backend.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../lib/utils/awsmobilejs-constant.js')
 const dfops = require('../../lib/utils/directory-file-ops.js')
 const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js')
 const awsClient = require('../../lib/aws-operations/aws-client.js')
@@ -171,7 +171,7 @@ describe('backend update', () => {
         mock_projectInfo.BackendLastSyncTime = '2018-01-01-01-01-01'
         mock_projectInfo.BackendLastPushTime = '2018-01-01-01-01-01'
         dfops.getDirContentMTime  = jest.fn((dir, ignoredDirs, ignoredFiles) => {
-            return moment('2018-01-01-01-01-02',  awsmobileJSConstant.DateTimeFormatString)
+            return moment('2018-01-01-01-01-02',  awsmobilejsConstant.DateTimeFormatString)
         })
         projectInfoManager.checkBackendUpdateNoConflict = jest.fn((projectInfo, backendDetails)=>{
             return true
@@ -191,7 +191,7 @@ describe('backend update', () => {
         const callback = jest.fn()
 
         dfops.getDirContentMTime  = jest.fn((dir, ignoredDirs, ignoredFiles) => {
-            return moment('2018-01-01-01-01-00',  awsmobileJSConstant.DateTimeFormatString)
+            return moment('2018-01-01-01-01-00',  awsmobilejsConstant.DateTimeFormatString)
         })
 
         backendUpdate.run(callback)

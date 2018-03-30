@@ -23,7 +23,7 @@ const path = require('path')
 const projectInfoManager = require('../../../lib/project-info-manager.js')
 const awsConfigProfileReader = require('../../../lib/aws-operations/aws-config-profile-reader.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 
 const awsConfigInfoManager = require('../../../lib/aws-operations/aws-config-info-manager.js')
 const newUserHelper = require('../../../lib/aws-operations/aws-config-new-user.js')
@@ -92,8 +92,8 @@ describe('aws-config-manager', () => {
     }
 
     const mock_awsConfig_invalid = {
-        "accessKeyId": awsmobileJSConstant.DefaultAWSAccessKeyId,
-        "secretAccessKey": awsmobileJSConstant.DefaultAWSSecretAccessKey,
+        "accessKeyId": awsmobilejsConstant.DefaultAWSAccessKeyId,
+        "secretAccessKey": awsmobilejsConstant.DefaultAWSSecretAccessKey,
         "region": 'non-existing-region'
     }
 

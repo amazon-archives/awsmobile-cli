@@ -38,7 +38,7 @@ const opsUserSignin = require('../../../lib/backend-operations/ops-user-signin')
 const backendSpecManager = require('../../../lib/backend-operations/backend-spec-manager.js')
 const awsExportFileManager = require('../../../lib/aws-operations/mobile-exportjs-file-manager.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const projectInfoManager = require('../../../lib/project-info-manager.js')
 
 const awsMobileYamlOps = require('../../../lib/aws-operations/mobile-yaml-ops.js')

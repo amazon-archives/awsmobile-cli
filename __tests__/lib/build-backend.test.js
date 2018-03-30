@@ -22,7 +22,7 @@ jest.mock('../../lib/backend-operations/ops-cloud-api.js')
 const path = require('path')
 
 const projectInfoManager = require('../../lib/project-info-manager.js')
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../lib/utils/awsmobilejs-constant.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 const featureOpsMapping = require('../../lib/utils/feature-ops-mapping.js')
 const backendSpecManager = require('../../lib/backend-operations/backend-spec-manager.js')

@@ -24,7 +24,7 @@ const { Writable } = require('stream')
 const backendSpecManager = require('../../../lib/backend-operations/backend-spec-manager.js')
 const dfops = require('../../../lib/utils/directory-file-ops.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const opsCloudApi = require('../../../lib/backend-operations/ops-cloud-api.js')
 
 const lambdaBuilder = require('../../../lib/backend-operations/cloud-api-lambda-builder.js')
