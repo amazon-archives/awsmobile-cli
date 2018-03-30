@@ -72,7 +72,7 @@
                     }
                 }
             ],
-            "region": "us-east-1"
+            "Region": "us-east-1"
         },
         {
             "AttributeDefinitions": [
@@ -92,7 +92,7 @@
                 "ReadCapacityUnits": 5,
                 "WriteCapacityUnits": 5
             },
-            "region": "us-east-1"
+            "Region": "us-east-1"
         }
     ]
 }
