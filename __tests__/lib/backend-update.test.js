@@ -148,7 +148,7 @@ describe('backend update', () => {
             }
         })
 
-        opsAppSync.update = jest.fn((projectInfo, awsDetails, callback)=>{
+        opsAppSync.updateApi = jest.fn((projectInfo, awsDetails, callback)=>{
             if(callback){
                 callback()
             }
