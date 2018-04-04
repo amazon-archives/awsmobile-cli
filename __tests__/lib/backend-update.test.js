@@ -177,7 +177,6 @@ describe('backend update', () => {
             return true
         })
         mock_projectInfo.BackendProjectID = 'BackendProjectID'
-        mock_projectInfo.BackendLastPushSuccessful = true
         projectBackendBuilder.build.mockClear()
         projectInfoManager.checkBackendUpdateNoConflict.mockClear()
         backendRetrieve.getLatestBackendDetails.mockClear()
