@@ -113,6 +113,7 @@ describe('backend update', () => {
     
     beforeAll(() => {
         global.console = {log: jest.fn()}
+        process.exit = jest.fn()
 
         backendRetrieve.getLatestBackendDetails =  jest.fn((backendProjectID, callback)=>{
             callback(mock_backendProjectDetails)
