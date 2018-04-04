@@ -371,7 +371,7 @@ describe('backend-info-manager', () => {
 
     test('syncCurrentBackendInfo', () => {
         let callback = jest.fn()
-        backendInfoManager.syncCurrentBackendInfo(mock_projectInfo, mock_backendProjectDetails, mock_awsDetails, 2, callback)
+        backendInfoManager.syncCurrentBackendInfo(mock_projectInfo, mock_backendProjectDetails, mock_awsDetails, 1,callback)
 
         expect(opsProject.syncCurrentBackendInfo).toBeCalled()
         expect(opsAnalytics.syncCurrentBackendInfo).toBeCalled()
