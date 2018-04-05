@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* 
- * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
  * the License. A copy of the License is located at
@@ -18,23 +18,33 @@ const chalk = require('chalk')
 const projectInfoManager = require('../lib/project-info-manager.js')
 const awsConfigManager = require('../lib/aws-operations/aws-config-manager.js')
 const backendInfoManager = require('../lib/backend-operations/backend-info-manager.js')
+const awsMobileRegions = require('../lib/aws-operations/aws-regions.js').regions
 
-const options = ['aws', 'project']
+const configurables = ['aws', 'project']
 
 program
     .description('edit configuration settings of the aws account or the project')
-    .usage('[aws|project] [options]')
+    .usage('<aws|project> [options]')
     .option('-l, --list', 'list the current configuration settings')
+    .option('-p, --profile <name>', '(aws) use named profile for aws access')
+    .option('-n, --new-user', '(aws) walk through the steps to setup aws access')
     .parse(process.argv)
 
-if (program.args.length < 1){
+if(program.args.length < 1){
     configure('aws')
+}else if(program.args[0] == 'aws' && 
+        program.args.length == 4 && 
+        awsMobileRegions.includes(program.args[3])){
+    let keyID = program.args[1]
+    let key = program.args[2]
+    let region = program.args[3]
+    configureAWSWithKeyAndRegion(keyID, key, region)
 }else{
-    let selection = program.args[0]
-    if(!options.includes(selection)){
+    let configurable = program.args[0]
+    if(!configurables.includes(configurable)){
         promptForInput(configure)
     }else{
-        configure(selection)
+        configure(configurable)
     }
 }
 
@@ -45,7 +55,7 @@ function promptForInput(callback)
             type: 'list',
             name: 'selection',
             message: "configure",
-            choices: options,
+            choices: configurables,
             default: 'aws'
         }
     ]).then(function (answers) {
@@ -69,24 +79,27 @@ function configure(selection)
 
 function configAWS(){
     if(program.list){
-        console.log('here\'s the current configurations for aws')
         awsConfigManager.listAWSConfig()
+    }else if(program.newUser){
+        awsConfigManager.newUserSetup()
     }else{
         console.log(chalk.blue('configure aws'))
-        awsConfigManager.configureAWS()
+        awsConfigManager.configureAWS(program.profile)
     }
 }
 
+function configureAWSWithKeyAndRegion(keyID, key, region){
+    awsConfigManager.configureWithKeyAndRegion(keyID, key, region)
+}
 
 function configProject(){
     let projectInfo = projectInfoManager.getProjectInfo()
     if(projectInfo){
         if(program.list){
-            console.log('here\'s the current configurations for the project')
-            projectInfoManager.listProjectInfo()
+            projectInfoManager.listProjectConfig()
         }else{
             console.log(chalk.blue('configure project'))
-            projectInfoManager.configureProjectInfo(function(projectInfo_old, projectInfo){
+            projectInfoManager.configureProject(function(projectInfo_old, projectInfo){
                 backendInfoManager.onProjectConfigChange(projectInfo_old, projectInfo)
             })
         }

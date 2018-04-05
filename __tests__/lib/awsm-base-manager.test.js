@@ -2,7 +2,7 @@ jest.mock('fs-extra')
 
 const fs = require('fs-extra')
 
-const baseManager = require('../../lib/awsmobilebase-manager.js')
+const baseManager = require('../../lib/awsm-base-manager.js')
 
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 
@@ -33,18 +33,16 @@ describe('awsmobile base manager functions', () => {
     beforeEach(() => {
         fs.existsSync.mockClear()
         fs.renameSync.mockClear()
-        fs.emptydir.mockClear()
+        fs.emptyDirSync.mockClear()
         fs.copySync.mockClear()
     })
 
     test('placeAwsmobileBase', () => {
-        const callback = jest.fn()
 
-        baseManager.placeAwsmobileBase(projectPath, callback)
+        baseManager.placeAwsmobileBase(projectPath)
 
         expect(fs.existsSync).toBeCalled()
         expect(fs.existsSync.mock.calls[0][0]).toBe(awsmobilejsDirPath)
-        expect(callback).toBeCalled()
     })
 
     test('backupAwsmobileBase', () => {

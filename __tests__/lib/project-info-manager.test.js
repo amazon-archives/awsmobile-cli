@@ -6,21 +6,20 @@ const mockirer = require('mockirer')
 const inquirer = require('inquirer')
 
 const projectInfoManager = require('../../lib/project-info-manager.js')
-
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
-const templateValidator = require('../../lib/project-validator.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
-const backendFormats = require('../../lib/backend-operations/backend-formats.js')
 
 describe('project info manager functions', () => {
     const projectName = 'projectName'
     const projectPath = path.join('/', projectName)
     const projectInfoFilePath = pathManager.getProjectInfoFilePath(projectPath)
+    const projectConfigFilePath = pathManager.getProjectConfigFilePath(projectPath)
     const backendYmlFilePath = pathManager.getBackendSpecProjectYmlFilePath(projectPath)
     
     const mock_projectInfo = {}
+    const mock_projectConfig = {}
     var MOCK_FILE_INFO = {}
     MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
+    MOCK_FILE_INFO[projectConfigFilePath] = JSON.stringify(mock_projectConfig, null, '\t')
     MOCK_FILE_INFO[backendYmlFilePath] = JSON.stringify('--- !com.amazonaws.mobilehub.v0.Project', null, '\t')
 
     const mock_srcDir = '/src'
@@ -29,26 +28,144 @@ describe('project info manager functions', () => {
     const mock_startCommand = 'npm run start'
 
     const mock_backendProjectDetails = {
-        "name": "name",
-        "projectId": "projectId",
-        "createdDate": "createdDate",
-        "lastUpdatedDate": "lastUpdatedDate",
-        "consoleUrl": "consoleUrl",
-        "InitializationTime": "",
-        "LastConfigurationTime": "",
-        "LastNPMInstallTime": "",
-        "FrontendLastBuildTime": "",
-        "LastPublishTime": "",
-        "BackendFormat": "yml",
-        "BackendLastBuildTime": "",
-        "BackendLastUpdateTime": "",
-        "BackendLastUpdateSuccessful": false,
-        "BackendProjectID": "",
-        "BackendProjectName":  "",
-        "BackendProjectConsoleUrl": "",
-        "BackendProjectCreationTime": "",
-        "BackendProjectLastUpdatedTime": ""
-    }
+            "name": "mockappname",
+            "projectId": "mock_project_id",
+            "region": "us-east-1",
+            "state": "NORMAL",
+            "createdDate": "2018-03-23T23:40:04.502Z",
+            "lastUpdatedDate": "2018-03-23T23:56:32.789Z",
+            "consoleUrl": "https://console.aws.amazon.com/mobilehub/home#/mock_project_id/build",
+            "resources": [
+                {
+                    "type": "AWS::S3::Bucket",
+                    "name": "mockappname-userfiles-mobilehub-mock_id",
+                    "arn": null,
+                    "feature": "user-data",
+                    "attributes": {
+                        "lastUpdateRequestID": "mock_request_id",
+                        "region": "us-east-1",
+                        "s3-bucket-console-url": "https://s3.console.aws.amazon.com/s3/buckets/mockappname-userfiles-mobilehub-mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::IAM::Policy",
+                    "name": "mockappname_userfiles_MOBILEHUB_mock_id",
+                    "arn": null,
+                    "feature": "user-data",
+                    "attributes": {
+                        "authType": "unauthenticated",
+                        "lastUpdateRequestID": "mock_request_id",
+                        "role": "mockappname_unauth_MOBILEHUB_mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::Cognito::IdentityPool",
+                    "name": "mockappname_MOBILEHUB_mock_id",
+                    "arn": "us-east-1:mock_arn_id",
+                    "feature": "user-signin",
+                    "attributes": {
+                        "lastUpdateRequestID": "mock_request_id",
+                        "poolid": "us-east-1:mock_arn_id",
+                        "roleARNs": "arn:aws:iam::mockaccountnumber:role/mockappname_unauth_MOBILEHUB_mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::IAM::Role",
+                    "name": "mockappname_unauth_MOBILEHUB_mock_id",
+                    "arn": "arn:aws:iam::mockaccountnumber:role/mockappname_unauth_MOBILEHUB_mock_id",
+                    "feature": "user-signin",
+                    "attributes": {
+                        "authType": "unauthenticated",
+                        "lastUpdateRequestID": "mock_request_id"
+                    }
+                },
+                {
+                    "type": "AWS::Pinpoint::AnalyticsApplication",
+                    "name": "mockappname20180323164004_MobileHub",
+                    "arn": "mock_arn",
+                    "feature": "analytics",
+                    "attributes": {
+                        "lastUpdateRequestID": "mock_request_id"
+                    }
+                },
+                {
+                    "type": "AWS::IAM::Policy",
+                    "name": "mockappname_mobileanalytics_MOBILEHUB_mock_id",
+                    "arn": null,
+                    "feature": "analytics",
+                    "attributes": {
+                        "authType": "unauthenticated",
+                        "lastUpdateRequestID": "mock_request_id",
+                        "role": "mockappname_unauth_MOBILEHUB_mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::IAM::Policy",
+                    "name": "mockappname_userprofiles_MOBILEHUB_mock_id",
+                    "arn": null,
+                    "feature": "user-data",
+                    "attributes": {
+                        "authType": "unauthenticated",
+                        "lastUpdateRequestID": "mock_request_id",
+                        "role": "mockappname_unauth_MOBILEHUB_mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::S3::Bucket",
+                    "name": "mockappname-hosting-mobilehub-mock_id",
+                    "arn": null,
+                    "feature": "hosting",
+                    "attributes": {
+                        "lastUpdateRequestID": "mock_request_id",
+                        "region": "us-east-1",
+                        "s3-bucket-console-url": "https://s3.console.aws.amazon.com/s3/buckets/mockappname-hosting-mobilehub-mock_id",
+                        "s3-bucket-website-url": "https://s3.amazonaws.com/mockappname-hosting-mobilehub-mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::CloudFront::Distribution",
+                    "name": "d1pwacowmw2me2.cloudfront.net",
+                    "arn": null,
+                    "feature": "hosting",
+                    "attributes": {
+                        "id": "E79VBAWVFP7BV",
+                        "lastUpdateRequestID": "mock_request_id"
+                    }
+                },
+                {
+                    "type": "AWS::IAM::Policy",
+                    "name": "mockappname_hosting_MOBILEHUB_mock_id",
+                    "arn": null,
+                    "feature": "hosting",
+                    "attributes": {
+                        "authType": "unauthenticated",
+                        "lastUpdateRequestID": "mock_request_id",
+                        "role": "mockappname_unauth_MOBILEHUB_mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::S3::Bucket",
+                    "name": "mockappname-deployments-mobilehub-mock_id",
+                    "arn": null,
+                    "feature": "common",
+                    "attributes": {
+                        "region": "us-east-1",
+                        "s3-bucket-console-url": "https://s3.console.aws.amazon.com/s3/buckets/mockappname-deployments-mobilehub-mock_id"
+                    }
+                },
+                {
+                    "type": "AWS::CloudFormation::Stack",
+                    "name": "Development",
+                    "arn": null,
+                    "feature": "cloud-api",
+                    "attributes": {
+                        "primary": "true",
+                        "region": "us-east-1",
+                        "stateSummary": "NOT_YET_DEPLOYED"
+                    }
+                }
+            ]
+        }
 
     beforeAll(() => {
         global.console = {log: jest.fn()}
@@ -73,10 +190,10 @@ describe('project info manager functions', () => {
         expect(fs.writeFileSync.mock.calls[0][0]).toBe(projectInfoFilePath)
     })
 
-    test('configureProjectInfo', () => {
+    test('configureProject', () => {
        // process.cwd = jest.fn(()=>{ return projectPath })
         const callback = jest.fn()
-        projectInfoManager.configureProjectInfo(callback)
+        projectInfoManager.configureProject(callback)
 
         expect(callback).toBeCalled()
         expect(callback.mock.calls[0][1].SourceDir).toBe(mock_srcDir)

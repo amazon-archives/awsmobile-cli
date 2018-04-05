@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* 
- * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
  * the License. A copy of the License is located at
@@ -16,11 +16,13 @@ const program = require('commander')
 const handler = require('../lib/backend-delete.js')
 
 program
-  .description('delete the awsmobile project in the cloud')
+  .description('delete the backend awsmobile project in the cloud')
+  .usage('[options]')
+  .option('-f, --force', 'force deleting the backend awsmobile project without prompt for confirmation')
   .parse(process.argv)
 
 if(program.args.length > 0){
   program.help()
 }else{
-  handler.run()
+  handler.run(program.force)
 }

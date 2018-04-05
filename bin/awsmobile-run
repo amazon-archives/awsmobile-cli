@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* 
- * Copyright 2017-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
  * the License. A copy of the License is located at
@@ -19,8 +19,8 @@ const ora = require('ora')
 const { spawn } = require('child_process')
 
 const projectInfoManager = require('../lib/project-info-manager.js')
-const projectAppBuilder = require('../lib/project-frontend-builder.js')
-const backendProjectUpdate = require('../lib/backend-update.js')
+const projectAppBuilder = require('../lib/build-frontend.js')
+const backendUpdate = require('../lib/backend-update.js')
 const nameManager = require('../lib/utils/awsmobilejs-name-manager.js')
 
 program
@@ -33,7 +33,7 @@ let projectInfo = projectInfoManager.getProjectInfo()
 if(projectInfo){
     if(projectInfo.StartCommand && projectInfo.StartCommand.length > 0){
         if(projectInfo.BackendProjectID && projectInfo.BackendProjectID.length > 0){
-            backendProjectUpdate.run(run, 0, -1)
+            backendUpdate.run(run)
         }
     }else{
         console.log(chalk.red('missing frontend start command')) 

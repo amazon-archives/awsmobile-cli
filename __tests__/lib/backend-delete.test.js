@@ -33,10 +33,16 @@ describe('backend delete', () => {
         'BackendProjectName': 'BackendProjectName', 
         'BackendProjectID': 'BackendProjectID', 
     }
+    
     const mock_awsConfig = {
         "accessKeyId":"mockAccessKeyID",
         "secretAccessKey":"mockSecretAccessKey",
         "region": "us-east-1"
+    }
+
+    const mock_awsDetails = {
+        info: null, 
+        config: mock_awsConfig
     }
 
     const mock_mobileProjectName = 'mock_mobileProjectName'
@@ -59,7 +65,7 @@ describe('backend delete', () => {
         })
 
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
-            callback(mock_awsConfig)
+            callback(mock_awsDetails)
         })
         awsExceptionHandler.handleMobileException = jest.fn()
         mockirer(inquirer, {

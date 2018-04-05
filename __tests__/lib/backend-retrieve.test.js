@@ -32,6 +32,11 @@ describe('backend retrieve', () => {
         "region": "us-east-1"
     }
 
+    const mock_awsDetails = {
+        info: null, 
+        config: mock_awsConfig
+    }
+
     const mock_describeError = {
         code: 'mockCode'
     }
@@ -46,7 +51,7 @@ describe('backend retrieve', () => {
         global.console = {log: jest.fn()}
 
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
-            callback(mock_awsConfig)
+            callback(mock_awsDetails)
         })
         awsExceptionHandler.handleMobileException = jest.fn()
        
@@ -80,7 +85,7 @@ describe('backend retrieve', () => {
         expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][0]).toBe(mock_projectInfo)
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][1]).toBe(mock_describeResponse.details)
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsConfig)
+        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsDetails)
         expect(callback).toBeCalled()
     })
 
@@ -103,7 +108,7 @@ describe('backend retrieve', () => {
         expect(callback).not.toBeCalled()
     })
 
-    test('get when api call successful', () => {
+    test('pull when api call successful', () => {
         const callback = jest.fn()
         const mock_mobileClient = {
             describeProject: jest.fn((param, callback)=>{
@@ -120,11 +125,11 @@ describe('backend retrieve', () => {
         expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][0]).toBe(mock_projectInfo)
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][1]).toBe(mock_describeResponse.details)
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsConfig)
+        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsDetails)
         expect(callback).toBeCalled()
     })
 
-    test('get when api call rutnrs error', () => {
+    test('pull when api call rutnrs error', () => {
         const callback = jest.fn()
         const mock_mobileClient = {
             describeProject: jest.fn((param, callback)=>{
@@ -142,4 +147,43 @@ describe('backend retrieve', () => {
         expect(awsExceptionHandler.handleMobileException.mock.calls[0][0]).toBe(mock_describeError)
         expect(callback).not.toBeCalled()
     })
+
+    test('get when api call successful', () => {
+        const callback = jest.fn()
+        const mock_mobileClient = {
+            describeProject: jest.fn((param, callback)=>{
+                callback(null, mock_describeResponse)
+            })
+        }
+        awsClient.Mobile = jest.fn(()=>{
+            return mock_mobileClient
+        })
+
+        backendRetrieve.getLatestBackendDetails(mock_mobileProjectID, callback)
+
+        expect(mock_mobileClient.describeProject).toBeCalled()
+        expect(callback).toBeCalled()
+        expect(callback.mock.calls[0][0]).toBe(mock_describeResponse.details)
+    })
+
+    test('get when api call rutnrs error', () => {
+        const callback = jest.fn()
+        const mock_mobileClient = {
+            describeProject: jest.fn((param, callback)=>{
+                callback(mock_describeError, mock_describeResponse)
+            })
+        }
+        awsClient.Mobile = jest.fn(()=>{
+            return mock_mobileClient
+        })
+
+        backendRetrieve.getLatestBackendDetails(mock_mobileProjectID, callback)
+
+        expect(mock_mobileClient.describeProject).toBeCalled()
+        expect(awsExceptionHandler.handleMobileException).toBeCalled()
+        expect(awsExceptionHandler.handleMobileException.mock.calls[0][0]).toBe(mock_describeError)
+        expect(callback).not.toBeCalled()
+    })
+
+    
 })

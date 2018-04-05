@@ -1,4 +1,5 @@
 jest.mock('fs-extra')
+jest.mock('../../lib/backend-wait-logic.js')
 jest.mock('../../lib/aws-operations/aws-client.js')
 jest.mock('../../lib/aws-operations/aws-config-manager.js')
 jest.mock('../../lib/aws-operations/aws-exception-handler.js')
@@ -15,6 +16,7 @@ const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js
 const awsClient = require('../../lib/aws-operations/aws-client.js')
 const awsExceptionHandler = require('../../lib/aws-operations/aws-exception-handler.js')
 const backendInfoManager = require('../../lib/backend-operations/backend-info-manager.js')
+const backendWaitLogic = require('../../lib/backend-wait-logic.js')
 
 describe('backend create', () => {
     const projectName = 'projectName'
@@ -41,6 +43,11 @@ describe('backend create', () => {
         "region": "us-east-1"
     }
 
+    const mock_awsDetails = {
+        info: null, 
+        config: mock_awsConfig
+    }
+
     const mock_mobileProjectName = 'mock_mobileProjectName'
 
     const mock_createError = {
@@ -57,7 +64,7 @@ describe('backend create', () => {
         global.console = {log: jest.fn()}
         fs.__setMockFiles(MOCK_FILE_INFO) 
         awsConfigManager.checkAWSConfig = jest.fn((callback)=>{
-            callback(mock_awsConfig)
+            callback(mock_awsDetails)
         })
         awsExceptionHandler.handleMobileException = jest.fn()
         mockirer(inquirer, {
@@ -68,6 +75,9 @@ describe('backend create', () => {
             if(callback){
                 callback()
             }
+        })
+        backendWaitLogic.wait = jest.fn((backendDetails, awsDetails, callback) => {
+            callback(null, backendDetails)
         })
     })
 
@@ -82,13 +92,13 @@ describe('backend create', () => {
             return mock_mobileClient
         })
 
-        backendCreate.createBackendProject(mock_projectInfo, callback)
+        backendCreate.createBackendProject(mock_projectInfo, {useDefault: true, syncToDevFlag: 1}, callback)
 
         expect(mock_mobileClient.createProject).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo).toBeCalled()
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][0]).toBe(mock_projectInfo)
         expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][1]).toBe(mock_createResponse.details)
-        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsConfig)
+        expect(backendInfoManager.syncCurrentBackendInfo.mock.calls[0][2]).toBe(mock_awsDetails)
         expect(callback).toBeCalled()
     })
 
@@ -103,7 +113,7 @@ describe('backend create', () => {
             return mock_mobileClient
         })
 
-        backendCreate.createBackendProject(mock_projectInfo, callback)
+        backendCreate.createBackendProject(mock_projectInfo, {useDefault: true, syncToDevFlag: 1}, callback)
 
         expect(mock_mobileClient.createProject).toBeCalled()
         expect(awsExceptionHandler.handleMobileException).toBeCalled()
