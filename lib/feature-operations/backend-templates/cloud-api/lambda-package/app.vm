@@ -9,10 +9,12 @@ See the License for the specific language governing permissions and limitations 
 var express = require('express')
 var bodyParser = require('body-parser')
 var AWS = require('aws-sdk')
+var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
 
 // declare a new express app
 var app = express()
 app.use(bodyParser.json())
+app.use(awsServerlessExpressMiddleware.eventContext())
 
 // Enable CORS for all methods
 app.use(function(req, res, next) {
@@ -30,7 +32,8 @@ AWS.config.update({ region: process.env.REGION })
 
 app.get('###PATH###', function(req, res) {
   // Add your code here
-  res.json({success: 'get call succeed!', url: req.url});
+  // Return the API Gateway event and query string parameters for example
+  res.json(req.apiGateway.event);
 });
 
 app.get('###PATH###/*', function(req, res) {
