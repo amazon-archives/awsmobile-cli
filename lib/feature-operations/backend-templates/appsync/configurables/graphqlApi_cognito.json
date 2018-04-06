@@ -3,7 +3,7 @@
     "authenticationType": "AMAZON_COGNITO_USER_POOLS",
     "userPoolConfig": {
         "userPoolId": "<userPoolId>",
-        "awsRegion": "<region>",
+        "awsRegion": "us-east-1",
         "defaultAction": "ALLOW",
         "appIdClientRegex": null
     }
