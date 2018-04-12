@@ -21,7 +21,7 @@ const moment = require('moment')
 
 
 const awsMobileRegions = require('../../../lib/aws-operations/aws-regions.js').regions
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const nameManager = require('../../../lib/utils/awsmobilejs-name-manager.js')
 
 const projectInfoManager = require('../../../lib/project-info-manager.js')

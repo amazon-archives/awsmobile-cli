@@ -16,12 +16,13 @@ jest.mock('../../lib/aws-operations/aws-client.js')
 jest.mock('../../lib/aws-operations/aws-config-manager.js')
 jest.mock('../../lib/aws-operations/aws-exception-handler.js')
 jest.mock('../../lib/backend-operations/backend-info-manager.js')
+jest.mock('../../lib/backend-operations/ops-appsync.js')
 
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
 const backendDelete = require('../../lib/backend-delete.js')
-
+const opsAppSync = require('../../lib/backend-operations/ops-appsync.js')
 const projectInfoManager = require('../../lib/project-info-manager.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js')
@@ -86,6 +87,11 @@ describe('backend delete', () => {
         }) 
         
         backendInfoManager.clearBackendInfo = jest.fn()
+        opsAppSync.deleteApi = jest.fn((projectInfo, awsDetails, callback)=>{
+            if(callback){
+                callback()
+            }
+        })
     })
 
     beforeEach(() => {

@@ -13,6 +13,7 @@
 "use strict";
 jest.mock('fs-extra')
 jest.mock('../../../lib/backend-operations/ops-project.js')
+jest.mock('../../../lib/backend-operations/ops-appsync.js')
 jest.mock('../../../lib/backend-operations/ops-analytics.js')
 jest.mock('../../../lib/backend-operations/ops-cloud-api')
 jest.mock('../../../lib/backend-operations/ops-database')
@@ -29,6 +30,7 @@ const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
 const opsProject = require('../../../lib/backend-operations/ops-project.js')
+const opsAppSync = require('../../../lib/backend-operations/ops-appsync.js')
 const opsAnalytics = require('../../../lib/backend-operations/ops-analytics.js')
 const opsCloudApi = require('../../../lib/backend-operations/ops-cloud-api')
 const opsDatabase = require('../../../lib/backend-operations/ops-database')
@@ -38,7 +40,7 @@ const opsUserSignin = require('../../../lib/backend-operations/ops-user-signin')
 const backendSpecManager = require('../../../lib/backend-operations/backend-spec-manager.js')
 const awsExportFileManager = require('../../../lib/aws-operations/mobile-exportjs-file-manager.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const projectInfoManager = require('../../../lib/project-info-manager.js')
 
 const awsMobileYamlOps = require('../../../lib/aws-operations/mobile-yaml-ops.js')
@@ -52,6 +54,7 @@ describe('backend-info-manager', () => {
     const currentBackendInfoDirPath = pathManager.getCurrentBackendInfoDirPath(projectPath)
     const backendDetailsFilePath = pathManager.getCurrentBackendDetailsFilePath(projectPath)
     const backendYamlFilePath = pathManager.getCurrentBackendYamlFilePath(projectPath)
+    const awsExportsJSFilePath = pathManager.getAWSExportFilePath(projectPath)
 
     const mock_awsConfig = {
         "accessKeyId":"mockAccessKeyID",
@@ -98,6 +101,20 @@ describe('backend-info-manager', () => {
             'mobile-analytics': {},
             'content-delivery': {}
         }
+    }
+
+    const mock_awsExportsJs = {
+        'aws_app_analytics': 'enable',
+    }
+
+    const mock_appsyncJSObj = {
+        "apiId": "mockid",
+        "name": "appsyncapi",
+        "region": "us-east-1",
+        "graphqlEndpoint": "https://mock-path",
+        "authenticationType": "API_KEY",
+        "apiKey": "mock_id",
+        "lastSyncToDevTime": "",
     }
 
     const mock_backendProjectDetails = {
@@ -242,6 +259,7 @@ describe('backend-info-manager', () => {
 
     var MOCK_FILE_INFO = {}
     MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
+    MOCK_FILE_INFO[awsExportsJSFilePath] = JSON.stringify(mock_awsExportsJs, null, '\t')
     MOCK_FILE_INFO[backendDetailsFilePath] = JSON.stringify(mock_backendProjectDetails, null, '\t')
 
     beforeAll(() => {
@@ -260,6 +278,14 @@ describe('backend-info-manager', () => {
         })
         projectInfoManager.updateBackendProjectDetails = jest.fn((projectInfo, backendDetails)=>{
             return projectInfo
+        })
+        opsAppSync.syncCurrentBackendInfo = jest.fn((projectInfo, backendDetails, awsDetails, callback)=>{
+            if(callback){
+                callback()
+            }
+        })
+        opsAppSync.getAppSyncJS = jest.fn((projectPath)=>{
+            return mock_appsyncJSObj
         })
         opsAnalytics.syncCurrentBackendInfo = jest.fn((projectInfo, backendDetails, awsDetails, callback)=>{
             if(callback){
@@ -296,6 +322,7 @@ describe('backend-info-manager', () => {
                 callback(mock_backendProject)
            }
         })
+        opsAppSync.syncToDevBackend = jest.fn()
         opsAnalytics.syncToDevBackend = jest.fn()
         opsCloudApi.syncToDevBackend = jest.fn()
         opsDatabase.syncToDevBackend = jest.fn()
@@ -303,7 +330,7 @@ describe('backend-info-manager', () => {
         opsUserFiles.syncToDevBackend = jest.fn()
         opsUserSignin.syncToDevBackend = jest.fn()
         opsProject.syncToDevBackend = jest.fn()
-        backendSpecManager.getEnabledFeaturesFromObject = jest.fn((backendProject)=>{
+        backendSpecManager.getEnabledFeatures = jest.fn((backendProject)=>{
             return ['user-signin', 'user-files', 'cloud-api', 'database', 'analytics', 'hosting' ]
         })
         opsProject.syncToDevBackend = jest.fn()
@@ -344,7 +371,7 @@ describe('backend-info-manager', () => {
 
     test('syncCurrentBackendInfo', () => {
         let callback = jest.fn()
-        backendInfoManager.syncCurrentBackendInfo(mock_projectInfo, mock_backendProjectDetails, mock_awsDetails, 2, callback)
+        backendInfoManager.syncCurrentBackendInfo(mock_projectInfo, mock_backendProjectDetails, mock_awsDetails, 1,callback)
 
         expect(opsProject.syncCurrentBackendInfo).toBeCalled()
         expect(opsAnalytics.syncCurrentBackendInfo).toBeCalled()

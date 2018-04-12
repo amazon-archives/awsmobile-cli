@@ -26,7 +26,7 @@ const backendContentManager = require('../../../lib/aws-operations/mobile-api-co
 const mobileProjectExport = require('../../../lib/aws-operations/mobile-project-export-manager.js')
 const awsMobileYamlOps = require('../../../lib/aws-operations/mobile-yaml-ops.js')
 
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 
 const opsProject = require('../../../lib/backend-operations/ops-project.js')

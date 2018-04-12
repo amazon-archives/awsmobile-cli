@@ -25,7 +25,7 @@ const extract = require('extract-zip')
 
 const awsClient = require('../../../lib/aws-operations/aws-client.js')
 const awsExceptionHandler = require('../../../lib/aws-operations/aws-exception-handler.js')
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const dfops = require('../../../lib/utils/directory-file-ops.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
 

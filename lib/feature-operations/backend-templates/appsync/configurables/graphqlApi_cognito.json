@@ -1,0 +1,10 @@
+{
+	"name": "{managed-by-awsmobile-cli}",
+    "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+    "userPoolConfig": {
+        "userPoolId": "<userPoolId>",
+        "awsRegion": "us-east-1",
+        "defaultAction": "ALLOW",
+        "appIdClientRegex": null
+    }
+}

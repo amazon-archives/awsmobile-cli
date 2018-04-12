@@ -24,7 +24,7 @@ const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
 const projectInfoManager = require('../../lib/project-info-manager')
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../lib/utils/awsmobilejs-constant.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 const gitManager = require('../../lib/utils/git-manager.js')
 const mobileExportJSFileManager = require('../../lib/aws-operations/mobile-exportjs-file-manager.js')
@@ -46,7 +46,7 @@ describe('command remove', () => {
         'BackendProjectID': 'BackendProjectID', 
     }
     var MOCK_FILE_INFO = {}
-    const mockDirPath = path.join(mock_projectInfo.ProjectPath, awsmobileJSConstant.AWSMobileJSBackUpDirName)
+    const mockDirPath = path.join(mock_projectInfo.ProjectPath, awsmobilejsConstant.AWSMobileJSBackUpDirName)
     const mockFilePath = path.join(mockDirPath, 'mockFileName')
     MOCK_FILE_INFO[mockFilePath] = 'mock file content'
     

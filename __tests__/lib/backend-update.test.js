@@ -24,6 +24,7 @@ jest.mock('../../lib/utils/awsmobilejs-path-manager.js')
 jest.mock('../../lib/backend-operations/backend-spec-manager.js')
 jest.mock('../../lib/backend-operations/ops-cloud-api.js')
 jest.mock('../../lib/backend-operations/ops-project.js')
+jest.mock('../../lib/backend-operations/ops-appsync.js')
 
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
@@ -37,7 +38,7 @@ const projectInfoManager = require('../../lib/project-info-manager.js')
 const backendRetrieve = require('../../lib/backend-retrieve.js')
 const projectBackendBuilder = require('../../lib/build-backend.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../lib/utils/awsmobilejs-constant.js')
 const dfops = require('../../lib/utils/directory-file-ops.js')
 const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js')
 const awsClient = require('../../lib/aws-operations/aws-client.js')
@@ -46,6 +47,7 @@ const backendInfoManager = require('../../lib/backend-operations/backend-info-ma
 const backendSpecManager = require('../../lib/backend-operations/backend-spec-manager.js')
 const opsCloudApi = require('../../lib/backend-operations/ops-cloud-api.js')
 const opsProject = require('../../lib/backend-operations/ops-project.js')
+const opsAppSync = require('../../lib/backend-operations/ops-appsync.js')
 
 describe('backend update', () => {
     
@@ -111,6 +113,7 @@ describe('backend update', () => {
     
     beforeAll(() => {
         global.console = {log: jest.fn()}
+        process.exit = jest.fn()
 
         backendRetrieve.getLatestBackendDetails =  jest.fn((backendProjectID, callback)=>{
             callback(mock_backendProjectDetails)
@@ -146,6 +149,13 @@ describe('backend update', () => {
             }
         })
 
+        opsAppSync.updateApi = jest.fn((projectInfo, awsDetails, callback)=>{
+            if(callback){
+                callback()
+            }
+        })
+
+
         backendInfoManager.syncCurrentBackendInfo = 
         jest.fn((projectInfo, backendDetails, awsConfig, syncToDevFlag, callback) => {
             if(callback){
@@ -162,13 +172,12 @@ describe('backend update', () => {
         mock_projectInfo.BackendLastSyncTime = '2018-01-01-01-01-01'
         mock_projectInfo.BackendLastPushTime = '2018-01-01-01-01-01'
         dfops.getDirContentMTime  = jest.fn((dir, ignoredDirs, ignoredFiles) => {
-            return moment('2018-01-01-01-01-02',  awsmobileJSConstant.DateTimeFormatString)
+            return moment('2018-01-01-01-01-02',  awsmobilejsConstant.DateTimeFormatString)
         })
         projectInfoManager.checkBackendUpdateNoConflict = jest.fn((projectInfo, backendDetails)=>{
             return true
         })
         mock_projectInfo.BackendProjectID = 'BackendProjectID'
-        mock_projectInfo.BackendLastPushSuccessful = true
         projectBackendBuilder.build.mockClear()
         projectInfoManager.checkBackendUpdateNoConflict.mockClear()
         backendRetrieve.getLatestBackendDetails.mockClear()
@@ -182,7 +191,7 @@ describe('backend update', () => {
         const callback = jest.fn()
 
         dfops.getDirContentMTime  = jest.fn((dir, ignoredDirs, ignoredFiles) => {
-            return moment('2018-01-01-01-01-00',  awsmobileJSConstant.DateTimeFormatString)
+            return moment('2018-01-01-01-01-00',  awsmobilejsConstant.DateTimeFormatString)
         })
 
         backendUpdate.run(callback)
@@ -255,7 +264,7 @@ describe('backend update', () => {
 
         backendUpdate.run(callback)
 
-        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled() 
         expect(awsExceptionHandler.handleMobileException).toBeCalled()
         expect(callback).not.toBeCalled()
     })
@@ -281,7 +290,7 @@ describe('backend update', () => {
 
         backendUpdate.run(callback)
 
-        expect(mock_mobileClient.updateProject).toBeCalled()
+        expect(mock_mobileClient.updateProject).toBeCalled() 
         expect(callback).toBeCalled()
     })
 
@@ -303,7 +312,6 @@ describe('backend update', () => {
         opsCloudApi.getStateGroup = jest.fn()
         opsCloudApi.getStateGroup.mockReturnValueOnce(0)
         opsCloudApi.getStateGroup.mockReturnValueOnce(1)
-
 
         backendUpdate.run(callback)
 

@@ -16,7 +16,7 @@ const pressKeyToContinue = require('../../../lib/utils/press-enter-to-continue.j
 describe('press-enter-to-continue', () => {
     test('run', () => {
         let mockData = 'mock-data'
-        let handle = {}
+        let handle = {message: 'mock-message'}
         pressKeyToContinue.run(handle).then((handle)=>{
             expect(handle.data).toBeDefined()
             expect(handle.data).toEqual(mockData)
