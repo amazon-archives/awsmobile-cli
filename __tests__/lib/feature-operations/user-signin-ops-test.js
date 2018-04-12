@@ -245,6 +245,7 @@ test('Enabling advance cognito settings no phone, no mfa', () => {
         "        attributes:" + "\n" +
         "          alias-attributes:" + "\n" +
         "            - email" + "\n" +
+        "          mfa-configuration: OFF" + "\n" +
         "          name: userpool" + "\n" +
         "          password-policy: !com.amazonaws.mobilehub.ConvertibleMap" + "\n" +
         "            min-length: 8" + "\n" +
