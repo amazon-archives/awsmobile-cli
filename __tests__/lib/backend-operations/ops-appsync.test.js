@@ -26,11 +26,9 @@ jest.mock('../../../lib/backend-operations/appsync-operations/helpers/helper-dat
 jest.mock('../../../lib/backend-operations/appsync-operations/helpers/helper-graphqlApi.js')
 jest.mock('../../../lib/backend-operations/appsync-operations/helpers/helper-resolvers.js')
 
-// jest.mock('../../../lib/utils/awsmobilejs-constant.js')
-// jest.mock('../../../lib/utils/directory-file-ops.js')
-
 const fs = require('fs-extra')
 const opn = require('opn')
+const path = require('path')
 const featureOps = require('../../../lib/feature-operations/scripts/appsync-ops.js')
 const awsClient = require('../../../lib/aws-operations/aws-client.js')
 
@@ -51,7 +49,6 @@ const dfOps = require('../../../lib/utils/directory-file-ops.js')
 const opsAppSync = require('../../../lib/backend-operations/ops-appsync.js')
 
 describe('ops appsync', () => {
-    const mock_projectInfo = {ProjectPath: '/mockProjectPath'}
     const mock_appsyncInfo = {
         "apiId": "rppp6qwzbnb7piwvkijjtbzql4",
         "region": "us-east-1",
@@ -65,6 +62,68 @@ describe('ops appsync', () => {
         "AppSyncConsoleUrl": "https://console.aws.amazon.com/appsync/home?region=us-east-1#/rppp6qwzbnb7piwvkijjtbzql4/v1/home",
         "lastSyncToDevTime": "2018-04-12-13-58-54",
         "apiKey": "da2-d35lzhj6efbxbbllh6pmgujsfa"
+    }
+    const mock_apiKeys = [
+        {
+            "id": "mockid",
+            "description": null,
+            "expires": 1523959200
+        }
+    ]
+    const mock_dataSources = {
+        "dataSources": [
+            {
+                "name": "AppSyncCommentTable",
+                "description": null,
+                "type": "AMAZON_DYNAMODB",
+                "serviceRoleArn": "{managed-by-awsmobile-cli}",
+                "dynamodbConfig": {
+                    "tableName": "AppSyncCommentTable-ga2zg5lf",
+                    "awsRegion": "us-east-1",
+                    "useCallerCredentials": false
+                }
+            }
+        ], 
+        "tables": [
+            {
+                "AttributeDefinitions": [
+                    {
+                        "AttributeName": "id",
+                        "AttributeType": "S"
+                    }
+                ],
+                "TableName": "AppSyncEventTable-ga2zg5lf",
+                "KeySchema": [
+                    {
+                        "AttributeName": "id",
+                        "KeyType": "HASH"
+                    }
+                ],
+                "ProvisionedThroughput": {
+                    "ReadCapacityUnits": 5,
+                    "WriteCapacityUnits": 5
+                },
+                "Region": "us-east-1"
+            }
+        ]
+    }
+    const mock_resolvers=[
+        {
+            "typeName": "Event",
+            "fieldName": "comments",
+            "dataSourceName": "AppSyncCommentTable",
+            "requestMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.request",
+            "responseMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.response"
+        }
+    ]
+    const mock_graphApi = {
+        "name": "r2-2018-04-12-12-14-53",
+        "apiId": "hixrulevljdnncqr7ape4grn2a",
+        "authenticationType": "AWS_IAM",
+        "arn": "arn:aws:appsync:us-east-1:466632810889:apis/hixrulevljdnncqr7ape4grn2a",
+        "uris": {
+            "GRAPHQL": "https://ayz2axtgw5fe3gp7m2zfvdoeom.appsync-api.us-east-1.amazonaws.com/graphql"
+        }
     }
 
     const mock_backendProjectSpec = {
@@ -82,14 +141,42 @@ describe('ops appsync', () => {
 
     const mock_awsDetails = {}
 
+    const projectName = 'projectName'
+    const projectPath = path.join('/', projectName)
+    const mock_projectInfo = {ProjectName: projectName, ProjectPath: projectPath}
+    const projectInfoFilePath = pathManager.getProjectInfoFilePath(projectPath)
+    const currentFeatureInfoDirPath = pathManager.getCurrentBackendFeatureDirPath(projectPath, opsAppSync.featureName)
+    const backendFeatureDirPath = pathManager.getBackendFeatureDirPath(projectPath, opsAppSync.featureName)
+    const mock_currentApiKeysFilePath = path.join(currentFeatureInfoDirPath, 'apiKeys.json')
+    const mock_currentDataSourcesFilePath = path.join(currentFeatureInfoDirPath, 'dataSources.json')
+    const mock_currentResolversFilePath = path.join(currentFeatureInfoDirPath, 'resolvers.json')
+    const mock_currentApiFilePath = path.join(currentFeatureInfoDirPath, 'graphqlApi.json')
+    const mock_currentSchemaFilePath = path.join(currentFeatureInfoDirPath, 'schema.graphql')
+    const mock_currentResolversMappingDirPath = path.join(currentFeatureInfoDirPath, 'resolver-mappings')
+    const mock_requestMappingFilePath = path.join(mock_currentResolversMappingDirPath, 'type.field.request')
+    const mock_responseMappingFilePath = path.join(mock_currentResolversMappingDirPath, 'type.field.response')
+    
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[projectInfoFilePath] = JSON.stringify(mock_projectInfo, null, '\t')
+    MOCK_FILE_INFO[mock_currentApiKeysFilePath] = JSON.stringify(mock_apiKeys, null, '\t')
+    MOCK_FILE_INFO[mock_currentDataSourcesFilePath] = JSON.stringify(mock_dataSources, null, '\t')
+    MOCK_FILE_INFO[mock_currentResolversFilePath] = JSON.stringify(mock_resolvers, null, '\t')
+    MOCK_FILE_INFO[mock_currentApiFilePath] = JSON.stringify(mock_graphApi, null, '\t')
+    MOCK_FILE_INFO[mock_currentSchemaFilePath] = 'mock_schema_contents'
+    MOCK_FILE_INFO[mock_requestMappingFilePath] = 'mock_request_mapping_contents'
+    MOCK_FILE_INFO[mock_responseMappingFilePath] = 'mock_response_mapping_contents'
+
+
     beforeAll(() => {
         global.console = {log: jest.fn()}
+        fs.__setMockFiles(MOCK_FILE_INFO) 
         awsClient.AppSync = jest.fn(()=>{
             return mock_appsyncClient
         })
         appsyncManager.getAppSyncInfo = jest.fn((projectPath)=>{
             return mock_appsyncInfo
         })
+        appsyncManager.setAppSyncInfo = jest.fn()
         appsyncManager.enable = jest.fn()
         appsyncManager.disable = jest.fn()
         appsyncRetrieve.run = jest.fn((projectInfo, awsDetails)=>{
@@ -97,6 +184,10 @@ describe('ops appsync', () => {
                 resolve()
             })
         })
+        apiKeysHelper.dressForDevBackend = jest.fn()
+        dataSourceHelper.dressForDevBackend = jest.fn()
+        graphqlHelper.dressForDevBackend = jest.fn()
+        resolversHelper.dressForDevBackend = jest.fn()
     })
    
     beforeEach(() => {
@@ -168,5 +259,16 @@ describe('ops appsync', () => {
             expect(appsyncRetrieve.run).toBeCalled()
             expect(callback).toBeCalled()
         })
+    })
+
+    test('syncToDevBackend', () => {
+        opsAppSync.syncToDevBackend(mock_projectInfo, mock_backendProjectSpec, [], true)
+        expect(fs.ensureDirSync).toBeCalled()
+        expect(fs.existsSync).toBeCalled()
+        expect(fs.copySync).toBeCalled()
+        expect(apiKeysHelper.dressForDevBackend).toBeCalled()
+        expect(dataSourceHelper.dressForDevBackend).toBeCalled()
+        expect(graphqlHelper.dressForDevBackend).toBeCalled()
+        expect(resolversHelper.dressForDevBackend).toBeCalled()
     })
 })
