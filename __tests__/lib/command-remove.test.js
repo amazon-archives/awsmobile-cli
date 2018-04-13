@@ -1,3 +1,16 @@
+/* 
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
 jest.mock('fs-extra')
 jest.mock('../../lib/project-info-manager')
 jest.mock('../../lib/utils/awsmobilejs-constant.js')
@@ -11,7 +24,7 @@ const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
 const projectInfoManager = require('../../lib/project-info-manager')
-const awsmobileJSConstant = require('../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../lib/utils/awsmobilejs-constant.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 const gitManager = require('../../lib/utils/git-manager.js')
 const mobileExportJSFileManager = require('../../lib/aws-operations/mobile-exportjs-file-manager.js')
@@ -33,7 +46,7 @@ describe('command remove', () => {
         'BackendProjectID': 'BackendProjectID', 
     }
     var MOCK_FILE_INFO = {}
-    const mockDirPath = path.join(mock_projectInfo.ProjectPath, awsmobileJSConstant.AWSMobileJSBackUpDirName)
+    const mockDirPath = path.join(mock_projectInfo.ProjectPath, awsmobilejsConstant.AWSMobileJSBackUpDirName)
     const mockFilePath = path.join(mockDirPath, 'mockFileName')
     MOCK_FILE_INFO[mockFilePath] = 'mock file content'
     

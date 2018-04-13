@@ -1,14 +1,28 @@
+/* 
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
 jest.mock('ora')
 jest.mock('../../lib/aws-operations/aws-client.js')
 jest.mock('../../lib/aws-operations/aws-config-manager.js')
 jest.mock('../../lib/aws-operations/aws-exception-handler.js')
 jest.mock('../../lib/backend-operations/backend-info-manager.js')
+jest.mock('../../lib/backend-operations/ops-appsync.js')
 
 const inquirer = require('inquirer')
 const mockirer = require('mockirer')
 
 const backendDelete = require('../../lib/backend-delete.js')
-
+const opsAppSync = require('../../lib/backend-operations/ops-appsync.js')
 const projectInfoManager = require('../../lib/project-info-manager.js')
 const pathManager = require('../../lib/utils/awsmobilejs-path-manager.js')
 const awsConfigManager = require('../../lib/aws-operations/aws-config-manager.js')
@@ -73,6 +87,11 @@ describe('backend delete', () => {
         }) 
         
         backendInfoManager.clearBackendInfo = jest.fn()
+        opsAppSync.deleteApi = jest.fn((projectInfo, awsDetails, callback)=>{
+            if(callback){
+                callback()
+            }
+        })
     })
 
     beforeEach(() => {

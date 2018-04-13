@@ -1,3 +1,16 @@
+/* 
+ * Copyright 2017-2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with
+ * the License. A copy of the License is located at
+ *
+ *     http://aws.amazon.com/apache2.0/
+ *
+ * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
+*/
+"use strict";
 jest.mock('fs-extra')
 jest.mock('archiver')
 jest.mock('../../../lib/backend-operations/backend-spec-manager.js')
@@ -11,7 +24,7 @@ const { Writable } = require('stream')
 const backendSpecManager = require('../../../lib/backend-operations/backend-spec-manager.js')
 const dfops = require('../../../lib/utils/directory-file-ops.js')
 const pathManager = require('../../../lib/utils/awsmobilejs-path-manager.js')
-const awsmobileJSConstant = require('../../../lib/utils/awsmobilejs-constant.js')
+const awsmobilejsConstant = require('../../../lib/utils/awsmobilejs-constant.js')
 const opsCloudApi = require('../../../lib/backend-operations/ops-cloud-api.js')
 
 const lambdaBuilder = require('../../../lib/backend-operations/cloud-api-lambda-builder.js')
