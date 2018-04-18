@@ -173,13 +173,26 @@ describe('ops appsync', () => {
         awsClient.AppSync = jest.fn(()=>{
             return mock_appsyncClient
         })
-        appsyncManager.getAppSyncInfo = jest.fn((projectPath)=>{
-            return mock_appsyncInfo
-        })
+        appsyncManager.getAppSyncInfo = jest.fn()
         appsyncManager.setAppSyncInfo = jest.fn()
         appsyncManager.enable = jest.fn()
         appsyncManager.disable = jest.fn()
+        appsyncCreate.run = jest.fn((projectInfo, awsDetails)=>{
+            return new Promise((resolve, reject)=>{
+                resolve()
+            })
+        })
         appsyncRetrieve.run = jest.fn((projectInfo, awsDetails)=>{
+            return new Promise((resolve, reject)=>{
+                resolve()
+            })
+        })
+        appsyncUpdate.run = jest.fn((projectInfo, awsDetails)=>{
+            return new Promise((resolve, reject)=>{
+                resolve()
+            })
+        })
+        appsyncDelete.run = jest.fn((projectInfo, appsyncInfo, awsDetails)=>{
             return new Promise((resolve, reject)=>{
                 resolve()
             })
@@ -195,6 +208,16 @@ describe('ops appsync', () => {
         featureOps.onFeatureTurnOn = undefined
         featureOps.onFeatureTurnOff = undefined
         fs.ensureDirSync.mockClear()
+        appsyncManager.getAppSyncInfo.mockClear((projectPath)=>{
+            return mock_appsyncInfo
+        })
+        appsyncManager.setAppSyncInfo.mockClear()
+        appsyncManager.enable.mockClear()
+        appsyncManager.disable.mockClear()
+        appsyncCreate.run.mockClear()
+        appsyncRetrieve.run.mockClear()
+        appsyncUpdate.run.mockClear()
+        appsyncDelete.run.mockClear()
     })
 
     test('property definitions', () => {
@@ -236,6 +259,7 @@ describe('ops appsync', () => {
     })
 
     test('runCommand', () => {
+        appsyncManager.getAppSyncInfo.mockReturnValueOnce(mock_appsyncInfo)
         opsAppSync.runCommand('console', mock_projectInfo, null)
         expect(appsyncManager.getAppSyncInfo).toBeCalled()
         expect(opn).toBeCalled()
@@ -262,6 +286,7 @@ describe('ops appsync', () => {
     })
 
     test('syncToDevBackend', () => {
+        appsyncManager.getAppSyncInfo.mockReturnValueOnce(mock_appsyncInfo)
         opsAppSync.syncToDevBackend(mock_projectInfo, mock_backendProjectSpec, [], true)
         expect(fs.ensureDirSync).toBeCalled()
         expect(fs.existsSync).toBeCalled()
@@ -270,5 +295,45 @@ describe('ops appsync', () => {
         expect(dataSourceHelper.dressForDevBackend).toBeCalled()
         expect(graphqlHelper.dressForDevBackend).toBeCalled()
         expect(resolversHelper.dressForDevBackend).toBeCalled()
+    })
+
+    test('createApi', () => {
+        let callback = jest.fn()
+        opsAppSync.createApi(mock_projectInfo, mock_awsDetails, callback).then(()=>{
+            expect(appsyncCreate.run).toBeCalled()
+            expect(callback).toBeCalled()
+        })
+    })
+
+    test('retrieveApi', () => {
+        let callback = jest.fn()
+        opsAppSync.retrieveApi(mock_projectInfo, mock_awsDetails, callback).then(()=>{
+            expect(appsyncRetrieve.run).toBeCalled()
+            expect(callback).toBeCalled()
+        })
+    })
+
+    test('deleteApi', () => {
+        appsyncManager.getAppSyncInfo.mockReturnValueOnce(mock_appsyncInfo)
+        opsAppSync.deleteApi(mock_projectInfo, mock_awsDetails, ()=>{
+            expect(appsyncDelete.run).toBeCalled()
+        })
+        
+        let callback = jest.fn()
+        appsyncManager.getAppSyncInfo.mockReturnValueOnce({})
+        opsAppSync.deleteApi(mock_projectInfo, mock_awsDetails, callback)
+        expect(callback).toBeCalled()
+    })
+
+    test('updateApi', () => {
+        appsyncManager.getAppSyncInfo.mockReturnValueOnce(mock_appsyncInfo)
+        opsAppSync.deleteApi(mock_projectInfo, mock_awsDetails, ()=>{
+            expect(appsyncDelete.run).toBeCalled()
+        })
+        
+        let callback = jest.fn()
+        appsyncManager.getAppSyncInfo.mockReturnValueOnce({})
+        opsAppSync.deleteApi(mock_projectInfo, mock_awsDetails, callback)
+        expect(callback).toBeCalled()
     })
 })
