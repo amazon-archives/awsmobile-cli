@@ -27,6 +27,7 @@ The awsmobile-CLI, built on top of AWS Mobile Hub, provides a command line inter
 
 The easiest way to install is using npm or yarn
 
+**You need to have installed [Node v8.9.0](https://nodejs.org/) and above**
 ```
 npm install -g awsmobile-cli
 
