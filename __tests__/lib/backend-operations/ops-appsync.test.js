@@ -173,8 +173,10 @@ describe('ops appsync', () => {
         awsClient.AppSync = jest.fn(()=>{
             return mock_appsyncClient
         })
-        appsyncManager.getAppSyncInfo = jest.fn()
+        appsyncManager.getAppSyncInfo = jest.fn((projectPath)=>{return mock_appsyncInfo})
         appsyncManager.setAppSyncInfo = jest.fn()
+        appsyncManager.getAppSyncJS = jest.fn()
+        appsyncManager.getEnabledFeatures = jest.fn()
         appsyncManager.enable = jest.fn()
         appsyncManager.disable = jest.fn()
         appsyncCreate.run = jest.fn((projectInfo, awsDetails)=>{
@@ -212,6 +214,8 @@ describe('ops appsync', () => {
             return mock_appsyncInfo
         })
         appsyncManager.setAppSyncInfo.mockClear()
+        appsyncManager.getAppSyncJS.mockClear()
+        appsyncManager.getEnabledFeatures.mockClear()
         appsyncManager.enable.mockClear()
         appsyncManager.disable.mockClear()
         appsyncCreate.run.mockClear()
@@ -335,5 +339,21 @@ describe('ops appsync', () => {
         appsyncManager.getAppSyncInfo.mockReturnValueOnce({})
         opsAppSync.deleteApi(mock_projectInfo, mock_awsDetails, callback)
         expect(callback).toBeCalled()
+    })
+
+    test('getAppSyncJS', () => {
+        opsAppSync.getAppSyncJS(mock_projectInfo.ProjectPath)
+        expect(appsyncManager.getAppSyncJS).toBeCalled()
+    })
+
+    test('getEnabledFeatures', () => {
+        opsAppSync.getEnabledFeatures(mock_projectInfo.ProjectPath)
+        expect(appsyncManager.getEnabledFeatures).toBeCalled()
+    })
+
+    test('isNewUpdateNeeded', () => {
+        let result = opsAppSync.isNewUpdateNeeded(mock_projectInfo.ProjectPath)
+        expect(appsyncManager.getAppSyncInfo).toBeCalled()
+        expect(result).toBeFalsy()
     })
 })
