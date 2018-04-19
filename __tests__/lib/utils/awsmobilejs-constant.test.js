@@ -54,7 +54,6 @@ describe('awsmobilejs constants', () => {
         expect(awsmobilejsConstant.AWSMobileAPIEndPoint).toBeDefined()
         expect(awsmobilejsConstant.AWSMobileDeviceFarmTestUrl).toBeDefined()
         expect(awsmobilejsConstant.AWSAmazonConsoleUrl).toBeDefined()
-        expect(awsmobilejsConstant.AWSEnableMobileRoleUrl).toBeDefined()
         expect(awsmobilejsConstant.AWSCreateIAMUsersUrl).toBeDefined() 
     })
 })

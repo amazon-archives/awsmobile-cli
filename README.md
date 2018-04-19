@@ -39,8 +39,6 @@ yarn global add awsmobile-cli
 
 * [Sign up for the AWS Free Tier](https://aws.amazon.com/free/) to learn and prototype at little or no cost.
 
-* [Enable AWS Mobile Hub Service Role](https://console.aws.amazon.com/mobilehub/home?region=us-east-1#/activaterole/) to let AWS Mobile use your AWS credentials  to create and manage your AWS services.
-
 * Configure the CLI with your AWS credentials
 
 ```
