@@ -120,7 +120,7 @@ describe('ops appsync', () => {
         "name": "r2-2018-04-12-12-14-53",
         "apiId": "hixrulevljdnncqr7ape4grn2a",
         "authenticationType": "AWS_IAM",
-        "arn": "arn:aws:appsync:us-east-1:466632810889:apis/hixrulevljdnncqr7ape4grn2a",
+        "arn": "arn:aws:appsync:us-east-1:account-number:apis/hixrulevljdnncqr7ape4grn2a",
         "uris": {
             "GRAPHQL": "https://ayz2axtgw5fe3gp7m2zfvdoeom.appsync-api.us-east-1.amazonaws.com/graphql"
         }
