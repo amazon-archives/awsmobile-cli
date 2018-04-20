@@ -110,7 +110,7 @@ describe('backend delete', () => {
    
 
     beforeAll(() => {
-        // global.console = {log: jest.fn()}
+        global.console = {log: jest.fn()}
         dfOps.readJsonFile = jest.fn((filePath)=>{
             if(filePath == backendDetailsFilePath){
                 return mock_backend_details
