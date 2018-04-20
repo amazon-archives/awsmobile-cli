@@ -116,13 +116,13 @@ describe('ops appsync', () => {
             "responseMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.response"
         }
     ]
-    const mock_graphApi = {
+    const mock_graphqlApi = {
         "name": "r2-2018-04-12-12-14-53",
-        "apiId": "hixrulevljdnncqr7ape4grn2a",
+        "apiId": "mock_id",
         "authenticationType": "AWS_IAM",
-        "arn": "arn:aws:appsync:us-east-1:account-number:apis/hixrulevljdnncqr7ape4grn2a",
+        "arn": "arn:aws:appsync:us-east-1:account-number:apis/mock_id",
         "uris": {
-            "GRAPHQL": "https://ayz2axtgw5fe3gp7m2zfvdoeom.appsync-api.us-east-1.amazonaws.com/graphql"
+            "GRAPHQL": "https://mock.appsync-api.us-east-1.amazonaws.com/graphql"
         }
     }
 
@@ -161,7 +161,7 @@ describe('ops appsync', () => {
     MOCK_FILE_INFO[mock_currentApiKeysFilePath] = JSON.stringify(mock_apiKeys, null, '\t')
     MOCK_FILE_INFO[mock_currentDataSourcesFilePath] = JSON.stringify(mock_dataSources, null, '\t')
     MOCK_FILE_INFO[mock_currentResolversFilePath] = JSON.stringify(mock_resolvers, null, '\t')
-    MOCK_FILE_INFO[mock_currentApiFilePath] = JSON.stringify(mock_graphApi, null, '\t')
+    MOCK_FILE_INFO[mock_currentApiFilePath] = JSON.stringify(mock_graphqlApi, null, '\t')
     MOCK_FILE_INFO[mock_currentSchemaFilePath] = 'mock_schema_contents'
     MOCK_FILE_INFO[mock_requestMappingFilePath] = 'mock_request_mapping_contents'
     MOCK_FILE_INFO[mock_responseMappingFilePath] = 'mock_response_mapping_contents'
