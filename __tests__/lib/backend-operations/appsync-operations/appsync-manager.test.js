@@ -28,7 +28,6 @@ const dfOps = require('../../../../lib/utils/directory-file-ops.js')
 const _featureName = 'appsync'
 const appsyncManager = require('../../../../lib/backend-operations/appsync-operations/appsync-manager.js')
 
-
 describe('appsync-manager', () => {
     const projectName = 'mock_project'
     const projectPath = '/'+projectName
