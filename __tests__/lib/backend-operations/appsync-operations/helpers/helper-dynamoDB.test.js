@@ -271,4 +271,12 @@ describe('appsync create', () => {
         expect(diffMarked).toBeDefined()
         expect(diffMarked.length).toBeGreaterThan(0)
     })
+    test('constructCreateParam', ()=>{
+        let param = helper.constructCreateParam(dataSources.tables[0])
+        expect(param).toBeDefined()
+    })
+    test('constructUpdateParam', ()=>{
+        let param = helper.constructUpdateParam(dataSources.tables[0])
+        expect(param).toBeDefined()
+    })
 })
