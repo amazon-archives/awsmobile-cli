@@ -68,20 +68,20 @@ describe('appsync create', () => {
         } 
     }
     let mock_listDateSourcesResponse = { dataSources:
-        [ { dataSourceArn: 'arn:aws:appsync:us-east-1:466632810889:apis/7zaoukpnnneyhpe66fwnptnghu/datasources/AppSyncCommentTable',
+        [ { dataSourceArn: 'mock_arn',
             name: 'AppSyncCommentTable',
             description: null,
             type: 'AMAZON_DYNAMODB',
-            serviceRoleArn: 'arn:aws:iam::466632810889:role/appsync-datasource-ddb-OYZK5W-AppSyncCommentTable-',
+            serviceRoleArn: 'mock_arn',
             dynamodbConfig:
              { tableName: 'AppSyncCommentTable-VHFuYLVO',
                awsRegion: 'us-east-1',
                useCallerCredentials: false } },
-          { dataSourceArn: 'arn:aws:appsync:us-east-1:466632810889:apis/7zaoukpnnneyhpe66fwnptnghu/datasources/AppSyncEventTable',
+          { dataSourceArn: 'mock_arn',
             name: 'AppSyncEventTable',
             description: null,
             type: 'AMAZON_DYNAMODB',
-            serviceRoleArn: 'arn:aws:iam::466632810889:role/appsync-datasource-ddb-OYZK5W-AppSyncEventTable-VH',
+            serviceRoleArn: 'mock_arn',
             dynamodbConfig:
              { tableName: 'AppSyncEventTable-VHFuYLVO',
                awsRegion: 'us-east-1',
@@ -91,8 +91,8 @@ describe('appsync create', () => {
         types:
         [ { name: 'Comment',
             description: null,
-            arn: 'arn:aws:appsync:us-east-1:466632810889:apis/7zaoukpnnneyhpe66fwnptnghu/types/Comment',
-            definition: 'type Comment\n{\n#   The id of the comment\'s parent event.\neventId: ID!\n\n\n#   A unique identifier for the comment.\ncommentId: String!\n\n\n#   The comment\'s content.\ncontent: String!\n\n\n#   The comment timestamp. This field is indexed to enable sorted pagination.\ncreatedAt: String!\n\n}\n',
+            arn: 'mock_arn',
+            definition: 'mock_definition',
             format: 'SDL',
             listResolversResponse: { resolvers: [], nextToken: null } }
         ]}
@@ -100,9 +100,9 @@ describe('appsync create', () => {
         typeName: 'Event',
         fieldName: 'comments',
         dataSourceName: 'AppSyncCommentTable',
-        resolverArn: 'arn:aws:appsync:us-east-1:466632810889:apis/7zaoukpnnneyhpe66fwnptnghu/types/Event/resolvers/comments',
-        requestMappingTemplate: '{managed-by-awsmobile-cli}:Event.comments.request',
-        responseMappingTemplate: '{managed-by-awsmobile-cli}:Event.comments.response' }]
+        resolverArn: 'mock_arn',
+        requestMappingTemplate: 'mock_mapping',
+        responseMappingTemplate: 'mock_mapping' }]
         
     let mock_listApiKeyResponse = { apiKeys: [], nextToken: null }
 
