@@ -11,6 +11,10 @@
  * and limitations under the License.
 */
 "use strict";
+jest.mock('fs-extra')
+
+const fs = require('fs-extra')
+const path = require('path')
 const awsmobilejsConstant = require('../../../../../lib/utils/awsmobilejs-constant.js')
 const DIFF = awsmobilejsConstant.DiffMark
 const CREATE = awsmobilejsConstant.DiffMark_Create
@@ -21,7 +25,33 @@ const DELETE = awsmobilejsConstant.DiffMark_Delete
 const helper = require('../../../../../lib/backend-operations/appsync-operations/helpers/helper-resolvers')
 
 describe('appsync create', () => {
-    const mock_resolverArn = "mock_resolverArn"
+    const featureDirPath = '/projectName/awsmobilejs/backend/appsync'
+    const resolverMappingsDirPath = path.join(featureDirPath, awsmobilejsConstant.AppSyncResolverMappingsDirName)
+    let requestMappingFileName = 'Event.comments.request'
+    let responseMappingFileName = 'Event.comments.response'
+    let requestMappingFilePath = path.join(resolverMappingsDirPath, requestMappingFileName)
+    let responseMappingFilePath = path.join(resolverMappingsDirPath, responseMappingFileName)
+
+    const resolver_naked = {
+        "typeName": "Event",
+        "fieldName": "comments",
+        "dataSourceName": "AppSyncCommentTable",
+        "resolverArn": "mock_resolverArn", 
+        "requestMappingTemplate": "mock_requestMappingTemplate",
+        "responseMappingTemplate": "mock_responseMappingTemplate"
+    }
+    const resolver_dressed = {
+        "typeName": "Event",
+        "fieldName": "comments",
+        "dataSourceName": "AppSyncCommentTable",
+        "resolverArn": "mock_resolverArn", 
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.response"
+    }
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[requestMappingFilePath] = "mock_requestMappingTemplate"
+    MOCK_FILE_INFO[responseMappingFilePath] = "mock_responseMappingTemplate"
+
     const resolvers_current =[
         {
             "typeName": "Event",
@@ -118,10 +148,23 @@ describe('appsync create', () => {
     ]
 
     beforeAll(()=>{
-
+        fs.__setMockFiles(MOCK_FILE_INFO) 
     })
     beforeEach(()=>{
-
+        fs.ensureDirSync.mockClear()
+        fs.writeFileSync.mockClear()
+        fs.existsSync.mockClear()
+        fs.readFileSync.mockClear()
+    })
+    test('writeResolverMappings', ()=>{
+        helper.writeResolverMappings(featureDirPath, resolver_naked)
+        expect(fs.ensureDirSync).toBeCalled()
+        expect(fs.writeFileSync).toBeCalled()
+    })
+    test('readResolverMappings', ()=>{
+        helper.readResolverMappings(featureDirPath, resolver_dressed)
+        expect(fs.existsSync).toBeCalled()
+        expect(fs.readFileSync).toBeCalled()
     })
     test('dressForDevBackend', ()=>{
         helper.dressForDevBackend(resolvers_current)
