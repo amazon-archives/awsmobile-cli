@@ -21,7 +21,6 @@ const DELETE = awsmobilejsConstant.DiffMark_Delete
 const helper = require('../../../../../lib/backend-operations/appsync-operations/helpers/helper-graphqlApi')
 
 describe('appsync create', () => {
-    const mock_ataSourceArn = "mock_dataSourceArn"
     const graphqlApi_current = {
         "name": "r-2018-04-19-14-11-44",
         "apiId": "mock_apiId",

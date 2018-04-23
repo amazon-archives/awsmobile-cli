@@ -21,11 +21,11 @@ const DELETE = awsmobilejsConstant.DiffMark_Delete
 const helper = require('../../../../../lib/backend-operations/appsync-operations/helpers/helper-dataSources')
 
 describe('appsync create', () => {
-    const mock_ataSourceArn = "mock_dataSourceArn"
+    const mock_dataSourceArn = "mock_dataSourceArn"
     const dataSources_current = {
         "dataSources": [
             {
-                "dataSourceArn": mock_ataSourceArn,
+                "dataSourceArn": mock_dataSourceArn,
                 "name": "AppSyncCommentTable",
                 "description": null,
                 "type": "AMAZON_DYNAMODB",
