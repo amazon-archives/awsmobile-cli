@@ -108,6 +108,9 @@ describe('appsync create', () => {
                         "IndexArn": "mock_IndexArn"
                     }
                 ],
+                "StreamSpecification": {
+                    StreamEnabled: false
+                },
                 "Region": "us-east-1"
             },
             {
@@ -206,6 +209,9 @@ describe('appsync create', () => {
                     "ReadCapacityUnits": 10,
                     "WriteCapacityUnits": 10
                 },
+                "StreamSpecification": {
+                    StreamEnabled: true
+                },
                 "LocalSecondaryIndexes": [
                     {
                         "IndexName": "LSI-AppSyncCommentTable-by-eventId-createdAt",
@@ -222,6 +228,28 @@ describe('appsync create', () => {
                         "Projection": {
                             "ProjectionType": "ALL"
                         }
+                    }
+                ],
+                "GlobalSecondaryIndexes": [
+                    {
+                        "IndexName": "GSI-AppSyncCommentTable-by-eventId-createdAt",
+                        "KeySchema": [
+                            {
+                                "AttributeName": "eventId",
+                                "KeyType": "HASH"
+                            },
+                            {
+                                "AttributeName": "createdAt",
+                                "KeyType": "RANGE"
+                            }
+                        ],
+                        "Projection": {
+                            "ProjectionType": "ALL"
+                        },
+                        "ProvisionedThroughput": {
+                            "ReadCapacityUnits": 10,
+                            "WriteCapacityUnits": 10
+                        },
                     }
                 ],
                 "Region": "us-east-1"
