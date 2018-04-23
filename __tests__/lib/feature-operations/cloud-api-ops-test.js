@@ -193,6 +193,97 @@ test('Creating cloud api, unrestricted (signin disabled)', () => {
         })
 });
 
+test('Creating cloud api, unrestricted (signin disabled) when there is existing imported api', () => {
+    // Setting yaml
+    let data =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic" + "\n" +
+        "    components: " + "\n" +
+        "      test-MobileHub: !com.amazonaws.mobilehub.v0.API " + "\n" +
+        "        attributes:" + "\n" +
+        "          name: test-MobileHub" + "\n" +
+        "          requires-signin: false" + "\n" +
+        "          api-arn: 'arn:xxxxx'" + "\n" +
+        "          sdk-generation-stage-name: Development" + "\n" +
+        "        paths:" + "\n" +
+        "          /items: !com.amazonaws.mobilehub.v0.Function {}" + "\n" +
+        "          '/items/{proxy+}': !com.amazonaws.mobilehub.v0.Function {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    var MOCK_FILE_INFO = {}
+    MOCK_FILE_INFO[backendYmlFilePath] = data;
+    fs.__setMockFiles(MOCK_FILE_INFO)
+
+    // answer enable
+    mockirer(inquirer, {
+        apiOptions: 'add',
+        apiName: 'sampleCloudApi',
+        pathName: '/items',
+        functionName: 'sampleLambda',
+        addAnothePath: false
+    });
+
+    var resultYaml =
+        "---!com.amazonaws.mobilehub.v0.Project" + "\n" +
+        "features:" + "\n" +
+        "  mobile-analytics: !com.amazonaws.mobilehub.v0.Pinpoint" + "\n" +
+        "    components:" + "\n" +
+        "      analytics: !com.amazonaws.mobilehub.v0.PinpointAnalytics {}" + "\n" +
+        "  cloudlogic: !com.amazonaws.mobilehub.v0.CloudLogic" + "\n" +
+        "    components: " + "\n" +
+        "      test-MobileHub: !com.amazonaws.mobilehub.v0.API " + "\n" +
+        "        attributes:" + "\n" +
+        "          name: test-MobileHub" + "\n" +
+        "          requires-signin: false" + "\n" +
+        "          api-arn: 'arn:xxxxx'" + "\n" +
+        "          sdk-generation-stage-name: Development" + "\n" +
+        "        paths:" + "\n" +
+        "          /items: !com.amazonaws.mobilehub.v0.Function {}" + "\n" +
+        "          '/items/{proxy+}': !com.amazonaws.mobilehub.v0.Function {}" + "\n" +
+        "      sampleCloudApi: !com.amazonaws.mobilehub.v0.API" + "\n" +
+        "        attributes: " + "\n" +
+        "          name: sampleCloudApi" + "\n" +
+        "          requires-signin: false" + "\n" +
+        "        paths: " + "\n" +
+        "          /items: !com.amazonaws.mobilehub.v0.Function " + "\n" +
+        "            name: sampleLambda" + "\n" +
+        "            codeFilename: uploads/sampleLambda.zip" + "\n" +
+        "            handler: lambda.handler" + "\n" +
+        "            enableCORS: true" + "\n" +
+        "            runtime: nodejs6.10" + "\n" +
+        "            environment: {}" + "\n" +
+        "          '/items/{proxy+}': !com.amazonaws.mobilehub.v0.Function " + "\n" +
+        "            name: sampleLambda" + "\n" +
+        "            codeFilename: uploads/sampleLambda.zip" + "\n" +
+        "            handler: lambda.handler" + "\n" +
+        "            enableCORS: true" + "\n" +
+        "            runtime: nodejs6.10" + "\n" +
+        "            environment: {}" + "\n" +
+        "name: '-2017-09-11-10-33-25'" + "\n" +
+        "region: us-east-1" + "\n" +
+        "uploads: []" + "\n" +
+        "sharedComponents: {}" + "\n";
+
+    let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
+    result = yamlSchema.trimObject(result);
+    let logResult = ["\n\nThis feature will create an API using Amazon API Gateway and AWS Lambda. You can optionally have the lambda function perform CRUD operations against your Amazon DynamoDB table.\n\n", "Select from one of the choices below.", "Create a new API", "Remove an API from the project", "Edit an API from the project", "Welcome to CloudLogic wizard", "You will be asked a series of questions to create your API", "API name", "HTTP path name", "Lambda function name (This will be created if it does not already exists)", "Add another HTTP path", "Adding lambda function code on: \n/projectName/awsmobilejs/backend/cloud-api/sampleLambda/", "...", "To test the api from the command line (after awsmobile push) use this commands", "awsmobile cloud-api invoke", "sampleCloudApi", "<method> <path> [init]", "Adding lambda function code on: \n/projectName/awsmobilejs/backend/cloud-api/sampleLambda/", "...", "To test the api from the command line (after awsmobile push) use this commands", "awsmobile cloud-api invoke", "sampleCloudApi", "<method> <path> [init]"];
+    cleanConsoleLog();
+
+    expect.assertions(2);
+    return cloudApiOps.specify(mock_projectInfo)
+        .then(currentDefiniton => {
+            expect(currentDefiniton.yamlDefinition).toEqual(result);
+            expect(consoleLogRegistry).toEqual(logResult);
+        })
+});
+
 test('Creating cloud api, unrestricted (signin enabled)', () => {
     // Setting yaml
     let data =
