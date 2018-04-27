@@ -105,6 +105,17 @@ describe('project info manager functions', () => {
         })
     })
 
+    test('setupAmplifyDependency angular', () => {
+        let mock_initInfo = {
+            projectPath: projectPath,
+            packageJson: mock_packageJson,
+            framework: 'angular'
+        }
+        dependencyManager.setupAmplifyDependency(mock_initInfo).then((initInfo)=>{
+            expect(spawn).toBeCalled()
+        })
+    })
+
     test('setupAmplifyDependency default', () => {
         let mock_initInfo = {
             projectPath: projectPath,
