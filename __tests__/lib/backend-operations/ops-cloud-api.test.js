@@ -69,7 +69,9 @@ describe('ops analytics', () => {
         })
 
         https.get = jest.fn((url, callback)=>{
-            
+            return {
+                on: jest.fn()
+            }
         })
     })
 

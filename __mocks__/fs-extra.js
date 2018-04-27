@@ -95,7 +95,9 @@ fs.lstatSync = jest.fn((path)=>{
 fs.statSync = jest.fn((path)=>{
     return fsDetails[path]
 })
-fs.readFileSync = readFileSync
+fs.readFileSync = jest.fn((filePath)=>{
+    return readFileSync(filePath)
+})
 fs.existsSync = jest.fn((path)=>{
     return fsDetails.hasOwnProperty(path)
 })
