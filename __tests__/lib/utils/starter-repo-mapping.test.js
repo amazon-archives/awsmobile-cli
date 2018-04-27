@@ -17,5 +17,6 @@ describe('feature-yaml-template-mapping', () => {
     test('feature-yaml-template-mapping defined', () => {
         expect(starterRepoMapping['react']).toBeDefined()
         expect(starterRepoMapping['react-native']).toBeDefined()
+        expect(starterRepoMapping['angular']).toBeDefined()
     })
 })
