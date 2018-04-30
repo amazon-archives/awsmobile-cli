@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "codecov": "^3.0.0",
-    "jest": "^21.2.1",
+    "jest": "^22.4.3",
     "mockirer": "^2.0.1"
   },
   "jest": {
