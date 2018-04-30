@@ -15,7 +15,6 @@
 const fs = require('fs-extra')
 const program = require('commander')
 const chalk = require('chalk')
-const _ = require('lodash')
 
 const projectInfoManager = require('../lib/project-info-manager.js')
 const pathManager = require('../lib/utils/awsmobilejs-path-manager.js')
@@ -123,10 +122,10 @@ function displayGeneralHelp(){
     console.log()
     console.log('  Commands:'  )
     console.log()
-    _.keys(_commonCommands).forEach(function(command) {
+    Object.keys(_commonCommands).forEach(function(command) {
         console.log('   ' + (command + '               ').slice(0,12) + _commonCommands[command].replace('{featureName}', _featureName))
     }, this)
-    _.keys(_featureOps.featureCommands).forEach(function(command) {
+    Object.keys(_featureOps.featureCommands).forEach(function(command) {
         console.log('   ' + (command + '               ').slice(0,12) + _featureOps.featureCommands[command])
     }, this)
 }
