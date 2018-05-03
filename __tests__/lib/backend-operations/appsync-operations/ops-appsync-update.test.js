@@ -589,7 +589,7 @@ describe('appsync update', () => {
     }
 
     beforeAll(() => {
-        // global.console = {log: jest.fn()}
+        global.console = {log: jest.fn()}
         fs.__setMockFiles(MOCK_FILE_INFO) 
 
         appsyncManager.getAppSyncInfo = jest.fn((projectPath)=>{return appsyncInfo})

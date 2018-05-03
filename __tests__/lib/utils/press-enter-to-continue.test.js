@@ -14,6 +14,9 @@
 const pressKeyToContinue = require('../../../lib/utils/press-enter-to-continue.js')
 
 describe('press-enter-to-continue', () => {
+    beforeAll(() => {
+        global.console = {log: jest.fn()}
+    })
     test('run', () => {
         let mockData = 'mock-data'
         let handle = {message: 'mock-message'}
