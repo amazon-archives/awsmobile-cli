@@ -56,19 +56,34 @@ describe('project info manager functions', () => {
         fs.writeFileSync.mockClear()
     })
 
-    test('npmInstall', () => {
+    test('installDependencies', () => {
         fs.__setMockFiles(MOCK_FILE_INFO) 
         let mock_callback = jest.fn()
-        dependencyManager.npmInstall(projectPath, mock_callback)
-
+        let projectInfo = {
+            ProjectPath: projectPath
+        }
+        dependencyManager.installDependencies(projectInfo, mock_callback)
         expect(mock_callback).toBeCalled()
     })
 
-    test('npmInstall no packagejson', () => {
+    test('installDependencies react', () => {
+        fs.__setMockFiles(MOCK_FILE_INFO) 
+        let mock_callback = jest.fn()
+        let projectInfo = {
+            ProjectPath: projectPath,
+            Framework: 'react'
+        }
+        dependencyManager.installDependencies(projectInfo, mock_callback)
+        expect(mock_callback).toBeCalled()
+    })
+
+    test('installDependencies no packagejson', () => {
         fs.__setMockFiles({}) 
         let mock_callback = jest.fn()
-        dependencyManager.npmInstall(projectPath, mock_callback)
-
+        let projectInfo = {
+            ProjectPath: projectPath
+        }
+        dependencyManager.installDependencies(projectInfo, mock_callback)
         expect(mock_callback).toBeCalled()
     })
 
