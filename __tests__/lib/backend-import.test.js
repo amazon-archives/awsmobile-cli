@@ -116,7 +116,7 @@ describe('backend import', () => {
         })
 
 
-        backendImport.run(mock_projectInfo, mock_callback)
+        backendImport.run(mock_projectInfo, {yesFlag: false}, mock_callback)
 
         expect(mock_mobileClient.createProject).toBeCalled()
         expect(awsExceptionHandler.handleMobileException).not.toBeCalled()
@@ -135,7 +135,7 @@ describe('backend import', () => {
         })
 
 
-        backendImport.run(mock_projectInfo, mock_callback)
+        backendImport.run(mock_projectInfo, {yesFlag: false}, mock_callback)
 
         expect(mock_mobileClient.createProject).toBeCalled()
         expect(awsExceptionHandler.handleMobileException).toBeCalled()

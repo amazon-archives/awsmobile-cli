@@ -49,7 +49,7 @@ describe('s5 setup backend', () => {
         backendCreate.createBackendProject = jest.fn((projectInfo, options, callback)=>{
             callback()
         })
-        backendImport.run = jest.fn((projectInfo, callback)=>{
+        backendImport.run = jest.fn((projectInfo, options, callback)=>{
             callback()
         })
         backendRetrieve.linkToBackend = jest.fn((projectInfo, mobileProjectID, syncToDevFlag, callback)=>{
