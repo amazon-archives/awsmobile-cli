@@ -124,7 +124,7 @@ test('Enabling default cognito', () => {
 
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advance settings"];
+    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advanced settings"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -193,7 +193,7 @@ test('Enabling advance cognito settings', () => {
 
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advance settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "How are users going to login", "Email", "Username", "Phone number (required for multifactor authentication)", "MFA authentication", "disabled", "optional", "required", "Password minimum length (number of characters)", "Password character requirements", "uppercase", "lowercase", "numbers", "special characters"];
+    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advanced settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "How are users going to login", "Email", "Username", "Phone number (required for multifactor authentication)", "MFA authentication", "disabled", "optional", "required", "Password minimum length (number of characters)", "Password character requirements", "uppercase", "lowercase", "numbers", "special characters"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -260,7 +260,7 @@ test('Enabling advance cognito settings no phone, no mfa', () => {
 
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advance settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "How are users going to login", "Email", "Username", "Phone number (required for multifactor authentication)", "Password minimum length (number of characters)", "Password character requirements", "uppercase", "lowercase", "numbers", "special characters"];
+    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advanced settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "How are users going to login", "Email", "Username", "Phone number (required for multifactor authentication)", "Password minimum length (number of characters)", "Password character requirements", "uppercase", "lowercase", "numbers", "special characters"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -316,7 +316,7 @@ test('Enabling facebook', () => {
 
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advance settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Facebook App ID"];
+    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advanced settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Facebook App ID"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -377,7 +377,7 @@ test('Enabling google', () => {
 
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advance settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Google Web App Client ID", "Google Android Client ID", "Google iOS Client ID"];
+    let logResult = ["Sign-in is currently disabled, what do you want to do next", "Enable sign-in with default settings", "Go to advanced settings", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Google Web App Client ID", "Google Android Client ID", "Google iOS Client ID"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -487,7 +487,7 @@ test('Disable signin (with api but no restriction for sign in users)', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Are you sure you want to disable Sign-In"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Are you sure you want to disable Sign-In"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -637,7 +637,7 @@ test('Disable signin (with api restricted for sign in users)', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Are you sure you want to disable Sign-In", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Are you sure you want to disable Sign-In", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -717,7 +717,7 @@ test('Disable cognito with more than one sign in method', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Cognito UserPools enabled, what do you want to do next", "Disable Cognito UserPools", "Are you sure you want to disable Cognito UserPools"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Cognito UserPools enabled, what do you want to do next", "Disable Cognito UserPools", "Are you sure you want to disable Cognito UserPools"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -805,7 +805,7 @@ test('Disable facebook with more than one sign in method', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Facebook sign-in enabled, what do you want to do next", "Edit facebook sign-in settings", "Disable facebook sign-in", "Are you sure you want to disable Facebook login"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Facebook sign-in enabled, what do you want to do next", "Edit facebook sign-in settings", "Disable facebook sign-in", "Are you sure you want to disable Facebook login"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -877,7 +877,7 @@ test('Disable google with more than one sign in method', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently enabled)", "Google sign-in enabled, what do you want to do next", "Edit google sign-in settings", "Disable google sign-in", "Are you sure you want to disable Google login"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently enabled)", "Google sign-in enabled, what do you want to do next", "Edit google sign-in settings", "Disable google sign-in", "Are you sure you want to disable Google login"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -985,7 +985,7 @@ test('Disable cognito and is the last sign in method (api without restriction fo
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Cognito UserPools enabled, what do you want to do next", "Disable Cognito UserPools", "Are you sure you want to disable Cognito UserPools"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Cognito UserPools enabled, what do you want to do next", "Disable Cognito UserPools", "Are you sure you want to disable Cognito UserPools"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1084,7 +1084,7 @@ test('Disable facebook login and is the last sign in method (api without restric
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Facebook sign-in enabled, what do you want to do next", "Edit facebook sign-in settings", "Disable facebook sign-in", "Are you sure you want to disable Facebook login"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Facebook sign-in enabled, what do you want to do next", "Edit facebook sign-in settings", "Disable facebook sign-in", "Are you sure you want to disable Facebook login"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1185,7 +1185,7 @@ test('Disable google login and is the last sign in method (api without restricti
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently enabled)", "Google sign-in enabled, what do you want to do next", "Edit google sign-in settings", "Disable google sign-in", "Are you sure you want to disable Google login"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently enabled)", "Google sign-in enabled, what do you want to do next", "Edit google sign-in settings", "Disable google sign-in", "Are you sure you want to disable Google login"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1294,7 +1294,7 @@ test('Disable cognito and is the last sign in method (api restricted for signin 
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Cognito UserPools enabled, what do you want to do next", "Disable Cognito UserPools", "Are you sure you want to disable Cognito UserPools", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently enabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently disabled)", "Cognito UserPools enabled, what do you want to do next", "Disable Cognito UserPools", "Are you sure you want to disable Cognito UserPools", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1394,7 +1394,7 @@ test('Disable facebook and is the last sign in method (api restricted for signin
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Facebook sign-in enabled, what do you want to do next", "Edit facebook sign-in settings", "Disable facebook sign-in", "Are you sure you want to disable Facebook login", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently enabled)", "Google sign-in (currently disabled)", "Facebook sign-in enabled, what do you want to do next", "Edit facebook sign-in settings", "Disable facebook sign-in", "Are you sure you want to disable Facebook login", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1496,7 +1496,7 @@ test('Disable google login and is the last sign in method (api restricted for si
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently enabled)", "Google sign-in enabled, what do you want to do next", "Edit google sign-in settings", "Disable google sign-in", "Are you sure you want to disable Google login", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Which sign-in method you want to configure", "Cognito UserPools (currently disabled)", "Facebook sign-in (currently disabled)", "Google sign-in (currently enabled)", "Google sign-in enabled, what do you want to do next", "Edit google sign-in settings", "Disable google sign-in", "Are you sure you want to disable Google login", "There are API with restriction to sign-in users, if you agree this will remove that restriction. Continue?"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1572,7 +1572,7 @@ test('Setting signIn required from optional', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advance settings", "Disable sign-in", "Are users required to sign in to your app?", "Optional", "Required"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be required (Currently set to optional)", "Go to advanced settings", "Disable sign-in", "Are users required to sign in to your app?", "Optional", "Required"];
     cleanConsoleLog();
 
     expect.assertions(2);
@@ -1648,7 +1648,7 @@ test('Setting signIn optional from required', () => {
         "sharedComponents: {}" + "\n";
     let result = yaml.safeLoad(resultYaml, { schema: yamlSchema.AWS_MOBILE_YAML_SCHEMA, noCompatMode: true, scalarType: 5 });
     result = yamlSchema.trimObject(result);
-    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be optional (Currently set to required)", "Go to advance settings", "Disable sign-in", "Are users required to sign in to your app?", "Optional", "Required"];
+    let logResult = ["Sign-in is currently enabled, what do you want to do next", "Configure Sign-in to be optional (Currently set to required)", "Go to advanced settings", "Disable sign-in", "Are users required to sign in to your app?", "Optional", "Required"];
     cleanConsoleLog();
 
     expect.assertions(2);
