@@ -86,6 +86,30 @@ describe('command init', () => {
         })
     })
 
+    test('init succeeds when passing a yes command to supress console input', () => {
+        return commandInit.init('mobileProjectID', true).then(() => {
+            expect(analyzeProject.run).toBeCalled()
+            expect(chooseStrategy.run).toBeCalled()
+            expect(initialize.run).toBeCalled()
+            expect(configure.run).toBeCalled()
+            expect(setupBackend.run).toBeCalled()
+            expect(onSuccess.run).toBeCalled()
+            expect(onFailure.run).not.toBeCalled()
+        })
+    })
+
+    test('init succeeds when passing a skipDeps command to skip installing dependencies', () => {
+        return commandInit.init('mobileProjectID', false, true).then(() => {
+            expect(analyzeProject.run).toBeCalled()
+            expect(chooseStrategy.run).toBeCalled()
+            expect(initialize.run).toBeCalled()
+            expect(configure.run).toBeCalled()
+            expect(setupBackend.run).toBeCalled()
+            expect(onSuccess.run).toBeCalled()
+            expect(onFailure.run).not.toBeCalled()
+        })
+    })
+
     test('init fails', () => {
 
         setupBackend.run = jest.fn((initInfo)=>{
