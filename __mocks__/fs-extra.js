@@ -74,7 +74,7 @@ function readdirSync(directoryPath) {
     if(fsDetails[directoryPath] && fsDetails[directoryPath].isDirectory()){
         result = fsDetails[directoryPath].content
     }
-    return result
+    return result || []
 }
 
 function readFileSync(filePath) {
@@ -111,5 +111,7 @@ fs.mkdirSync = jest.fn()
 fs.ensureDirSync = jest.fn()
 fs.createReadStream = jest.fn()
 fs.createWriteStream = jest.fn()
+fs.rmdirSync = jest.fn();
+fs.unlinkSync = jest.fn();
 
 module.exports = fs
