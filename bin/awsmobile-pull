@@ -19,12 +19,14 @@ const chalk = require('chalk')
 
 program
   .description('pull the latest details of the awsmobile project from the cloud')
+  .usage('[options]')
+  .option('-d, --sync-dev <value>', 'synchronize contents in #current-backend-info/ with the latest in the aws cloud', 0)
   .parse(process.argv)
 
 let projectInfo = projectInfoManager.getProjectInfo()
 if(projectInfo){
   if(projectInfo.BackendProjectID && projectInfo.BackendProjectID.length > 0){
-    backendRetrieve.pullBackend(projectInfo, projectInfo.BackendProjectID, 0, null)
+    backendRetrieve.pullBackend(projectInfo, projectInfo.BackendProjectID, program.syncDev, null)
   }else{
     console.log(chalk.red('backend awsmobile project unknown'))
   }
