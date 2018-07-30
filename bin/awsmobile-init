@@ -36,6 +36,7 @@ program
   .usage('[awsmobile-project-id] [options]')
   .option('-y, --yes', 'suppress console input and use default in the init procedure')
   .option('-r, --remove', 'remove awsmobilejs from the current project')
+  .option('-s, --skip-deps', 'skip installing Javscript dependencies')
   .parse(process.argv)
 
 if(program.remove){
@@ -45,5 +46,9 @@ if(program.remove){
   if(program.args && program.args.length > 0){
     mobileProjectID = program.args[0]
   }
-  commandInit.init(mobileProjectID, program.yes)
+  let skipInstallingDependencies = false;
+  if(program.skipDeps){
+    skipInstallingDependencies = true;
+  }
+  commandInit.init(mobileProjectID, program.yes, skipInstallingDependencies)
 }

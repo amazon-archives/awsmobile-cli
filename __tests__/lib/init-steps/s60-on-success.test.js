@@ -75,4 +75,14 @@ describe('s60 on success', () => {
             expect(fs.writeFileSync).toBeCalled()
         })
     })
+
+    test('run with skipInstallingDependencies set', () => {
+        dependencyManager.setupAmplifyDependency.mockReset()
+        const custom_initInfo = Object.assign({}, mock_initInfo, { skipInstallingDependencies: true })
+		return onSuccess.run(custom_initInfo).then((initInfo)=>{
+            expect(dependencyManager.setupAmplifyDependency).not.toBeCalled()
+            expect(gitManager.insertAwsmobilejs).toBeCalled()
+            expect(fs.writeFileSync).toBeCalled()
+        })
+    })
 })
