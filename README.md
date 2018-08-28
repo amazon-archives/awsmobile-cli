@@ -106,4 +106,4 @@ When you run `awsmobile configure` inside a valid awsmobilejs project, it sets t
 
 ## Usage
 
-Go to the [AWS Mobile Docs](http://docs.aws.amazon.com/aws-mobile/latest/developerguide/web-getting-started.html) to learn more about the usage of the awsmobile-cli and some sample codes to get your app up and running.  
+Go to the [AWS Mobile Docs](https://docs.aws.amazon.com/aws-mobile/latest/developerguide/aws-mobile-cli-reference.html) to learn more about the usage of the awsmobile-cli and some sample codes to get your app up and running.  
