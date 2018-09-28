@@ -75,7 +75,7 @@ describe('command init', () => {
     })
 
     test('init succeeds', () => {
-        return commandInit.init('mobileProjectID').then(() => {
+        return commandInit.init('mobileProjectID', true).then(() => {
             expect(analyzeProject.run).toBeCalled()
             expect(chooseStrategy.run).toBeCalled()
             expect(initialize.run).toBeCalled()
@@ -92,7 +92,7 @@ describe('command init', () => {
             throw new Error()
         })
 
-        return commandInit.init('mobileProjectID').then(() => {
+        return commandInit.init('mobileProjectID', true).then(() => {
             expect(analyzeProject.run).toBeCalled()
             expect(chooseStrategy.run).toBeCalled()
             expect(initialize.run).toBeCalled()
